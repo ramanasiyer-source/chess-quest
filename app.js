@@ -51,8 +51,9 @@
       const r = await fetch('https://lichess.org/api/user/' + encodeURIComponent(u)); if (!r.ok) throw new Error('user ' + r.status);
       UI.lichess.user = await r.json();
       const g = await fetch('https://lichess.org/api/games/user/' + encodeURIComponent(u) + '?max=8&opening=true', { headers: { Accept: 'application/x-ndjson' } });
-      UI.lichess.games = (await g.text()).trim().split('\n').filter(Boolean).map(l => JSON.parse(l));
-    } catch (e) { UI.lichess.err = String(e); }
+      if (!g.ok) throw new Error('games ' + g.status);
+      UI.lichess.games = (await g.text()).trim().split('\n').filter(Boolean).map(l => JSON.parse(l)).filter(x => x && x.players && x.players.white && x.players.black);
+    } catch (e) { UI.lichess.err = String(e); UI.lichess.games = UI.lichess.games || []; }
     if (['progress', 'today'].includes(UI.tab)) renderView();
   }
 
