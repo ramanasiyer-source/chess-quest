@@ -32,7 +32,7 @@ try{
  document.querySelectorAll('.modal button').forEach(x=>x.click());
  // show answer path
  document.querySelector('#tr-next').click(); await wait(50);
- document.querySelector('#tr-show').click(); await wait(3500);
+ document.querySelector('#tr-show').click(); for(let i=0;i<30 && !tr.T.done;i++) await wait(300);
  ok('show-answer records shown', tr.T.done && CQ.S.puzzle.seen[tr.T.p.id].last==='shown');
  // challenge mode
  document.querySelector('#tr-chal').checked=true; document.querySelector('#tr-chal').onchange(); await wait(50);

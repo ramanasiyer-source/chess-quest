@@ -126,7 +126,7 @@
       T.busy = false; finish();
     };
     $('#tr-next', root).onclick = next;
-    $('#tr-chal', root).onchange = () => { if (T.done || !T.p) next(); };
+    $('#tr-chal', root).onchange = () => { if (T.done || !T.p) next(); else toast('⚡ Challenge mode starts with your next puzzle'); };
     root.reload = next; root.T = T; root.board = board; next();
     return root;
   }
