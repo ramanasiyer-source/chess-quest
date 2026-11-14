@@ -17,7 +17,7 @@
     ['puzzles', '🧩', 'Puzzles'],
     ['lessons', '📚', 'Lessons'],
     ['endgames', '♚', 'Endgames'],
-    ['progress', '📈', 'Stats'],
+    ['progress', '📅', 'Calendar'],
     ['vault', '⭐', 'Vault'],
     ['settings', '⚙️', 'Settings'],
   ];
@@ -27,7 +27,7 @@
     ['assets/anish-jacket-fringe.jpg', 'Side Fringe + Columbia Jacket'],
     ['assets/anish-blazer-fringe.jpg', 'Side Fringe + Grandmaster Blazer'],
   ];
-  const UI = window.CQ_UI = { tab: 'today', open: null, persist: {}, puzzleFilterLvl: null, lichess: { user: null, games: null, err: null } };
+  const UI = window.CQ_UI = { tab: 'today', open: null, persist: {}, calYm: null, puzzleFilterLvl: null, lichess: { user: null, games: null, err: null } };
 
   /* ---------- tiny helpers: toast, modal, confetti, beep ---------- */
   let audioCtx = null;
@@ -342,9 +342,13 @@
   }
   function lessonCard(l) {
     const mastered = S().lessons.done[l.id];
+    const catBadge = l.cat === 'Opening' ? '🏛️ Opening Variation' : l.cat === 'Middlegame' ? '⚔️ Middlegame Strategy & Tactics' : '♚ Endgame Technique';
     return `<div class="lesson">
       <div class="row between wrap">
-        <h3>${l.icon} ${esc(l.title)}</h3>
+        <div>
+          <span class="chip small">${catBadge}</span>
+          <h3 style="margin-top:4px">${l.icon} ${esc(l.title)}</h3>
+        </div>
         <span class="chip ${mastered ? 'ok' : 'run'}">${mastered ? '✅ Mastered (3/3 Exam)' : '🔒 Pass 3/3 Quiz to Complete'}</span>
       </div>
       <p class="muted">${esc(l.why)}</p>
@@ -352,7 +356,7 @@
       <div class="drill">🏋️ <b>Board Drill:</b> ${esc(l.drill)}</div>
       <div class="row wrap" style="margin-top:10px">
         <button class="primary" data-act="quiz" data-id="${l.id}">🎓 ${mastered ? 'Retake Mastery Test (+10 ⭐ daily)' : 'Take Mastery Test (Board + Theory · +15 ⭐)'}</button>
-        ${(l.videos || []).map(v => `<a class="btn" target="_blank" rel="noopener" href="${v[1]}">▶ Watch: ${esc(v[0])}</a>`).join('')}
+        ${(l.videos || []).map(v => `<a class="btn" target="_blank" rel="noopener" href="${v[1]}">▶ ${esc(v[0])}</a>`).join('')}
         ${l.link ? `<a class="btn" target="_blank" rel="noopener" href="${l.link[1]}">🔗 ${esc(l.link[0])}</a>` : ''}
         ${l.drill_id ? `<button data-act="lab" data-id="${l.drill_id}">♚ Open Endgame Lab</button>` : ''}
       </div>
@@ -636,8 +640,8 @@
       <div class="card hero">
         <div class="row between wrap">
           <div>
-            <h3>🎓 Foundational Chess Theory & Mastery Exams</h3>
-            <p class="muted small" style="margin:4px 0 0">A lesson is ONLY marked complete when you pass its <b>3-question Board + Theory Mastery Test (3/3)</b>! Each exam passed earns <b>+15 ⭐</b> and credits Today's Phase 2 Quest.</p>
+            <h3>🎓 Structured Chess School Curriculum (Opening · Middlegame · Endgame Triad)</h3>
+            <p class="muted small" style="margin:4px 0 0">Modeled on the <b>Saint Louis Chess Club GM Syllabus & Yusupov/Steps Method</b>: every level has <b>1 Opening Variation + 1 Middlegame Strategy/Tactic + 1 Endgame Technique</b>. Pass the 3/3 Board + Theory Exam on all 3 to master the level!</p>
           </div>
           <span class="chip ok" style="font-size:16px">✅ ${masteredCount} / ${LESSONS.length} Mastered</span>
         </div>
@@ -645,29 +649,39 @@
       <div class="card">
         <div class="row between wrap">
           <div>
-            <b>🎬 Watched a YouTube Opening / Endgame Video? Take a Topic Mastery Test!</b>
-            <div class="muted small">Pick the topic you just watched on YouTube and pass the interactive 3-question test to prove you mastered it!</div>
+            <b>🎬 Watched a Saint Louis Chess Club / YouTube Lecture? Take the Topic Exam!</b>
+            <div class="muted small">Pick the Opening, Middlegame, or Endgame module you just watched and pass the 3-question Board + Theory test!</div>
           </div>
           <div class="row wrap">
             <select id="yt-topic-sel">
-              ${LESSONS.map(l => `<option value="${l.id}">${l.icon} L${l.l}: ${esc(l.title)}</option>`).join('')}
+              ${LESSONS.map(l => `<option value="${l.id}">${l.icon} L${l.l} [${l.cat}]: ${esc(l.title)}</option>`).join('')}
             </select>
             <button class="primary" data-act="yttest">🎓 Test Me Now (+15 ⭐)</button>
           </div>
         </div>
       </div>
-      ${LEVELS.map(lv => `<div class="card">
-        <h3>${lv.icon} Level ${lv.n}: ${lv.name} <small class="muted">(${lv.mc} · ${lv.band})</small></h3>
-        <p class="muted small">${esc(lv.goal)}</p>
-        ${LESSONS.filter(l => l.l === lv.n).map(l => {
-          const isDone = !!S().lessons.done[l.id];
-          return `<details ${l.l === S().level && !isDone ? 'open' : ''}>
-            <summary>${isDone ? '✅' : l.icon} ${esc(l.title)} <span class="chip small ${isDone ? 'ok' : ''}">${isDone ? 'Mastered 3/3' : 'Take Test (+15 ⭐)'}</span></summary>
-            ${lessonCard(l)}
-          </details>`;
-        }).join('')}
-      </div>`).join('')}
-      <div class="card"><h3>🌐 Curated Video & Interactive Channels</h3><div class="row wrap">${RECOMMENDED.map(r => `<a class="btn" target="_blank" rel="noopener" href="${r[1]}">${esc(r[0])} ↗</a>`).join('')}</div></div>`;
+      ${LEVELS.map(lv => {
+        const mods = LESSONS.filter(l => l.l === lv.n);
+        const doneMods = mods.filter(l => S().lessons.done[l.id]).length;
+        return `<div class="card">
+          <div class="row between wrap">
+            <h3>${lv.icon} Level ${lv.n}: ${lv.name} <small class="muted">(${lv.mc} · ${lv.band})</small></h3>
+            <span class="chip ${doneMods === mods.length ? 'ok' : ''}">${doneMods === mods.length ? '🏆 Triad Mastered (3/3)' : `Triad: ${doneMods}/${mods.length} Passed`}</span>
+          </div>
+          <p class="muted small" style="margin:4px 0 8px">${esc(lv.goal)}</p>
+          <div class="row wrap" style="margin-bottom:8px">
+            ${mods.map(m => `<span class="chip small ${S().lessons.done[m.id] ? 'ok' : ''}">${S().lessons.done[m.id] ? '✅' : m.icon} ${esc(m.cat)}</span>`).join('')}
+          </div>
+          ${mods.map(l => {
+            const isDone = !!S().lessons.done[l.id];
+            return `<details ${l.l === S().level && !isDone ? 'open' : ''}>
+              <summary><span>${isDone ? '✅' : l.icon} <b>[${esc(l.cat)}]</b> ${esc(l.title)}</span> <span class="chip small ${isDone ? 'ok' : ''}">${isDone ? 'Mastered 3/3' : 'Take Test (+15 ⭐)'}</span></summary>
+              ${lessonCard(l)}
+            </details>`;
+          }).join('')}
+        </div>`;
+      }).join('')}
+      <div class="card"><h3>🏛️ Saint Louis Chess Club GM Lectures & Recommended Channels</h3><div class="row wrap">${RECOMMENDED.map(r => `<a class="btn" target="_blank" rel="noopener" href="${r[1]}">${esc(r[0])} ↗</a>`).join('')}</div></div>`;
   }
 
   /* ----- Endgame Lab ----- */
@@ -717,7 +731,112 @@
     b.locked = true; setTimeout(() => { const m = opponentMove(b.chess); if (m) b.play(m.from, m.to); b.locked = false; if (b.chess.game_over()) end(); else if (EG.moves >= dr.limit + 20) { EG.over = true; $('#eg-msg').innerHTML = 'Too many moves — press 🔄 and aim to be more efficient.'; } }, 450);
   }
 
-  /* ----- Progress / Stats ----- */
+  /* ----- Monthly Activity Calendar + Progress / Stats ----- */
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  function renderCalendarCard() {
+    const s = S(), today = CQ.dstr(), target = s.settings.dailyMin || 30;
+    const ym = UI.calYm || today.slice(0, 7);
+    const [Y, M] = ym.split('-').map(Number);
+    const firstDow = new Date(Y, M - 1, 1).getDay();
+    const numDays = new Date(Y, M, 0).getDate();
+    let maxDays = 0, partDays = 0, zeroDays = 0, monthMin = 0, monthStars = 0;
+
+    const cells = [];
+    for (let b = 0; b < firstDow; b++) cells.push(`<div class="cal-cell empty"></div>`);
+    for (let dayNum = 1; dayNum <= numDays; dayNum++) {
+      const k = `${Y}-${String(M).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+      const d = s.days[k];
+      const mins = CQ.minutesOf(d);
+      const pz = d && d.pz ? d.pz.solved : 0;
+      const dayLedger = s.ledger.filter(e => e.date === k && e.delta > 0);
+      const stars = dayLedger.reduce((a, e) => a + e.delta, 0) || (d && d.stars) || 0;
+      const hasQuiz = dayLedger.some(e => e.type === 'lesson_quiz');
+      const hasEg = dayLedger.some(e => e.type === 'endgame');
+      const hasRev = dayLedger.some(e => e.type === 'review');
+      const isFuture = k > today;
+      const isToday = k === today;
+
+      let cls = 'cal-future', badge = '';
+      if (!isFuture) {
+        if ((d && d.questComplete) || mins >= target) { cls = 'cal-max'; badge = 'MAX'; maxDays++; }
+        else if (mins > 0 || pz > 0 || stars > 0) { cls = 'cal-part'; badge = 'PART'; partDays++; }
+        else { cls = 'cal-zero'; badge = '0 CR'; zeroDays++; }
+        monthMin += mins;
+        monthStars += stars;
+      }
+
+      const icons = [hasQuiz ? '🎓' : '', hasEg ? '♚' : '', hasRev ? '📝' : ''].filter(Boolean).join('');
+      cells.push(`
+        <div class="cal-cell ${cls} ${isToday ? 'today' : ''}" data-act="calday" data-id="${k}" title="Tap for ${k} details">
+          <div class="cal-hd"><b>${dayNum}</b>${badge ? `<span class="cal-tag">${badge}</span>` : ''}</div>
+          ${isFuture ? `<div class="cal-body muted">—</div>` : cls === 'cal-zero' ? `
+            <div class="cal-body zero-txt"><b>0 Credit</b><span>0m · 0 ⭐</span></div>
+          ` : `
+            <div class="cal-body">
+              <div>⏱ <b>${mins}m</b> ${icons}</div>
+              <div>🧩 ${pz}pz · <span class="star">+${stars}⭐</span></div>
+            </div>
+          `}
+        </div>`);
+    }
+
+    return `<div class="card">
+      <div class="row between wrap">
+        <div>
+          <h3>📅 Monthly Activity & Credit Calendar</h3>
+          <div class="muted small">Tap any day box for full parent audit. Green = Max Credit (${target}+ min or Full Quest), Yellow = Partial, Red = 0 Credit.</div>
+        </div>
+        <div class="row">
+          <button class="btn small" data-act="calprev">◀ Prev</button>
+          <b style="min-width:130px;text-align:center">${MONTHS[M - 1]} ${Y}</b>
+          <button class="btn small" data-act="calnext">Next ▶</button>
+          ${ym !== today.slice(0, 7) ? `<button class="btn small primary" data-act="caltoday">Today</button>` : ''}
+        </div>
+      </div>
+      <div class="grid4" style="margin:10px 0">
+        <div class="stat cal-stat-max"><b>🟩 ${maxDays}</b><span>Max Credit Days</span></div>
+        <div class="stat cal-stat-part"><b>🟨 ${partDays}</b><span>Partial Credit Days</span></div>
+        <div class="stat cal-stat-zero"><b>🟥 ${zeroDays}</b><span>0 Credit (Missed)</span></div>
+        <div class="stat"><b>⏱ ${monthMin}m · ⭐${monthStars}</b><span>Month Total</span></div>
+      </div>
+      <div class="cal-dow">
+        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+      </div>
+      <div class="cal-grid">${cells.join('')}</div>
+    </div>`;
+  }
+
+  function openDayDetailModal(dateStr) {
+    const s = S(), d = s.days[dateStr], target = s.settings.dailyMin || 30;
+    const mins = CQ.minutesOf(d);
+    const dayLedger = s.ledger.filter(e => e.date === dateStr);
+    const earned = dayLedger.filter(e => e.delta > 0).reduce((a, e) => a + e.delta, 0);
+    const status = (d && d.questComplete) || mins >= target
+      ? '<span class="chip ok">🟩 MAX CREDIT (Full Goal Met)</span>'
+      : (mins > 0 || (d && d.pz && d.pz.tried > 0) || earned > 0)
+        ? '<span class="chip run">🟨 PARTIAL CREDIT</span>'
+        : '<span class="chip bad">🟥 0 CREDIT (No Chess Activity)</span>';
+    const sec = (d && d.sec) || { p1: 0, p2: 0, p3: 0, free: 0 };
+    const pz = (d && d.pz) || { tried: 0, first: 0, solved: 0, fastWrong: 0 };
+    modal(`
+      <div class="row between wrap"><h3>📅 ${esc(dateStr)}</h3>${status}</div>
+      <div class="grid4" style="margin:10px 0">
+        <div class="stat"><b>${mins}m</b><span>of ${target}m goal</span></div>
+        <div class="stat"><b>${pz.solved}/${pz.tried}</b><span>puzzles solved</span></div>
+        <div class="stat"><b>${pz.tried ? Math.round(pz.first / pz.tried * 100) : 0}%</b><span>first-try accuracy</span></div>
+        <div class="stat"><b class="star">+${earned} ⭐</b><span>stars earned</span></div>
+      </div>
+      <div class="drill small">
+        <b>⏱ Time Breakdown:</b> Phase 1 (Tactics): <b>${fmt(sec.p1)}</b> · Phase 2 (Theory/Endgame): <b>${fmt(sec.p2)}</b> · Phase 3 (Play/Review): <b>${fmt(sec.p3)}</b> · Extra Practice: <b>${fmt(sec.free || 0)}</b><br>
+        <b>⚡ Impulse Moves (&lt;4s wrong):</b> ${pz.fastWrong}
+      </div>
+      <h4>📒 Activity & Star Log for ${esc(dateStr)}</h4>
+      <div style="max-height:180px;overflow-y:auto">
+        ${dayLedger.length ? dayLedger.map(e => `<div class="row between line small"><span>${esc(e.desc)}</span><b class="${e.delta > 0 ? 'plus' : 'minus'}">${e.delta > 0 ? '+' : ''}${e.delta} ⭐</b></div>`).join('') : '<p class="muted small">No stars logged on this date.</p>'}
+      </div>
+    `);
+  }
+
   function badges() {
     const s = S(), q = Object.values(s.days).filter(d => d.questComplete).length, pz = Object.values(s.days).reduce((a, d) => a + d.pz.solved, 0), bs = CQ.bestStreak();
     const eg = Object.values(s.endgames).reduce((a, e) => a + e.wins, 0), qz = Object.keys(s.lessons.done || {}).length;
@@ -740,6 +859,7 @@
     const themes = Object.entries(th).filter(([, x]) => x.n >= 3).map(([k, x]) => [k, x.first / x.n, x.n]).sort((a, b) => a[1] - b[1]);
     const fastWrong = Object.values(s.days).reduce((a, d) => a + d.pz.fastWrong, 0), tried = Object.values(s.days).reduce((a, d) => a + d.pz.tried, 0), first = Object.values(s.days).reduce((a, d) => a + d.pz.first, 0);
     v.innerHTML = `
+      ${renderCalendarCard()}
       <div class="card">
         <div class="row between wrap">
           <h3>🎯 Road to ${set.ratingTarget} OTB</h3>
@@ -910,6 +1030,15 @@
       }
       case 'switchavatar': return openAvatarSwitcher();
       case 'openlograting': return openRatingLogger();
+      case 'calprev': case 'calnext': {
+        const cur = UI.calYm || CQ.dstr().slice(0, 7);
+        const [y, m] = cur.split('-').map(Number);
+        const dt = new Date(y, m - 1 + (a === 'calnext' ? 1 : -1), 1);
+        UI.calYm = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0');
+        return renderView();
+      }
+      case 'caltoday': UI.calYm = CQ.dstr().slice(0, 7); return renderView();
+      case 'calday': return openDayDetailModal(id);
       case 'picktier': {
         const lvl = +id;
         go('puzzles');

@@ -90,3 +90,21 @@ details{border-top:1px solid #334155;padding:6px 0}summary{cursor:pointer;paddin
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:grid;place-items:center;z-index:100;padding:14px;overflow-y:auto}.modal .modal-card{max-width:480px;width:100%;margin:auto;max-height:92vh;overflow-y:auto}
 .toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:#0b1220;border:1px solid var(--gold);padding:10px 16px;border-radius:12px;opacity:0;transition:.3s;z-index:120}.toast.show{opacity:1;transform:translate(-50%,0)}
 .confetti{position:fixed;top:-40px;z-index:150;animation:fall 3s linear forwards;pointer-events:none}@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.8}}
+/* Monthly Activity Calendar */
+.cal-dow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.cal-cell{min-height:68px;background:#0b1220;border:1px solid #334155;border-radius:9px;padding:5px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;font-size:11px;overflow:hidden}
+.cal-cell.empty{background:transparent;border:0;cursor:default}
+.cal-cell.today{box-shadow:0 0 0 2px var(--gold)}
+.cal-cell.cal-max{background:rgba(20,83,45,.45);border-color:#22c55e}
+.cal-cell.cal-part{background:rgba(120,53,15,.42);border-color:#f59e0b}
+.cal-cell.cal-zero{background:rgba(127,29,29,.28);border-color:#991b1b}
+.cal-cell.cal-future{opacity:.42}
+.cal-hd{display:flex;justify-content:space-between;align-items:center;gap:2px}
+.cal-hd b{font-size:12px}
+.cal-tag{font-size:9px;font-weight:800;padding:1px 4px;border-radius:4px;background:rgba(0,0,0,.4)}
+.cal-max .cal-tag{color:#86efac}.cal-part .cal-tag{color:#fde68a}.cal-zero .cal-tag{color:#fca5a5}
+.cal-body{font-size:10px;line-height:1.25;margin-top:3px}
+.cal-body.zero-txt b{display:block;color:#fca5a5;font-size:10px}
+.cal-body.zero-txt span{color:var(--muted);font-size:9px}
+.cal-stat-max{border:1px solid #166534}.cal-stat-part{border:1px solid #b45309}.cal-stat-zero{border:1px solid #991b1b}
