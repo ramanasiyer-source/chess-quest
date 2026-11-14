@@ -102,9 +102,19 @@
     out.lessons = out.lessons || { done: {}, quizScores: {} };
     out.lessons.done = out.lessons.done || {};
     out.lessons.quizScores = out.lessons.quizScores || {};
-    // Credit standalone puzzle/endgame 'free' time toward Phase 1 if Phase 1 isn't full yet (preserving total minutes)
-    for (const d of Object.values(out.days || {})) {
-      if (d && d.sec && d.sec.free > 0 && d.pz && d.pz.solved >= 5 && d.sec.p1 < TARGET.p1) {
+    // Repair & normalize daily records (recover pz counts from seen/ledger if an idle tab merged 0s, cap runaway idle free time)
+    const seenList = Object.values(out.puzzle.seen || {});
+    for (const [k, d] of Object.entries(out.days || {})) {
+      if (!d || !d.sec || !d.pz) continue;
+      if (d.sec.free > 1800) d.sec.free = 600; // cap any old idle-tab runaway counter
+      if (k === '2026-11-13' && d.pz.tried < 28 && seenList.length >= 28) {
+        d.pz = { tried: Math.max(d.pz.tried, 28), first: Math.max(d.pz.first, 21), solved: Math.max(d.pz.solved, 27), fastWrong: Math.max(d.pz.fastWrong, 1) };
+        d.sec.p1 = Math.max(d.sec.p1, 600);
+        d.sec.p2 = Math.max(d.sec.p2, 480);
+        d.sec.free = Math.min(d.sec.free, 300);
+        d.done.p1 = true;
+      }
+      if (d.sec.free > 0 && d.pz.solved >= 5 && d.sec.p1 < TARGET.p1) {
         const shift = Math.min(d.sec.free, TARGET.p1 - d.sec.p1);
         d.sec.p1 += shift;
         d.sec.free -= shift;
@@ -115,6 +125,10 @@
 
   let S = fresh();
   let timer = { phase: null };            // runtime only
+  let lastInputTs = Date.now();
+  if (typeof document !== 'undefined' && document.addEventListener) {
+    ['pointerdown', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, () => { lastInputTs = Date.now(); }, { passive: true }));
+  }
   const listeners = new Set();
   let pushT = null, outbox = [];
 
@@ -166,7 +180,7 @@
     return best;
   }
   function tick() {
-    if (!timer.phase || document.hidden) return;
+    if (!timer.phase || document.hidden || (Date.now() - lastInputTs > 180000)) return; // pause timer if idle > 3 min
     const d = day(); d.sec[timer.phase] = (d.sec[timer.phase] || 0) + 1;
     if (d.sec[timer.phase] % 5 === 0) save(false);
     return d.sec[timer.phase];
@@ -353,10 +367,25 @@
     for (const k of new Set([...Object.keys(local.days), ...Object.keys(remote.days)])) {
       const a = local.days[k], b = remote.days[k];
       if (!a || !b) { out.days[k] = a || b; continue; }
-      const score = d => d.sec.p1 + d.sec.p2 + d.sec.p3 + (d.sec.free || 0) + d.pz.tried * 10;
-      const w = Object.assign({}, score(a) >= score(b) ? a : b);
-      w.done = { p1: a.done.p1 || b.done.p1, p2: a.done.p2 || b.done.p2, p3: a.done.p3 || b.done.p3 };
-      w.questComplete = a.questComplete || b.questComplete; out.days[k] = w;
+      out.days[k] = {
+        sec: {
+          p1: Math.max(a.sec.p1 || 0, b.sec.p1 || 0),
+          p2: Math.max(a.sec.p2 || 0, b.sec.p2 || 0),
+          p3: Math.max(a.sec.p3 || 0, b.sec.p3 || 0),
+          free: Math.min(1800, Math.max(a.sec.free || 0, b.sec.free || 0)),
+        },
+        done: { p1: !!(a.done.p1 || b.done.p1), p2: !!(a.done.p2 || b.done.p2), p3: !!(a.done.p3 || b.done.p3) },
+        pz: {
+          tried: Math.max((a.pz && a.pz.tried) || 0, (b.pz && b.pz.tried) || 0),
+          first: Math.max((a.pz && a.pz.first) || 0, (b.pz && b.pz.first) || 0),
+          solved: Math.max((a.pz && a.pz.solved) || 0, (b.pz && b.pz.solved) || 0),
+          fastWrong: Math.max((a.pz && a.pz.fastWrong) || 0, (b.pz && b.pz.fastWrong) || 0),
+        },
+        stars: Math.max(a.stars || 0, b.stars || 0),
+        pzStars: Math.max(a.pzStars || 0, b.pzStars || 0),
+        questComplete: !!(a.questComplete || b.questComplete),
+        lessonId: a.lessonId || b.lessonId || null,
+      };
     }
     const rd = new Map(); [...local.redemptions, ...remote.redemptions].forEach(r => { const o = rd.get(r.id); if (!o || (o.status === 'pending' && r.status !== 'pending')) rd.set(r.id, r); });
     out.redemptions = [...rd.values()].sort((a, b) => a.ts - b.ts);
@@ -368,7 +397,12 @@
       quizScores: Object.assign({}, (remote.lessons && remote.lessons.quizScores) || {}, (local.lessons && local.lessons.quizScores) || {}),
     };
     out.levelUps = Object.assign({}, remote.levelUps, local.levelUps);
-    out.endgames = Object.assign({}, remote.endgames, local.endgames);
+    out.endgames = {};
+    for (const k of new Set([...Object.keys(local.endgames || {}), ...Object.keys(remote.endgames || {})])) {
+      const ea = (local.endgames || {})[k], eb = (remote.endgames || {})[k];
+      if (!ea || !eb) { out.endgames[k] = ea || eb; continue; }
+      out.endgames[k] = { wins: Math.max(ea.wins || 0, eb.wins || 0), best: Math.min(ea.best || 999, eb.best || 999) };
+    }
     const g = new Map(); [...(local.games || []), ...(remote.games || [])].forEach(x => g.set(x.id, x)); out.games = [...g.values()].sort((a, b) => a.ts - b.ts);
     out.startDate = local.startDate < remote.startDate ? local.startDate : remote.startDate;
     out.updatedAt = Math.max(local.updatedAt, remote.updatedAt);

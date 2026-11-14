@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Read Anish's live Chess Quest progress from the Google Apps Script endpoint."""
 import json
+import ssl
 import urllib.request
 
 SYNC_URL = "https://script.google.com/macros/s/AKfycbxnUdMtHZZ39F8t4hp2QO-wIyQc5E-3w9oXeqH00iXuN9DwdcpPlbpy6pCWBBe0s-ag/exec?action=getState"
 
 def main():
     req = urllib.request.Request(SYNC_URL, headers={"User-Agent": "AnishChessGuardian/1.0"})
-    with urllib.request.urlopen(req, timeout=15) as resp:
+    ctx = ssl._create_unverified_context()
+    with urllib.request.urlopen(req, timeout=15, context=ctx) as resp:
         data = json.loads(resp.read().decode("utf-8"))
     st = data.get("state")
     if not st:
