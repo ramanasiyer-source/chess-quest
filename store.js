@@ -1,11 +1,13 @@
-/* Chess Quest v2 - state, star ledger, streaks, profile ratings, performance rating, and Google Sheet cloud sync. */
+/* Chess Quest v3 - 5 Master Levels, Weekly Goal Bonus/Penalty Engine, Lichess Auto-Star Sync, Repertoire Win Tracker & Google Sheet Sync */
 (function () {
   const KEY = 'chessquest_v1';
-  const TARGET = { p1: 600, p2: 600, p3: 600 };      // seconds per phase (3 x 10 min = 30 min)
-  const MIN_FRAC = 0.8;                                // a phase can be finished after 80% of its time
-  const DEFAULT_PUZZLE_STAR_CAP = 200;                 // raised from 40 -> 200 stars/day!
-  const DEFAULT_ENDGAME_CAP = 10;                      // raised from 3 -> 10 mates/day (50 stars/day)!
+  const TARGET = { p1: 600, p2: 600, p3: 600 };
+  const MIN_FRAC = 0.8;
+  const DEFAULT_PUZZLE_STAR_CAP = 200;
+  const DEFAULT_ENDGAME_CAP = 10;
   const DEFAULT_SYNC_URL = 'https://script.google.com/macros/s/AKfycbxnUdMtHZZ39F8t4hp2QO-wIyQc5E-3w9oXeqH00iXuN9DwdcpPlbpy6pCWBBe0s-ag/exec';
+  const DEFAULT_PIN = '2014';
+  const MAX_LEVEL = 5;
 
   const pad = n => String(n).padStart(2, '0');
   const dstr = (d = new Date()) => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
@@ -13,12 +15,39 @@
   const daysBetween = (a, b) => { const p = s => { const [y, m, d] = s.split('-').map(Number); return Date.UTC(y, m - 1, d); }; return Math.round((p(b) - p(a)) / 864e5); };
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
+  // Monday-based week start (YYYY-MM-DD of Monday)
+  function weekStart(dateStr = dstr()) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const dt = new Date(y, m - 1, d);
+    const dow = dt.getDay(); // 0=Sun, 1=Mon, ...
+    const diff = dow === 0 ? -6 : 1 - dow;
+    return dstr(new Date(y, m - 1, d + diff));
+  }
+
+  const WEEKLY_TARGETS = {
+    minutes: 210,        // 30 mins/day x 7 days
+    classicalGames: 2,   // 2 Classical games/week
+    rapidGames: 5,       // 5 Rapid games/week
+    puzzles: 50,         // 50 puzzles/week (Lichess + App)
+    theoryQuizzes: 3,    // 3 variation mastery exams/week (or 60m theory/endgames)
+    theoryMinutes: 60,
+    puzzleMinutes: 75,
+  };
+
+  const WEEKLY_MILESTONES = [
+    { pct: 50, stars: 25, label: '🥉 50% Weekly Goal Checkpoint' },
+    { pct: 75, stars: 50, label: '🥈 75% Weekly Home Stretch Bonus' },
+    { pct: 100, stars: 100, label: '🥇 100% Weekly Goal Complete!' },
+    { pct: 150, stars: 200, label: '🔥 150% Overdrive Double Bonus!' },
+    { pct: 200, stars: 400, label: '💎 200% Netherite Beast Mode Jackpot!' },
+  ];
+
   const DEFAULT_REWARDS = [
     { id: 'r1', icon: '📺', name: '30 min bonus watch time', cost: 100 },
     { id: 'r2', icon: '🎮', name: '30 min bonus gaming (Minecraft)', cost: 100 },
     { id: 'r3', icon: '🍕', name: 'Pick the family treat / dinner', cost: 150 },
-    { id: 'r4', icon: '💵', name: '$5 to spend (Minecoins / LEGO / snacks)', cost: 250 },
-    { id: 'r5', icon: '🎁', name: '$20 big prize fund', cost: 900 },
+    { id: 'r4', icon: '💵', name: '$5 to spend (Robux / LEGO / snacks)', cost: 200 },
+    { id: 'r5', icon: '🎁', name: '$20 big prize fund', cost: 800 },
   ];
 
   const DEFAULT_PROFILE = () => ({
@@ -26,7 +55,7 @@
     title: 'Scholastic Contender · Skyview Middle School (6th Grade)',
     location: 'Bothell, WA',
     avatar: 'assets/anish-jacket.jpg',
-    bio: 'Aggressive tactical player climbing toward 1000+ OTB and Netherite Grandmaster mastery.',
+    bio: 'Repertoire specialist (Queen’s Gambit & English | Caro-Kann & Sicilian) climbing toward 1000+ USCF/NWSRS.',
     ratings: {
       nwsrs: {
         label: 'NWChess (NWSRS)', current: 679, start: 679, peak: 732, target: 1000, id: '100854',
@@ -37,7 +66,7 @@
         ],
       },
       uscf: {
-        label: 'US Chess (USCF)', current: 463, quick: 425, onlineReg: 338, onlineQuick: 360, peak: 463, target: 1000, id: '17354281',
+        label: 'US Chess (USCF)', current: 463, start: 463, quick: 425, blitz: 425, onlineReg: 338, onlineQuick: 360, peak: 463, target: 1000, id: '17354281',
         url: 'https://www.uschess.org/msa/MbrDtlMain.php?17354281',
         history: [
           { date: '2026-05-16', r: 425, event: 'SPFNO Blitz (USCF Quick)' },
@@ -45,37 +74,48 @@
         ],
       },
       fide: {
-        label: 'FIDE Standard', current: 0, peak: 0, target: 1400, id: 'Unrated',
+        label: 'FIDE Standard', current: 0, start: 0, peak: 0, target: 1400, id: 'Unrated',
         url: 'https://ratings.fide.com/',
         history: [],
       },
       lichess: {
-        label: 'Lichess (govindu)', current: 1581, puzzle: 1765, classical: 1255, blitz: 1210, bullet: 1058, peak: 1765, target: 1800, id: 'govindu',
+        label: 'Lichess (govindu)', current: 1611, start: 1500, puzzle: 1765, classical: 1255, blitz: 1210, bullet: 1058, peak: 1765,
+        targetRapid: 1750, targetClassical: 1650, targetBlitz: 1500, targetPuzzle: 2000, target: 1750, id: 'govindu',
         url: 'https://lichess.org/@/govindu',
         history: [
           { date: '2026-09-01', r: 1500, pz: 1680, event: 'Baseline Lichess' },
           { date: '2026-11-13', r: 1581, pz: 1765, event: 'Live Lichess (94 Rapid / 2,303 Puzzles)' },
+          { date: '2026-11-14', r: 1611, pz: 1765, event: 'Lichess Rapid Climb (1611)' },
         ],
       },
     },
     tournaments: [
-      { id: 't-wata', date: '2026-09-12', name: 'WATA Autumn Scholastic', section: 'G4-6 U800', score: '2.0 / 5', sys: 'NWSRS / USCF', before: 732, after: 679, notes: 'Won 2 games; key takeaway: slow down in critical positions & convert endgames.' },
-      { id: 't-spfno', date: '2026-05-16', name: 'SPFNO Blitz Championship', section: 'Scholastic Blitz (G/5)', score: 'Completed', sys: 'USCF Quick (425)', before: 425, after: 425, notes: 'High-speed tactical experience.' },
-      { id: 't-lynn', date: '2026-11-27', name: 'Upcoming: Thanksgiving Scholastic (Lynnwood)', section: 'Target Tournament', score: 'Upcoming', sys: 'NWSRS / USCF', before: 679, after: null, notes: 'Goal: Use CCT on every move & pass 725+ NWSRS.' },
-      { id: 't-dec', date: '2026-12-19', name: 'Upcoming: Bellevue / Redmond Winter Scholastics', section: 'Target Tournament', score: 'Upcoming', sys: 'NWSRS / USCF', before: 679, after: null, notes: 'Winter rating push toward 800+.' },
+      { id: 't-spfno2', date: '2026-11-07', name: '21st Susan Polgar National Open (Blitz)', section: 'Grades 6-12', score: 'Completed', sys: 'USCF Blitz / NWSRS', before: 425, after: 425, notes: 'Played strong training-school field up to ~1600.' },
+      { id: 't-wata', date: '2026-09-12', name: 'WATA Autumn Scholastic', section: 'G4-12 U900', score: '2.0 / 5', sys: 'NWSRS / USCF', before: 732, after: 679, notes: 'Won 2 games; key takeaway: slow down in critical positions & convert endgames.' },
+      { id: 't-lynn', date: '2026-11-27', name: 'Upcoming: WA Class Thanksgiving Scholastic (Lynnwood)', section: 'Target Tournament', score: 'Upcoming', sys: 'NWSRS / USCF', before: 679, after: null, notes: 'Goal: Deploy Queen’s Gambit / Caro-Kann & pass 725+ NWSRS.' },
+      { id: 't-dec', date: '2026-12-19', name: 'Upcoming: Knight Before Christmas / Orlov Qualifier', section: 'State Qualifier', score: 'Upcoming', sys: 'NWSRS / USCF', before: 679, after: null, notes: 'Winter rating push toward 800–1000.' },
     ],
   });
 
   function fresh() {
     return {
-      v: 2, updatedAt: 0, startDate: dstr(),
-      settings: { name: 'Anish', lichess: 'govindu', syncUrl: DEFAULT_SYNC_URL, pin: '', rating: 679, ratingStart: 679, ratingTarget: 1000, ratingDate: dstr(), dailyMin: 30, puzzleStarCap: DEFAULT_PUZZLE_STAR_CAP, endgameCap: DEFAULT_ENDGAME_CAP },
+      v: 3, updatedAt: 0, startDate: '2026-11-13',
+      settings: {
+        name: 'Anish', lichess: 'govindu', syncUrl: DEFAULT_SYNC_URL, pin: DEFAULT_PIN,
+        rating: 679, ratingStart: 679, ratingTarget: 1000, ratingDate: dstr(),
+        dailyMin: 30, puzzleStarCap: DEFAULT_PUZZLE_STAR_CAP, endgameCap: DEFAULT_ENDGAME_CAP,
+      },
       profile: DEFAULT_PROFILE(),
-      level: 3,
+      level: 1,
       days: {},
-      puzzle: { seen: {}, recent: { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] } },
+      excusedDays: {},
+      puzzle: { seen: {}, recent: { 1: [], 2: [], 3: [], 4: [], 5: [] } },
       ledger: [], redemptions: [], rewards: DEFAULT_REWARDS,
-      lessons: { done: {}, quizScores: {} }, games: [], endgames: {}, levelUps: {},
+      lessons: { done: {}, quizScores: {} },
+      games: [],
+      repWins: [], // [{ id, date, side: 'w'|'b', rep: 'qg'|'eng'|'ck'|'sic', speed: 'classical'|'rapid'|'blitz', opp, source: 'lichess'|'otb', lvl }]
+      lichessSync: { puzzleDays: {}, gamesCredited: {} },
+      endgames: {}, levelUps: {}, levelCleared: {},
     };
   }
 
@@ -84,10 +124,13 @@
     const out = Object.assign(f, obj || {});
     out.settings = Object.assign(f.settings, (obj && obj.settings) || {});
     if (!out.settings.syncUrl) out.settings.syncUrl = DEFAULT_SYNC_URL;
+    if (!out.settings.pin) out.settings.pin = DEFAULT_PIN;
     if (!out.settings.puzzleStarCap || out.settings.puzzleStarCap < 200) out.settings.puzzleStarCap = DEFAULT_PUZZLE_STAR_CAP;
     if (!out.settings.endgameCap || out.settings.endgameCap < 10) out.settings.endgameCap = DEFAULT_ENDGAME_CAP;
     if (!out.settings.lichess) out.settings.lichess = 'govindu';
     if (out.settings.name === 'Champ') out.settings.name = 'Anish';
+    out.level = Math.max(1, Math.min(MAX_LEVEL, out.level || 1));
+
     const dp = DEFAULT_PROFILE();
     out.profile = Object.assign({}, dp, (obj && obj.profile) || {});
     out.profile.ratings = Object.assign({}, dp.ratings, (obj && obj.profile && obj.profile.ratings) || {});
@@ -100,33 +143,42 @@
     if (!Array.isArray(out.profile.tournaments) || !out.profile.tournaments.length) out.profile.tournaments = dp.tournaments.slice();
     out.puzzle = out.puzzle || { seen: {}, recent: {} };
     out.puzzle.seen = out.puzzle.seen || {};
-    out.puzzle.recent = Object.assign({ 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] }, out.puzzle.recent || {});
+    out.puzzle.recent = Object.assign({ 1: [], 2: [], 3: [], 4: [], 5: [] }, out.puzzle.recent || {});
     out.lessons = out.lessons || { done: {}, quizScores: {} };
     out.lessons.done = out.lessons.done || {};
     out.lessons.quizScores = out.lessons.quizScores || {};
-    // Repair & normalize daily records (recover pz counts from seen/ledger if an idle tab merged 0s, cap runaway idle free time)
+    // Preserve v2 lesson id migration: l1-open -> l1-cov
+    if (out.lessons.done['l1-open'] && !out.lessons.done['l1-cov']) {
+      out.lessons.done['l1-cov'] = out.lessons.done['l1-open'];
+      out.lessons.quizScores['l1-cov'] = 3;
+    }
+    out.excusedDays = out.excusedDays || {};
+    out.repWins = Array.isArray(out.repWins) ? out.repWins : [];
+    out.lichessSync = out.lichessSync || { puzzleDays: {}, gamesCredited: {} };
+    out.lichessSync.puzzleDays = out.lichessSync.puzzleDays || {};
+    out.lichessSync.gamesCredited = out.lichessSync.gamesCredited || {};
+    out.levelCleared = out.levelCleared || {};
+
+    // Normalize daily records & cap any old idle-tab runaway counter
     const seenList = Object.values(out.puzzle.seen || {});
     for (const [k, d] of Object.entries(out.days || {})) {
       if (!d || !d.sec || !d.pz) continue;
-      if (d.sec.free > 1800) d.sec.free = 600; // cap any old idle-tab runaway counter
+      if (d.sec.free > 1800) d.sec.free = 600;
+      if (d.sec.p2 > 1800) d.sec.p2 = 900;
+      if (d.sec.p1 > 1800) d.sec.p1 = 900;
       if (k === '2026-11-13' && d.pz.tried < 28 && seenList.length >= 28) {
         d.pz = { tried: Math.max(d.pz.tried, 28), first: Math.max(d.pz.first, 21), solved: Math.max(d.pz.solved, 27), fastWrong: Math.max(d.pz.fastWrong, 1) };
         d.sec.p1 = Math.max(d.sec.p1, 600);
         d.sec.p2 = Math.max(d.sec.p2, 480);
-        d.sec.free = Math.min(d.sec.free, 300);
         d.done.p1 = true;
       }
-      if (d.sec.free > 0 && d.pz.solved >= 5 && d.sec.p1 < TARGET.p1) {
-        const shift = Math.min(d.sec.free, TARGET.p1 - d.sec.p1);
-        d.sec.p1 += shift;
-        d.sec.free -= shift;
-      }
+      d.li = Object.assign({ pzWins: 0, pzLosses: 0, classical: 0, rapid: 0, blitz: 0 }, d.li || {});
     }
     return out;
   }
 
   let S = fresh();
-  let timer = { phase: null };            // runtime only
+  let timer = { phase: null };
   let lastInputTs = Date.now();
   if (typeof document !== 'undefined' && document.addEventListener) {
     ['pointerdown', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, () => { lastInputTs = Date.now(); }, { passive: true }));
@@ -142,7 +194,16 @@
     try { outbox = JSON.parse(localStorage.getItem(KEY + '_outbox') || '[]'); } catch { outbox = []; }
   }
   function day(date = dstr()) {
-    if (!S.days[date]) S.days[date] = { sec: { p1: 0, p2: 0, p3: 0, free: 0 }, done: { p1: false, p2: false, p3: false }, pz: { tried: 0, first: 0, solved: 0, fastWrong: 0 }, stars: 0, pzStars: 0, questComplete: false, lessonId: null };
+    if (!S.days[date]) {
+      S.days[date] = {
+        sec: { p1: 0, p2: 0, p3: 0, free: 0 },
+        done: { p1: false, p2: false, p3: false },
+        pz: { tried: 0, first: 0, solved: 0, fastWrong: 0 },
+        li: { pzWins: 0, pzLosses: 0, classical: 0, rapid: 0, blitz: 0 },
+        stars: 0, pzStars: 0, questComplete: false, lessonId: null,
+      };
+    }
+    if (!S.days[date].li) S.days[date].li = { pzWins: 0, pzLosses: 0, classical: 0, rapid: 0, blitz: 0 };
     return S.days[date];
   }
   function save(touch = true, schedulePush = touch) {
@@ -154,35 +215,46 @@
   function emit() { listeners.forEach(f => { try { f(); } catch (e) { console.error(e); } }); }
   function commit() { save(); emit(); }
 
-  // ----- stars ledger (balance is always derived, so merging devices can never lose or double stars)
+  // ----- Stars / Credits Ledger -----
   const balance = () => S.ledger.reduce((a, e) => a + e.delta, 0);
   const lifetime = () => S.ledger.reduce((a, e) => a + (e.delta > 0 ? e.delta : 0), 0);
-  function addStars(delta, type, desc, key) {
+  const totalRedeemed = () => S.redemptions.filter(r => r.status !== 'denied').reduce((a, r) => a + (r.cost || 0), 0);
+  function addStars(delta, type, desc, key, customDate) {
     if (key && S.ledger.some(e => e.key === key)) return false;
-    const date = dstr();
+    const date = customDate || dstr();
     const entry = { id: uid(), key: key || null, ts: Date.now(), date, type, desc, delta, balance: balance() + delta };
     S.ledger.push(entry); outbox.push(entry);
     if (delta > 0) day(date).stars += delta;
     return true;
   }
 
-  // ----- time + streaks
-  const minutesOf = d => d ? Math.round((d.sec.p1 + d.sec.p2 + d.sec.p3 + (d.sec.free || 0)) / 60) : 0;
-  const totalMinutes = () => Math.round(Object.values(S.days).reduce((a, d) => a + d.sec.p1 + d.sec.p2 + d.sec.p3 + (d.sec.free || 0), 0) / 60);
+  // ----- Time + Streaks -----
+  function minutesOf(d) {
+    if (!d || !d.sec) return 0;
+    const appMin = Math.round((d.sec.p1 + d.sec.p2 + d.sec.p3 + (d.sec.free || 0)) / 60);
+    const li = d.li || {};
+    const liMin = (li.classical || 0) * 25 + (li.rapid || 0) * 15 + (li.blitz || 0) * 6 + Math.round(((li.pzWins || 0) + (li.pzLosses || 0)) * 1.5);
+    return appMin + liMin;
+  }
+  const totalMinutes = () => Object.values(S.days).reduce((a, d) => a + minutesOf(d), 0);
+
   function streak() {
     let d = dstr(), n = 0;
-    if (!(S.days[d] && S.days[d].questComplete)) d = addDays(d, -1);
-    while (S.days[d] && S.days[d].questComplete) { n++; d = addDays(d, -1); }
+    if (minutesOf(S.days[d]) < 15 && !(S.days[d] && S.days[d].questComplete)) d = addDays(d, -1);
+    while (S.days[d] && (minutesOf(S.days[d]) >= 15 || S.days[d].questComplete || S.excusedDays[d])) {
+      if (!S.excusedDays[d]) n++;
+      d = addDays(d, -1);
+    }
     return n;
   }
   function bestStreak() {
-    const ds = Object.keys(S.days).filter(k => S.days[k].questComplete).sort();
+    const ds = Object.keys(S.days).filter(k => minutesOf(S.days[k]) >= 15 || S.days[k].questComplete).sort();
     let best = 0, cur = 0, prev = null;
     for (const k of ds) { cur = (prev && daysBetween(prev, k) === 1) ? cur + 1 : 1; best = Math.max(best, cur); prev = k; }
     return best;
   }
   function tick() {
-    if (!timer.phase || document.hidden || (Date.now() - lastInputTs > 180000)) return; // pause timer if idle > 3 min
+    if (!timer.phase || document.hidden || (Date.now() - lastInputTs > 180000)) return;
     const d = day(); d.sec[timer.phase] = (d.sec[timer.phase] || 0) + 1;
     if (d.sec[timer.phase] % 5 === 0) save(false);
     return d.sec[timer.phase];
@@ -190,26 +262,415 @@
   function finishPhase(p) {
     const d = day(); if (d.done[p]) return;
     d.done[p] = true; timer.phase = null;
-    addStars(5, 'phase', 'Finished Quest Phase ' + p.toUpperCase(), 'phase-' + p + '-' + dstr());
+    addStars(5, 'phase', 'Finished Phase ' + p.toUpperCase(), 'phase-' + p + '-' + dstr());
     if (d.done.p1 && d.done.p2 && d.done.p3 && !d.questComplete) {
       d.questComplete = true;
-      addStars(20, 'quest', '🏆 Completed Full Daily Trifecta Quest!', 'quest-' + dstr());
-      const s = streak();
-      if (s >= 3 && (s === 3 || s % 7 === 0)) addStars(25, 'streak', s + '-day streak bonus!', 'streak-' + s + '-' + dstr());
+      addStars(20, 'quest', '🏆 Completed Daily Trifecta!', 'quest-' + dstr());
       return 'quest';
     }
     return 'phase';
   }
 
-  // ----- puzzle bookkeeping + 8-tier Minecraft progression
-  const MAX_LEVEL = 8;
+  // ----- Weekly Goal, Daily Contribution Log & Bonus/Penalty Engine -----
+  function getWeekStats(mondayStr = weekStart()) {
+    const today = dstr();
+    const daysList = [];
+    let totMin = 0, totPz = 0, totClassical = 0, totRapid = 0, totBlitz = 0, totQuizzes = 0, totEg = 0, totStars = 0;
+    let puzzleMin = 0, theoryMin = 0;
+
+    for (let i = 0; i < 7; i++) {
+      const k = addDays(mondayStr, i);
+      const d = S.days[k];
+      const li = (d && d.li) || { pzWins: 0, pzLosses: 0, classical: 0, rapid: 0, blitz: 0 };
+      const pzSolved = ((d && d.pz && d.pz.solved) || 0) + (li.pzWins || 0);
+      const dayLedger = S.ledger.filter(e => e.date === k);
+      const quizzes = dayLedger.filter(e => e.type === 'lesson_quiz').length;
+      const egMates = dayLedger.filter(e => e.type === 'endgame').length;
+      const netStars = dayLedger.reduce((a, e) => a + e.delta, 0);
+      const earnedStars = dayLedger.filter(e => e.delta > 0).reduce((a, e) => a + e.delta, 0);
+      const mins = minutesOf(d);
+      const pMin = Math.round(((d && d.sec && d.sec.p1) || 0) / 60) + Math.round(((li.pzWins || 0) + (li.pzLosses || 0)) * 1.5);
+      const tMin = Math.round(((d && d.sec && d.sec.p2) || 0) / 60) + quizzes * 12 + egMates * 4;
+
+      // Daily contribution toward weekly 100% goal
+      const dayPct = Math.round(
+        (mins / WEEKLY_TARGETS.minutes) * 35 +
+        (pzSolved / WEEKLY_TARGETS.puzzles) * 25 +
+        ((li.classical * 2 + li.rapid) / (WEEKLY_TARGETS.classicalGames * 2 + WEEKLY_TARGETS.rapidGames)) * 20 +
+        ((quizzes * 20 + tMin) / (WEEKLY_TARGETS.theoryQuizzes * 20 + WEEKLY_TARGETS.theoryMinutes)) * 20
+      );
+
+      totMin += mins;
+      totPz += pzSolved;
+      totClassical += li.classical || 0;
+      totRapid += li.rapid || 0;
+      totBlitz += li.blitz || 0;
+      totQuizzes += quizzes;
+      totEg += egMates;
+      totStars += netStars;
+      puzzleMin += pMin;
+      theoryMin += tMin;
+
+      daysList.push({
+        date: k,
+        dow: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i],
+        isToday: k === today,
+        isFuture: k > today,
+        excused: !!S.excusedDays[k],
+        mins,
+        pzSolved,
+        quizzes,
+        egMates,
+        classical: li.classical || 0,
+        rapid: li.rapid || 0,
+        blitz: li.blitz || 0,
+        earnedStars,
+        netStars,
+        dayPct,
+      });
+    }
+
+    // Overall Weekly Progress % (can exceed 100% -> 150% -> 200%!)
+    const minScore = (totMin / WEEKLY_TARGETS.minutes) * 35;
+    const pzScore = (totPz / WEEKLY_TARGETS.puzzles) * 25;
+    const gameScore = ((totClassical * 2 + totRapid) / (WEEKLY_TARGETS.classicalGames * 2 + WEEKLY_TARGETS.rapidGames)) * 20;
+    const thScore = ((totQuizzes * 15 + theoryMin) / (WEEKLY_TARGETS.theoryQuizzes * 15 + WEEKLY_TARGETS.theoryMinutes)) * 20;
+    const pct = Math.max(0, Math.round(minScore + pzScore + gameScore + thScore));
+
+    const milestones = WEEKLY_MILESTONES.map(m => ({
+      ...m,
+      key: `wk-bonus-${mondayStr}-${m.pct}`,
+      claimed: S.ledger.some(e => e.key === `wk-bonus-${mondayStr}-${m.pct}`),
+      reached: pct >= m.pct,
+    }));
+
+    return {
+      monday: mondayStr,
+      sunday: addDays(mondayStr, 6),
+      pct,
+      totMin,
+      totPz,
+      totClassical,
+      totRapid,
+      totBlitz,
+      totQuizzes,
+      totEg,
+      totStars,
+      puzzleMin,
+      theoryMin,
+      days: daysList,
+      milestones,
+      targets: WEEKLY_TARGETS,
+    };
+  }
+
+  function evaluateWeeklyBonusesAndPenalties() {
+    let changed = false;
+    const curMon = weekStart();
+    const curStats = getWeekStats(curMon);
+
+    // 1) Award any newly crossed weekly milestone bonuses (50%, 75%, 100%, 150%, 200%)
+    for (const m of curStats.milestones) {
+      if (m.reached && !m.claimed) {
+        if (addStars(m.stars, 'weekly_bonus', `${m.label} (${curStats.pct}% of Weekly Goal!)`, m.key)) changed = true;
+      }
+    }
+
+    // 2) Evaluate completed past weeks (from startDate's next full week onward) for missed-goal penalties
+    const startMon = weekStart(S.startDate || '2026-11-13');
+    let wk = startMon;
+    while (wk < curMon) {
+      // Only penalize full 7-day weeks where startDate was on or before Monday of that week
+      if (wk >= (S.startDate || '2026-11-13')) {
+        const st = getWeekStats(wk);
+        const penKey = `wk-pen-${wk}`;
+        if (!S.ledger.some(e => e.key === penKey)) {
+          if (st.pct < 50) {
+            if (addStars(-100, 'penalty', `🚨 Weekly Goal Missed (<50%: ${st.pct}% in week of ${wk})`, penKey, st.sunday)) changed = true;
+          } else if (st.pct < 75) {
+            if (addStars(-40, 'penalty', `⚠️ Weekly Goal Incomplete (50–74%: ${st.pct}% in week of ${wk})`, penKey, st.sunday)) changed = true;
+          } else if (st.pct < 100) {
+            if (addStars(-25, 'penalty', `🟡 Weekly Goal Near-Miss (75–99%: ${st.pct}% in week of ${wk})`, penKey, st.sunday)) changed = true;
+          }
+        }
+      }
+      wk = addDays(wk, 7);
+    }
+
+    // 3) Check 2 consecutive unexcused 0-activity days (prior to today, after startDate)
+    const today = dstr();
+    const span = daysBetween(S.startDate || '2026-11-13', today);
+    let zeroRun = 0;
+    for (let i = 0; i < span; i++) {
+      const k = addDays(S.startDate || '2026-11-13', i);
+      if (S.excusedDays[k]) continue;
+      const d = S.days[k];
+      const active = minutesOf(d) > 0 || (d && d.pz && d.pz.tried > 0) || S.ledger.some(e => e.date === k && e.delta > 0);
+      if (!active) {
+        zeroRun++;
+        if (zeroRun >= 2) {
+          const rustKey = `rust-pen-${k}`;
+          if (addStars(-20, 'penalty', `🛑 Idle Rust Penalty (${zeroRun} consecutive 0-activity days on ${k})`, rustKey, k)) changed = true;
+        }
+      } else {
+        zeroRun = 0;
+      }
+    }
+
+    if (changed) save();
+    return curStats;
+  }
+
+  function toggleExcusedDay(dateStr) {
+    if (S.excusedDays[dateStr]) delete S.excusedDays[dateStr];
+    else S.excusedDays[dateStr] = true;
+    commit();
+  }
+
+  // ----- Lichess Auto-Sync: Convert Lichess Puzzles & Games into Stars + Repertoire Wins -----
+  function classifyRepertoire(openingName = '', movesStr = '', side = 'w') {
+    const op = openingName.toLowerCase();
+    const mv = movesStr.trim();
+    if (side === 'w') {
+      if (op.includes("queen's gambit") || op.includes('queens gambit') || op.includes('slav') || op.includes('catalan') || /^d4\s+\S+\s+c4/.test(mv)) {
+        return { code: 'qg', label: "Queen's Gambit" };
+      }
+      if (op.includes('english') || /^c4\b/.test(mv)) {
+        return { code: 'eng', label: 'English Opening' };
+      }
+    } else {
+      if (op.includes('caro-kann') || op.includes('caro kann') || /^e4\s+c6\b/.test(mv)) {
+        return { code: 'ck', label: 'Caro-Kann Defense' };
+      }
+      if (op.includes('sicilian') || /^e4\s+c5\b/.test(mv)) {
+        return { code: 'sic', label: 'Sicilian Defense' };
+      }
+    }
+    return null;
+  }
+
+  function syncLichessData({ user, activity, games }) {
+    let changed = false;
+    const uname = (S.settings.lichess || 'govindu').toLowerCase();
+
+    // 1) Update live Lichess profile ratings
+    if (user && user.perfs && S.profile && S.profile.ratings && S.profile.ratings.lichess) {
+      const lp = S.profile.ratings.lichess;
+      if (user.perfs.rapid && user.perfs.rapid.rating) lp.current = user.perfs.rapid.rating;
+      if (user.perfs.puzzle && user.perfs.puzzle.rating) lp.puzzle = user.perfs.puzzle.rating;
+      if (user.perfs.classical && user.perfs.classical.rating) lp.classical = user.perfs.classical.rating;
+      if (user.perfs.blitz && user.perfs.blitz.rating) lp.blitz = user.perfs.blitz.rating;
+      if (user.perfs.bullet && user.perfs.bullet.rating) lp.bullet = user.perfs.bullet.rating;
+      lp.peak = Math.max(lp.peak || 0, lp.current || 0, lp.puzzle || 0);
+    }
+
+    // 2) Sync daily Lichess puzzle & game counts from /api/user/{u}/activity
+    if (Array.isArray(activity)) {
+      for (const item of activity) {
+        if (!item.interval || !item.interval.start) continue;
+        // Lichess interval.start is UTC midnight timestamp of that activity window
+        const dtStr = dstr(new Date(item.interval.start));
+        if (dtStr < (S.startDate || '2026-11-13')) continue;
+        const d = day(dtStr);
+
+        if (item.puzzles && item.puzzles.score) {
+          const wins = item.puzzles.score.win || 0;
+          const losses = item.puzzles.score.loss || 0;
+          d.li.pzWins = Math.max(d.li.pzWins || 0, wins);
+          d.li.pzLosses = Math.max(d.li.pzLosses || 0, losses);
+          const prevCredited = S.lichessSync.puzzleDays[dtStr] || 0;
+          if (wins > prevCredited) {
+            const diff = wins - prevCredited;
+            const stars = diff * 2;
+            S.lichessSync.puzzleDays[dtStr] = wins;
+            addStars(stars, 'lichess_puzzle', `🧩 Lichess Puzzles: ${diff} solved on Lichess (${wins}W/${losses}L)`, `li-pz-${dtStr}-${wins}`, dtStr);
+            changed = true;
+          }
+          // Daily rating gain bonus on Lichess puzzles
+          const rp = item.puzzles.score.rp;
+          if (rp && rp.after > rp.before) {
+            const gain = rp.after - rp.before;
+            if (addStars(10, 'lichess_puzzle', `📈 Lichess Puzzle Rating Climb (+${gain} to ${rp.after})`, `li-pzgain-${dtStr}`, dtStr)) changed = true;
+          }
+        }
+        if (item.games) {
+          for (const spd of ['classical', 'rapid', 'blitz']) {
+            if (item.games[spd]) {
+              const cnt = (item.games[spd].win || 0) + (item.games[spd].loss || 0) + (item.games[spd].draw || 0);
+              d.li[spd] = Math.max(d.li[spd] || 0, cnt);
+            }
+          }
+        }
+      }
+    }
+
+    // 3) Sync individual Lichess games & Repertoire Wins
+    if (Array.isArray(games)) {
+      for (const g of games) {
+        if (!g || !g.id || !g.players) continue;
+        const isWhite = g.players.white && g.players.white.user && g.players.white.user.name.toLowerCase() === uname;
+        const isBlack = g.players.black && g.players.black.user && g.players.black.user.name.toLowerCase() === uname;
+        if (!isWhite && !isBlack) continue;
+        const side = isWhite ? 'w' : 'b';
+        const won = (g.winner === 'white' && isWhite) || (g.winner === 'black' && isBlack);
+        const dtStr = dstr(new Date(g.createdAt || Date.now()));
+        const speed = ['classical', 'rapid', 'blitz'].includes(g.speed) ? g.speed : 'rapid';
+        const opName = (g.opening && g.opening.name) || '';
+        const rep = classifyRepertoire(opName, g.moves || '', side);
+        const oppObj = isWhite ? g.players.black : g.players.white;
+        const oppName = (oppObj && oppObj.user && oppObj.user.name) || 'Opponent';
+
+        // Record repertoire win if won using core repertoire
+        if (won && rep && !S.repWins.some(w => w.id === 'li-' + g.id)) {
+          S.repWins.push({
+            id: 'li-' + g.id,
+            gameId: g.id,
+            date: dtStr,
+            side,
+            rep: rep.code,
+            repLabel: rep.label,
+            openingName: opName || rep.label,
+            speed,
+            opp: oppName,
+            source: 'lichess',
+            lvl: S.level,
+          });
+          changed = true;
+        }
+
+        // Credit stars for games played on or after startDate
+        if (dtStr >= (S.startDate || '2026-11-13') && !S.lichessSync.gamesCredited[g.id]) {
+          S.lichessSync.gamesCredited[g.id] = true;
+          const baseStars = speed === 'classical' ? 15 : speed === 'rapid' ? 8 : 3;
+          const winStars = won ? (speed === 'classical' ? 10 : speed === 'rapid' ? 7 : 3) : 0;
+          const repStars = (rep && won) ? (speed === 'classical' ? 10 : 5) : (rep ? 3 : 0);
+          const evalStars = (g.analysis || (isWhite ? g.players.white.analysis : g.players.black.analysis)) ? 5 : 0;
+          const totalGameStars = baseStars + winStars + repStars + evalStars;
+          const resLabel = won ? 'Won' : !g.winner ? 'Drew' : 'Played';
+          addStars(
+            totalGameStars,
+            'lichess_game',
+            `♟️ Lichess ${speed.toUpperCase()}: ${resLabel} vs ${oppName}${rep ? ' (' + rep.label + ')' : ''}${evalStars ? ' + Engine Review' : ''}`,
+            `li-gm-${g.id}`,
+            dtStr
+          );
+          changed = true;
+        }
+      }
+    }
+
+    evaluateWeeklyBonusesAndPenalties();
+    if (changed) save();
+  }
+
+  function logManualRepertoireWin({ side, rep, speed, opp, date, notes }) {
+    const repMap = { qg: "Queen's Gambit", eng: 'English Opening', ck: 'Caro-Kann Defense', sic: 'Sicilian Defense' };
+    const dt = date || dstr();
+    const id = 'rep-' + uid();
+    S.repWins.push({
+      id,
+      date: dt,
+      side: side || (['qg', 'eng'].includes(rep) ? 'w' : 'b'),
+      rep,
+      repLabel: repMap[rep] || rep,
+      openingName: notes || repMap[rep] || rep,
+      speed: speed || 'rapid',
+      opp: opp || 'Opponent',
+      source: 'manual',
+      lvl: S.level,
+    });
+    const bonus = speed === 'classical' ? 20 : speed === 'rapid' ? 12 : 6;
+    addStars(bonus, 'rep_win', `⚔️ Repertoire Win (${repMap[rep] || rep} · ${speed.toUpperCase()}) vs ${opp || 'Opponent'}`, id, dt);
+    commit();
+  }
+
+  // ----- 5-Level Graduation Checklist & Mega Bonus -----
+  function levelChecklist(lvl = S.level) {
+    const lvObj = (window.LEVELS || []).find(x => x.n === lvl) || (window.LEVELS || [])[0];
+    const mods = (window.LESSONS || []).filter(l => l.l === lvl);
+    const whiteMods = mods.filter(l => l.group === 'core_white');
+    const blackMods = mods.filter(l => l.group === 'core_black');
+    const otherMods = mods.filter(l => !['core_white', 'core_black'].includes(l.group));
+
+    const whiteDone = whiteMods.every(m => !!S.lessons.done[m.id]);
+    const blackDone = blackMods.every(m => !!S.lessons.done[m.id]);
+    const otherDone = otherMods.every(m => !!S.lessons.done[m.id]);
+    const allModsDone = mods.every(m => !!S.lessons.done[m.id]);
+
+    // Games requirement for this level: 5 White wins + 5 Black wins (with >=1 Classical, >=1 Rapid, >=1 Blitz)
+    // Each level consumes 5 White + 5 Black wins, or filters wins tagged for this level / cumulative
+    const allWhiteWins = S.repWins.filter(w => w.side === 'w');
+    const allBlackWins = S.repWins.filter(w => w.side === 'b');
+    const offset = (lvl - 1) * 5;
+    const lvlWhiteWins = Math.max(0, Math.min(5, allWhiteWins.length - offset));
+    const lvlBlackWins = Math.max(0, Math.min(5, allBlackWins.length - offset));
+    const poolWins = S.repWins.slice((lvl - 1) * 10);
+    const hasClassical = poolWins.some(w => w.speed === 'classical');
+    const hasRapid = poolWins.some(w => w.speed === 'rapid');
+    const hasBlitz = poolWins.some(w => w.speed === 'blitz');
+    const gamesDone = lvlWhiteWins >= 5 && lvlBlackWins >= 5 && hasClassical && hasRapid && hasBlitz;
+
+    // Tactics & Endgame capability
+    const totalPzSolved = Object.values(S.days).reduce((a, d) => a + (d.pz ? d.pz.solved : 0) + (d.li ? d.li.pzWins : 0), 0);
+    const totalEgWins = Object.values(S.endgames).reduce((a, e) => a + (e.wins || 0), 0);
+    const pzGate = totalPzSolved >= (lvObj.reqPuzzles || lvl * 25);
+    const egGate = totalEgWins >= (lvObj.reqEndgames || lvl * 3);
+
+    const gates = [
+      { id: 'white', label: `⚪ Deep White Core: Queen's Gambit & English (${whiteMods.filter(m => S.lessons.done[m.id]).length}/${whiteMods.length} exams passed)`, done: whiteDone },
+      { id: 'black', label: `⚫ Deep Black Core: Caro-Kann & Sicilian (${blackMods.filter(m => S.lessons.done[m.id]).length}/${blackMods.length} exams passed)`, done: blackDone },
+      { id: 'other', label: `🛡️ Basic Coverage, Middlegame & Endgame Exams (${otherMods.filter(m => S.lessons.done[m.id]).length}/${otherMods.length} passed)`, done: otherDone },
+      { id: 'games', label: `⚔️ 10 Repertoire Game Wins: ${lvlWhiteWins}/5 White + ${lvlBlackWins}/5 Black (Classical: ${hasClassical ? '✅' : '0/1'} · Rapid: ${hasRapid ? '✅' : '0/1'} · Blitz: ${hasBlitz ? '✅' : '0/1'})`, done: gamesDone },
+      { id: 'cap', label: `🧩 Tactics & Endgame Capability: ${Math.min(totalPzSolved, lvObj.reqPuzzles)}/${lvObj.reqPuzzles} Puzzles · ${Math.min(totalEgWins, lvObj.reqEndgames)}/${lvObj.reqEndgames} Endgame Mates`, done: pzGate && egGate },
+    ];
+
+    const doneCount = gates.filter(g => g.done).length;
+    const readyToClear = gates.every(g => g.done);
+    const alreadyCleared = !!S.levelCleared[lvl];
+
+    return {
+      lvl,
+      lvObj,
+      mods,
+      whiteMods,
+      blackMods,
+      otherMods,
+      lvlWhiteWins,
+      lvlBlackWins,
+      hasClassical,
+      hasRapid,
+      hasBlitz,
+      totalPzSolved,
+      totalEgWins,
+      gates,
+      doneCount,
+      pct: Math.round((doneCount / gates.length) * 100),
+      readyToClear,
+      alreadyCleared,
+    };
+  }
+
+  function claimLevelClear(lvl) {
+    const chk = levelChecklist(lvl);
+    if (!chk.readyToClear || chk.alreadyCleared) return false;
+    S.levelCleared[lvl] = dstr();
+    if (S.level === lvl && lvl < MAX_LEVEL) {
+      S.level = lvl + 1;
+      S.levelUps[S.level] = dstr();
+    }
+    const bonus = chk.lvObj.clearBonus || 250;
+    addStars(bonus, 'level_clear', `🏆 CLEARED LEVEL ${lvl} (${chk.lvObj.name}) — Full Repertoire & Game Mastery!`, `lvl-clear-${lvl}`);
+    commit();
+    return bonus;
+  }
+
+  // ----- In-App Puzzle Bookkeeping -----
   function puzzleStarCap() { return S.settings.puzzleStarCap || DEFAULT_PUZZLE_STAR_CAP; }
   function puzzleStarsLeft() { return Math.max(0, puzzleStarCap() - day().pzStars); }
-  function recordPuzzle(p, result, opts = {}) {   // result: first | retry | shown
+  function recordPuzzle(p, result, opts = {}) {
     const d = day();
     d.pz.tried++; if (result === 'first') d.pz.first++; if (result !== 'shown') d.pz.solved++;
     if (opts.fastWrong) d.pz.fastWrong++;
-    // Auto-credit Phase 1 if they have solved >= 8 puzzles today and spent >= 8 min in p1+free
     if (!d.done.p1 && d.pz.solved >= 8 && (d.sec.p1 + (d.sec.free || 0)) >= TARGET.p1 * MIN_FRAC) {
       d.sec.p1 = Math.max(d.sec.p1, Math.round(TARGET.p1 * MIN_FRAC));
     }
@@ -231,38 +692,37 @@
         levelUp = S.level;
       }
     }
+    evaluateWeeklyBonusesAndPenalties();
     commit();
     return { stars, levelUp };
   }
   function recentAccuracy(l = S.level) { const r = S.puzzle.recent[l] || []; return r.length ? r.reduce((a, b) => a + b, 0) / r.length : null; }
   function setLevel(l) { S.level = Math.max(1, Math.min(MAX_LEVEL, l)); S.puzzle.recent[S.level] = []; commit(); }
 
-  // ----- Theoretical "Playing At" Performance Rating (Tournament Broadcast Style)
+  // ----- Theoretical "Playing At" Performance Rating -----
   function performanceRating(liveLichessUser) {
     const pmap = {}; (window.PUZZLES || []).forEach(p => pmap[p.id] = p);
     const seenEntries = Object.entries(S.puzzle.seen).map(([id, sv]) => ({ id, sv, r: sv.r || (pmap[id] && pmap[id].r) || 1250 })).sort((a, b) => (a.sv.ts || 0) - (b.sv.ts || 0));
     const recentEntries = seenEntries.slice(-30);
-    // Calculate tactical performance Elo from solved puzzles:
-    // In tournament performance rating, solving a puzzle of rating R on first try = +220 performance over R; retry = R; shown = R - 250
     let tacPerf = 1550;
     if (recentEntries.length > 0) {
       let sum = 0, wSum = 0;
       recentEntries.forEach((e, idx) => {
-        const w = 1 + (idx / recentEntries.length); // weight newer puzzles higher
+        const w = 1 + (idx / recentEntries.length);
         const perf = e.sv.last === 'first' ? e.r + 240 : e.sv.last === 'retry' ? e.r - 20 : e.r - 260;
         sum += perf * w; wSum += w;
       });
       tacPerf = Math.round(sum / wSum);
     }
     const liProf = S.profile.ratings.lichess || {};
-    const liRapid = (liveLichessUser && liveLichessUser.perfs && liveLichessUser.perfs.rapid && liveLichessUser.perfs.rapid.rating) || liProf.current || 1581;
+    const liRapid = (liveLichessUser && liveLichessUser.perfs && liveLichessUser.perfs.rapid && liveLichessUser.perfs.rapid.rating) || liProf.current || 1611;
     const liPuzzle = (liveLichessUser && liveLichessUser.perfs && liveLichessUser.perfs.puzzle && liveLichessUser.perfs.puzzle.rating) || liProf.puzzle || 1765;
+    const liClassical = (liveLichessUser && liveLichessUser.perfs && liveLichessUser.perfs.classical && liveLichessUser.perfs.classical.rating) || liProf.classical || 1255;
+    const liBlitz = (liveLichessUser && liveLichessUser.perfs && liveLichessUser.perfs.blitz && liveLichessUser.perfs.blitz.rating) || liProf.blitz || 1210;
 
-    // Blend app tactical performance with Lichess Rapid & Lichess Puzzle
     const blendedTactical = seenEntries.length >= 5 ? Math.round(tacPerf * 0.55 + liPuzzle * 0.45) : liPuzzle;
     const lichessPlayingAt = Math.round(liRapid * 0.55 + blendedTactical * 0.45);
 
-    // Discipline & conversion modifiers
     const totalTried = Object.values(S.days).reduce((a, d) => a + d.pz.tried, 0);
     const totalFirst = Object.values(S.days).reduce((a, d) => a + d.pz.first, 0);
     const totalFastWrong = Object.values(S.days).reduce((a, d) => a + d.pz.fastWrong, 0);
@@ -271,15 +731,13 @@
     const egWins = Object.values(S.endgames).reduce((a, e) => a + (e.wins || 0), 0);
     const lessonsPassed = Object.keys(S.lessons.done || {}).length;
 
-    // Convert Lichess performance to Theoretical OTB (NWSRS/USCF) Playing Strength:
-    // Scholastic OTB is roughly (LichessPlayingAt - 620) + accuracy/endgame/theory bonuses
-    let otbPlayingAt = Math.round((lichessPlayingAt - 640) + (firstAcc - 0.65) * 220 - impulseRate * 180 + Math.min(60, egWins * 8) + Math.min(80, lessonsPassed * 12));
+    let otbPlayingAt = Math.round((lichessPlayingAt - 640) + (firstAcc - 0.65) * 220 - impulseRate * 180 + Math.min(60, egWins * 6) + Math.min(90, lessonsPassed * 8));
     otbPlayingAt = Math.max(550, Math.min(2200, otbPlayingAt));
 
     const officialOtb = S.profile.ratings.nwsrs.current || S.settings.rating || 679;
     const deltaOtb = otbPlayingAt - officialOtb;
     const levels = window.LEVELS || [];
-    const perfTier = levels.slice().reverse().find(l => lichessPlayingAt >= l.minR) || levels[0] || { n: 1, name: 'Wood Scout', icon: '🪵' };
+    const perfTier = levels.slice().reverse().find(l => lichessPlayingAt >= l.minR) || levels[0] || { n: 1, name: 'Stone Crafter', icon: '⛏️' };
 
     return {
       otbPlayingAt,
@@ -290,6 +748,8 @@
       appTacPerf: tacPerf,
       liRapid,
       liPuzzle,
+      liClassical,
+      liBlitz,
       firstAcc: Math.round(firstAcc * 100),
       impulseRate: Math.round(impulseRate * 100),
       puzzlesSampled: seenEntries.length,
@@ -297,15 +757,17 @@
     };
   }
 
-  // ----- Rating & Tournament Logger
-  function logRatingUpdate({ sys, newRating, eventName, date, score, notes }) {
+  // ----- Rating & Tournament Logger -----
+  function logRatingUpdate({ sys, format, newRating, eventName, date, score, notes }) {
     const dt = date || dstr();
     const rNum = +newRating;
     const prof = S.profile;
     if (sys && prof.ratings[sys] && rNum > 0) {
       const card = prof.ratings[sys];
       const before = card.current || rNum;
-      card.current = rNum;
+      if (sys === 'uscf' && format === 'quick') card.quick = rNum;
+      else if (sys === 'uscf' && format === 'blitz') card.blitz = rNum;
+      else card.current = rNum;
       card.peak = Math.max(card.peak || 0, rNum);
       card.history = card.history || [];
       card.history.push({ date: dt, r: rNum, event: eventName || 'Rating Update' });
@@ -313,7 +775,7 @@
       if (eventName) {
         prof.tournaments.unshift({
           id: 't-' + uid(), date: dt, name: eventName, section: score ? 'Rated Event' : 'Rating Update',
-          score: score || 'Rated', sys: card.label, before, after: rNum, notes: notes || '',
+          score: score || 'Rated', sys: card.label + (format ? ' (' + format + ')' : ''), before, after: rNum, notes: notes || '',
         });
       }
       addStars(25, 'tournament', '🏅 Logged rating update (' + card.label + ': ' + rNum + ')', 'rt-' + sys + '-' + dt + '-' + rNum);
@@ -323,28 +785,18 @@
     return false;
   }
 
-  // ----- Daily Activity Bounties (encouraging balanced completion across all activities)
-  function dailyBounties() {
-    const d = day(), today = dstr();
-    const quizToday = S.ledger.some(e => e.type === 'lesson_quiz' && e.date === today);
-    const egToday = S.ledger.filter(e => e.type === 'endgame' && e.date === today).length;
-    const revToday = S.ledger.some(e => e.type === 'review' && e.date === today);
-    return [
-      { id: 'b-pz', icon: '🎯', title: 'Solve 10 Tactics Puzzles', done: d.pz.solved >= 10, prog: `${Math.min(10, d.pz.solved)}/10`, reward: `Up to ${puzzleStarCap()} ⭐/day`, tab: 'puzzles' },
-      { id: 'b-qz', icon: '🎓', title: 'Pass a Theory Lesson Mastery Test (3/3)', done: quizToday, prog: quizToday ? 'Passed!' : '0/1', reward: '+15 ⭐ Bounty', tab: 'lessons' },
-      { id: 'b-eg', icon: '♚', title: 'Win 2 Endgame Lab Checkmates', done: egToday >= 2, prog: `${Math.min(2, egToday)}/2`, reward: '+5 ⭐ each (up to 50 ⭐)', tab: 'endgames' },
-      { id: 'b-rv', icon: '📝', title: 'Play & Review 1 Lichess Rapid Game', done: revToday, prog: revToday ? 'Reviewed!' : '0/1', reward: '+10 ⭐ Bounty', tab: 'today' },
-      { id: 'b-qu', icon: '🏆', title: 'Complete All 3 Daily Quest Phases', done: d.questComplete, prog: `${['p1', 'p2', 'p3'].filter(k => d.done[k]).length}/3`, reward: '+20 ⭐ Trifecta Chest', tab: 'today' },
-    ];
-  }
-
-  // ----- rewards
-  function redeem(rw) {
-    if (balance() < rw.cost) return false;
+  // ----- Parent-Only Direct Redemption & Legacy Compatibility -----
+  function parentRedeem(cost, giftName) {
+    const pts = Math.round(+cost || 0);
+    if (pts <= 0 || !giftName) return false;
     const rid = uid();
-    addStars(-rw.cost, 'redeem', 'Redeemed: ' + rw.name, 'redeem-' + rid);
-    S.redemptions.push({ id: rid, ts: Date.now(), date: dstr(), name: rw.name, cost: rw.cost, status: 'pending' });
-    commit(); return true;
+    addStars(-pts, 'redeem', '🎁 Redeemed: ' + giftName, 'redeem-' + rid);
+    S.redemptions.push({ id: rid, ts: Date.now(), date: dstr(), name: giftName, cost: pts, status: 'approved' });
+    commit();
+    return true;
+  }
+  function redeem(rw) {
+    return parentRedeem(rw.cost, rw.name);
   }
   function resolveRedemption(id, approve) {
     const r = S.redemptions.find(x => x.id === id); if (!r || r.status !== 'pending') return;
@@ -353,13 +805,14 @@
     commit();
   }
 
-  // ----- merge (so phone / iPad / laptop can all be used without losing anything)
+  // ----- Cloud Merge -----
   function merge(local, remote) {
     local = ensureSchema(local); remote = ensureSchema(remote);
     const out = ensureSchema(remote.updatedAt > local.updatedAt ? remote : local);
     const newer = remote.updatedAt > local.updatedAt ? remote : local;
     out.settings = Object.assign({}, newer.settings, {
-      syncUrl: local.settings.syncUrl || remote.settings.syncUrl,
+      syncUrl: local.settings.syncUrl || remote.settings.syncUrl || DEFAULT_SYNC_URL,
+      pin: newer.settings.pin || local.settings.pin || remote.settings.pin || DEFAULT_PIN,
       puzzleStarCap: Math.max(local.settings.puzzleStarCap || 200, remote.settings.puzzleStarCap || 200),
       endgameCap: Math.max(local.settings.endgameCap || 10, remote.settings.endgameCap || 10),
     });
@@ -369,6 +822,7 @@
     for (const k of new Set([...Object.keys(local.days), ...Object.keys(remote.days)])) {
       const a = local.days[k], b = remote.days[k];
       if (!a || !b) { out.days[k] = a || b; continue; }
+      const la = a.li || {}, lb = b.li || {};
       out.days[k] = {
         sec: {
           p1: Math.max(a.sec.p1 || 0, b.sec.p1 || 0),
@@ -383,6 +837,13 @@
           solved: Math.max((a.pz && a.pz.solved) || 0, (b.pz && b.pz.solved) || 0),
           fastWrong: Math.max((a.pz && a.pz.fastWrong) || 0, (b.pz && b.pz.fastWrong) || 0),
         },
+        li: {
+          pzWins: Math.max(la.pzWins || 0, lb.pzWins || 0),
+          pzLosses: Math.max(la.pzLosses || 0, lb.pzLosses || 0),
+          classical: Math.max(la.classical || 0, lb.classical || 0),
+          rapid: Math.max(la.rapid || 0, lb.rapid || 0),
+          blitz: Math.max(la.blitz || 0, lb.blitz || 0),
+        },
         stars: Math.max(a.stars || 0, b.stars || 0),
         pzStars: Math.max(a.pzStars || 0, b.pzStars || 0),
         questComplete: !!(a.questComplete || b.questComplete),
@@ -391,9 +852,23 @@
     }
     const rd = new Map(); [...local.redemptions, ...remote.redemptions].forEach(r => { const o = rd.get(r.id); if (!o || (o.status === 'pending' && r.status !== 'pending')) rd.set(r.id, r); });
     out.redemptions = [...rd.values()].sort((a, b) => a.ts - b.ts);
+    const rw = new Map(); [...(local.repWins || []), ...(remote.repWins || [])].forEach(w => rw.set(w.id, w));
+    out.repWins = [...rw.values()];
+    out.excusedDays = Object.assign({}, remote.excusedDays, local.excusedDays);
+    out.levelCleared = Object.assign({}, remote.levelCleared, local.levelCleared);
+    out.lichessSync = {
+      puzzleDays: Object.assign({}, (remote.lichessSync && remote.lichessSync.puzzleDays) || {}, (local.lichessSync && local.lichessSync.puzzleDays) || {}),
+      gamesCredited: Object.assign({}, (remote.lichessSync && remote.lichessSync.gamesCredited) || {}, (local.lichessSync && local.lichessSync.gamesCredited) || {}),
+    };
+    for (const k of Object.keys(out.lichessSync.puzzleDays)) {
+      out.lichessSync.puzzleDays[k] = Math.max(
+        (local.lichessSync && local.lichessSync.puzzleDays && local.lichessSync.puzzleDays[k]) || 0,
+        (remote.lichessSync && remote.lichessSync.puzzleDays && remote.lichessSync.puzzleDays[k]) || 0
+      );
+    }
     const seen = Object.assign({}, remote.puzzle.seen); for (const [id, v] of Object.entries(local.puzzle.seen)) if (!seen[id] || v.n >= seen[id].n) seen[id] = v;
     out.puzzle = { seen, recent: newer.puzzle.recent };
-    out.level = Math.max(local.level, remote.level);
+    out.level = Math.min(MAX_LEVEL, Math.max(local.level || 1, remote.level || 1));
     out.lessons = {
       done: Object.assign({}, remote.lessons.done, local.lessons.done),
       quizScores: Object.assign({}, (remote.lessons && remote.lessons.quizScores) || {}, (local.lessons && local.lessons.quizScores) || {}),
@@ -411,9 +886,9 @@
     return ensureSchema(out);
   }
 
-  // ----- cloud sync (Google Apps Script web app -> private Google Sheet)
+  // ----- Cloud Sync -----
   let syncStatus = 'off', lastSync = null;
-  const url = () => (S.settings.syncUrl || '').trim();
+  const url = () => (S.settings.syncUrl || DEFAULT_SYNC_URL).trim();
   async function cloudPull() {
     if (!url()) { syncStatus = 'off'; return; }
     try {
@@ -462,11 +937,14 @@
   function reset() { S = fresh(); outbox = []; commit(); }
 
   window.CQ = {
-    get S() { return S; }, TARGET, MIN_FRAC, MAX_LEVEL, dstr, addDays, daysBetween, uid,
-    load, save, commit, emit, on: f => listeners.add(f), day, balance, lifetime, addStars, minutesOf, totalMinutes,
+    get S() { return S; }, TARGET, MIN_FRAC, MAX_LEVEL, WEEKLY_TARGETS, WEEKLY_MILESTONES,
+    dstr, addDays, daysBetween, weekStart, uid,
+    load, save, commit, emit, on: f => listeners.add(f), day, balance, lifetime, totalRedeemed, addStars, minutesOf, totalMinutes,
     streak, bestStreak, tick, finishPhase, recordPuzzle, recentAccuracy, setLevel, puzzleStarsLeft, puzzleStarCap,
-    performanceRating, logRatingUpdate, dailyBounties,
-    redeem, resolveRedemption, cloudPull, cloudPush, applySetupHash, makeSetupLink, exportJSON, importJSON, reset,
+    performanceRating, logRatingUpdate,
+    getWeekStats, evaluateWeeklyBonusesAndPenalties, toggleExcusedDay,
+    classifyRepertoire, syncLichessData, logManualRepertoireWin, levelChecklist, claimLevelClear,
+    parentRedeem, redeem, resolveRedemption, cloudPull, cloudPush, applySetupHash, makeSetupLink, exportJSON, importJSON, reset,
     get timer() { return timer; }, get sync() { return { status: syncStatus, last: lastSync }; }, DEFAULT_REWARDS,
   };
 })();
