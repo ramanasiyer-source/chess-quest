@@ -1,0 +1,1125 @@
+{
+  "status": "success",
+  "updatedAt": 1794686450901,
+  "state": {
+    "v": 1,
+    "updatedAt": 1794686450901,
+    "startDate": "2026-11-13",
+    "settings": {
+      "name": "Anish",
+      "lichess": "govindu",
+      "syncUrl": "https://script.google.com/macros/s/AKfycbxnUdMtHZZ39F8t4hp2QO-wIyQc5E-3w9oXeqH00iXuN9DwdcpPlbpy6pCWBBe0s-ag/exec",
+      "pin": "",
+      "rating": 679,
+      "ratingStart": 679,
+      "ratingTarget": 1000,
+      "ratingDate": "2026-11-13",
+      "dailyMin": 30,
+      "puzzleStarCap": 10000,
+      "endgameCap": 10
+    },
+    "profile": {
+      "fullName": "Anish Ramana Iyer",
+      "title": "Scholastic Contender \u00b7 Skyview Middle School (6th Grade)",
+      "location": "Bothell, WA",
+      "avatar": "assets/anish-jacket.jpg",
+      "bio": "Aggressive tactical player climbing toward 1000+ OTB and Netherite Grandmaster mastery.",
+      "ratings": {
+        "nwsrs": {
+          "label": "NWChess (NWSRS)",
+          "current": 679,
+          "start": 679,
+          "peak": 732,
+          "target": 1000,
+          "id": "100854",
+          "url": "https://www.nwchess.com/ratings/",
+          "history": [
+            {
+              "date": "2026-05-01",
+              "r": 732,
+              "event": "Spring Scholastic Rating"
+            },
+            {
+              "date": "2026-09-12",
+              "r": 679,
+              "event": "WATA Autumn Scholastic (2.0/5)"
+            }
+          ]
+        },
+        "uscf": {
+          "label": "US Chess (USCF)",
+          "current": 463,
+          "quick": 425,
+          "onlineReg": 338,
+          "onlineQuick": 360,
+          "peak": 463,
+          "target": 1000,
+          "id": "17354281",
+          "url": "https://www.uschess.org/msa/MbrDtlMain.php?17354281",
+          "history": [
+            {
+              "date": "2026-05-16",
+              "r": 425,
+              "event": "SPFNO Blitz (USCF Quick)"
+            },
+            {
+              "date": "2026-09-12",
+              "r": 463,
+              "event": "WATA Autumn Scholastic (USCF Reg)"
+            }
+          ]
+        },
+        "fide": {
+          "label": "FIDE Standard",
+          "current": 0,
+          "peak": 0,
+          "target": 1400,
+          "id": "Unrated",
+          "url": "https://ratings.fide.com/",
+          "history": []
+        },
+        "lichess": {
+          "label": "Lichess (govindu)",
+          "current": 1611,
+          "puzzle": 1765,
+          "classical": 1255,
+          "blitz": 1210,
+          "bullet": 1058,
+          "peak": 1765,
+          "target": 1800,
+          "id": "govindu",
+          "url": "https://lichess.org/@/govindu",
+          "history": [
+            {
+              "date": "2026-09-01",
+              "r": 1500,
+              "pz": 1680,
+              "event": "Baseline Lichess"
+            },
+            {
+              "date": "2026-11-13",
+              "r": 1581,
+              "pz": 1765,
+              "event": "Live Lichess (94 Rapid / 2,303 Puzzles)"
+            }
+          ]
+        }
+      },
+      "tournaments": [
+        {
+          "id": "t-wata",
+          "date": "2026-09-12",
+          "name": "WATA Autumn Scholastic",
+          "section": "G4-6 U800",
+          "score": "2.0 / 5",
+          "sys": "NWSRS / USCF",
+          "before": 732,
+          "after": 679,
+          "notes": "Won 2 games; key takeaway: slow down in critical positions & convert endgames."
+        },
+        {
+          "id": "t-spfno",
+          "date": "2026-05-16",
+          "name": "SPFNO Blitz Championship",
+          "section": "Scholastic Blitz (G/5)",
+          "score": "Completed",
+          "sys": "USCF Quick (425)",
+          "before": 425,
+          "after": 425,
+          "notes": "High-speed tactical experience."
+        },
+        {
+          "id": "t-lynn",
+          "date": "2026-11-27",
+          "name": "Upcoming: Thanksgiving Scholastic (Lynnwood)",
+          "section": "Target Tournament",
+          "score": "Upcoming",
+          "sys": "NWSRS / USCF",
+          "before": 679,
+          "after": null,
+          "notes": "Goal: Use CCT on every move & pass 725+ NWSRS."
+        },
+        {
+          "id": "t-dec",
+          "date": "2026-12-19",
+          "name": "Upcoming: Bellevue / Redmond Winter Scholastics",
+          "section": "Target Tournament",
+          "score": "Upcoming",
+          "sys": "NWSRS / USCF",
+          "before": 679,
+          "after": null,
+          "notes": "Winter rating push toward 800+."
+        }
+      ]
+    },
+    "level": 3,
+    "days": {
+      "2026-11-13": {
+        "sec": {
+          "p1": 600,
+          "p2": 11600,
+          "p3": 13,
+          "free": 623
+        },
+        "done": {
+          "p1": true,
+          "p2": false,
+          "p3": false
+        },
+        "pz": {
+          "tried": 28,
+          "first": 21,
+          "solved": 27,
+          "fastWrong": 1
+        },
+        "stars": 190,
+        "pzStars": 40,
+        "questComplete": false,
+        "lessonId": "l3-def"
+      },
+      "2026-11-14": {
+        "sec": {
+          "p1": 1074,
+          "p2": 24325,
+          "p3": 0,
+          "free": 29
+        },
+        "done": {
+          "p1": false,
+          "p2": false,
+          "p3": false
+        },
+        "pz": {
+          "tried": 14,
+          "first": 8,
+          "solved": 14,
+          "fastWrong": 0
+        },
+        "stars": 115,
+        "pzStars": 50,
+        "questComplete": false,
+        "lessonId": "l3-open"
+      }
+    },
+    "puzzle": {
+      "seen": {
+        "CehjZ": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794614507453
+        },
+        "IovZy": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "ts": 1794614542825
+        },
+        "F8OjL": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794614565187
+        },
+        "5Juh3": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794614587571
+        },
+        "OU8hN": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794614799192
+        },
+        "eeKJR": {
+          "n": 1,
+          "first": 0,
+          "last": "shown",
+          "ts": 1794614803150
+        },
+        "JAfMN": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794614819211
+        },
+        "7UmJC": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794614830426
+        },
+        "JcGZB": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794614848047
+        },
+        "oS7gR": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794614872539
+        },
+        "Q8gBA": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "ts": 1794614899616
+        },
+        "fbPFk": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "ts": 1794615092032
+        },
+        "Mmpjj": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794615106445
+        },
+        "G5zfD": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794615124080
+        },
+        "3mnIu": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794615136529
+        },
+        "IeiHX": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794615163469
+        },
+        "1MkBa": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794615173218
+        },
+        "63JEj": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "ts": 1794615197451
+        },
+        "GYE6E": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794615209325
+        },
+        "X1G8V": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794615258067
+        },
+        "8Wf37": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794615312417
+        },
+        "Z4ee3": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794618162557
+        },
+        "noisF": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794618234761
+        },
+        "VOVCZ": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794618294112
+        },
+        "tANLe": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "ts": 1794618318047
+        },
+        "5Dboh": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794618329870
+        },
+        "vRNKk": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "ts": 1794618355889
+        },
+        "35nSd": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "ts": 1794618631000
+        },
+        "XuPpN": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "r": 1327,
+          "ts": 1794685634499
+        },
+        "PpJkc": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "r": 1648,
+          "ts": 1794685724528
+        },
+        "2tNxs": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "r": 1698,
+          "ts": 1794685772214
+        },
+        "Dpfj6": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "r": 1677,
+          "ts": 1794685893108
+        },
+        "sBMw5": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "r": 1853,
+          "ts": 1794685944843
+        },
+        "sTB7O": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "r": 1812,
+          "ts": 1794686006865
+        },
+        "2lpDp": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "r": 1834,
+          "ts": 1794686091560
+        },
+        "3Ji3S": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "r": 1869,
+          "ts": 1794686109283
+        },
+        "3xASs": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "r": 1902,
+          "ts": 1794686212485
+        },
+        "0yhMq": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "r": 1812,
+          "ts": 1794686271100
+        },
+        "40ck3": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "r": 1848,
+          "ts": 1794686317463
+        },
+        "1sTp0": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "r": 1778,
+          "ts": 1794686368270
+        },
+        "4Esgt": {
+          "n": 1,
+          "first": 1,
+          "last": "first",
+          "r": 1794,
+          "ts": 1794686392578
+        },
+        "11NGt": {
+          "n": 1,
+          "first": 0,
+          "last": "retry",
+          "r": 1811,
+          "ts": 1794686422329
+        }
+      },
+      "recent": {
+        "1": [
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "2": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1
+        ],
+        "3": [
+          1,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          1
+        ],
+        "4": [],
+        "5": [],
+        "6": [],
+        "7": [],
+        "8": []
+      }
+    },
+    "ledger": [
+      {
+        "id": "mwfn548ul0c6w",
+        "key": null,
+        "ts": 1794614507455,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle CehjZ (first try)",
+        "delta": 2,
+        "balance": 2
+      },
+      {
+        "id": "mwfn5vjda05ys",
+        "key": null,
+        "ts": 1794614542825,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle IovZy (retry)",
+        "delta": 1,
+        "balance": 3
+      },
+      {
+        "id": "mwfn6csj3ie82",
+        "key": null,
+        "ts": 1794614565187,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle F8OjL (first try)",
+        "delta": 2,
+        "balance": 5
+      },
+      {
+        "id": "mwfn6u2b04nb2",
+        "key": null,
+        "ts": 1794614587571,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle 5Juh3 (first try)",
+        "delta": 2,
+        "balance": 7
+      },
+      {
+        "id": "mwfnbdcohz4sm",
+        "key": null,
+        "ts": 1794614799192,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle OU8hN (first try)",
+        "delta": 2,
+        "balance": 9
+      },
+      {
+        "id": "mwfnbssrplipf",
+        "key": null,
+        "ts": 1794614819211,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle JAfMN (first try)",
+        "delta": 2,
+        "balance": 11
+      },
+      {
+        "id": "mwfnc1gao9yqb",
+        "key": null,
+        "ts": 1794614830426,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle 7UmJC (first try)",
+        "delta": 2,
+        "balance": 13
+      },
+      {
+        "id": "mwfncf1rpcde8",
+        "key": null,
+        "ts": 1794614848047,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle JcGZB (first try)",
+        "delta": 2,
+        "balance": 15
+      },
+      {
+        "id": "mwfncxy4in5r4",
+        "key": null,
+        "ts": 1794614872540,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle oS7gR (first try)",
+        "delta": 2,
+        "balance": 17
+      },
+      {
+        "id": "mwfncxy4r3hen",
+        "key": "levelup-2",
+        "ts": 1794614872540,
+        "date": "2026-11-13",
+        "type": "levelup",
+        "desc": "Level up to Level 2!",
+        "delta": 50,
+        "balance": 67
+      },
+      {
+        "id": "mwfndiu8f2zom",
+        "key": null,
+        "ts": 1794614899616,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle Q8gBA (retry)",
+        "delta": 1,
+        "balance": 68
+      },
+      {
+        "id": "mwfnhnb4bdjtx",
+        "key": null,
+        "ts": 1794615092033,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle fbPFk (retry)",
+        "delta": 1,
+        "balance": 69
+      },
+      {
+        "id": "mwfnhyfhbxtlq",
+        "key": null,
+        "ts": 1794615106445,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle Mmpjj (first try)",
+        "delta": 2,
+        "balance": 71
+      },
+      {
+        "id": "mwfnic1cwp50r",
+        "key": null,
+        "ts": 1794615124080,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle G5zfD (first try)",
+        "delta": 2,
+        "balance": 73
+      },
+      {
+        "id": "mwfniln5uhury",
+        "key": null,
+        "ts": 1794615136529,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle 3mnIu (first try)",
+        "delta": 2,
+        "balance": 75
+      },
+      {
+        "id": "mwfnj6fhhvs3r",
+        "key": null,
+        "ts": 1794615163469,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle IeiHX (first try)",
+        "delta": 2,
+        "balance": 77
+      },
+      {
+        "id": "mwfnjdyaivk2m",
+        "key": null,
+        "ts": 1794615173218,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle 1MkBa (first try)",
+        "delta": 2,
+        "balance": 79
+      },
+      {
+        "id": "mwfnjwnflnruu",
+        "key": null,
+        "ts": 1794615197451,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle 63JEj (retry)",
+        "delta": 1,
+        "balance": 80
+      },
+      {
+        "id": "mwfnk5t9dsfcr",
+        "key": null,
+        "ts": 1794615209325,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle GYE6E (first try)",
+        "delta": 2,
+        "balance": 82
+      },
+      {
+        "id": "mwfnl7f7p3f8s",
+        "key": null,
+        "ts": 1794615258067,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle X1G8V (first try)",
+        "delta": 2,
+        "balance": 84
+      },
+      {
+        "id": "mwfnmdcx2scff",
+        "key": null,
+        "ts": 1794615312417,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle 8Wf37 (first try)",
+        "delta": 2,
+        "balance": 86
+      },
+      {
+        "id": "mwfnmdcxa45k7",
+        "key": "levelup-3",
+        "ts": 1794615312417,
+        "date": "2026-11-13",
+        "type": "levelup",
+        "desc": "Level up to Level 3!",
+        "delta": 50,
+        "balance": 136
+      },
+      {
+        "id": "mwfnnd9xe933j",
+        "key": "eg-mwfnnd9xt50a4",
+        "ts": 1794615358965,
+        "date": "2026-11-13",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 12",
+        "delta": 5,
+        "balance": 141
+      },
+      {
+        "id": "mwfnoefsrgtji",
+        "key": "eg-mwfnoefssnpy5",
+        "ts": 1794615407128,
+        "date": "2026-11-13",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 17",
+        "delta": 5,
+        "balance": 146
+      },
+      {
+        "id": "mwfnovpx4difw",
+        "key": "eg-mwfnovpxm01oe",
+        "ts": 1794615429525,
+        "date": "2026-11-13",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 10",
+        "delta": 5,
+        "balance": 151
+      },
+      {
+        "id": "mwfpbgji4tnpi",
+        "key": null,
+        "ts": 1794618162560,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle Z4ee3 (first try)",
+        "delta": 2,
+        "balance": 153
+      },
+      {
+        "id": "mwfpd095henqb",
+        "key": null,
+        "ts": 1794618234761,
+        "date": "2026-11-13",
+        "type": "puzzle",
+        "desc": "Puzzle noisF (first try)",
+        "delta": 2,
+        "balance": 155
+      },
+      {
+        "id": "egretro1113",
+        "key": "eg-retro-2026-11-13",
+        "ts": 1794633222584,
+        "date": "2026-11-13",
+        "type": "endgame",
+        "desc": "\u265a 7 Extra Endgame Lab Checkmates (8-move K+Q PB & 16-move K+R!)",
+        "delta": 35,
+        "balance": 190
+      },
+      {
+        "id": "mwgjug9smzqnr",
+        "key": "eg-mwgjug9rcjtu2",
+        "ts": 1794669437152,
+        "date": "2026-11-14",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 13",
+        "delta": 5,
+        "balance": 195
+      },
+      {
+        "id": "mwgjuuypeacv8",
+        "key": "eg-mwgjuuypgb8sl",
+        "ts": 1794669456193,
+        "date": "2026-11-14",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 11",
+        "delta": 5,
+        "balance": 200
+      },
+      {
+        "id": "mwgjwn3hmek9r",
+        "key": "eg-mwgjwn3hybkz8",
+        "ts": 1794669539309,
+        "date": "2026-11-14",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 12",
+        "delta": 5,
+        "balance": 205
+      },
+      {
+        "id": "mwgjybfg1q9it",
+        "key": "eg-mwgjybfg5sipk",
+        "ts": 1794669617500,
+        "date": "2026-11-14",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 16",
+        "delta": 5,
+        "balance": 210
+      },
+      {
+        "id": "mwgjzwcit3nes",
+        "key": "quiz-l1-open",
+        "ts": 1794669691266,
+        "date": "2026-11-14",
+        "type": "lesson_quiz",
+        "desc": "\ud83c\udf93 Passed Mastery Exam: 1.e4 e5 Classical Center & Defeating Early Queen Traps",
+        "delta": 15,
+        "balance": 225
+      },
+      {
+        "id": "mwgtebfd1yoe7",
+        "key": "eg-mwgtebfcyddgm",
+        "ts": 1794685480538,
+        "date": "2026-11-14",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 12",
+        "delta": 5,
+        "balance": 230
+      },
+      {
+        "id": "mwgtez432484s",
+        "key": "eg-mwgtez4348ce9",
+        "ts": 1794685511235,
+        "date": "2026-11-14",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 14",
+        "delta": 5,
+        "balance": 235
+      },
+      {
+        "id": "mwgtfay6uncaq",
+        "key": "eg-mwgtfay6ng7u2",
+        "ts": 1794685526574,
+        "date": "2026-11-14",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 10",
+        "delta": 5,
+        "balance": 240
+      },
+      {
+        "id": "mwgtfpxc4bifp",
+        "key": "eg-mwgtfpxc0h7gg",
+        "ts": 1794685545984,
+        "date": "2026-11-14",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 11",
+        "delta": 5,
+        "balance": 245
+      },
+      {
+        "id": "mwgtg8gfrr5zp",
+        "key": "eg-mwgtg8gf1tsv5",
+        "ts": 1794685569999,
+        "date": "2026-11-14",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 14",
+        "delta": 5,
+        "balance": 250
+      },
+      {
+        "id": "mwgtgomag6aon",
+        "key": "eg-mwgtgoma1ei74",
+        "ts": 1794685590946,
+        "date": "2026-11-14",
+        "type": "endgame",
+        "desc": "Checkmate: King + Queen vs King in 12",
+        "delta": 5,
+        "balance": 255
+      },
+      {
+        "id": "mwgthm834psfb",
+        "key": null,
+        "ts": 1794685634499,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "Puzzle XuPpN (1327) first try",
+        "delta": 3,
+        "balance": 258
+      },
+      {
+        "id": "mwgtjjowlyrg9",
+        "key": null,
+        "ts": 1794685724528,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "Puzzle PpJkc (1648) retry",
+        "delta": 1,
+        "balance": 259
+      },
+      {
+        "id": "mwgtkkhiqm3d5",
+        "key": null,
+        "ts": 1794685772214,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "Puzzle 2tNxs (1698) first try",
+        "delta": 3,
+        "balance": 262
+      },
+      {
+        "id": "mwgtn5row0t9a",
+        "key": null,
+        "ts": 1794685893108,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "Puzzle Dpfj6 (1677) first try",
+        "delta": 3,
+        "balance": 265
+      },
+      {
+        "id": "mwgto9ordqtw7",
+        "key": null,
+        "ts": 1794685944843,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "\u26a1 Puzzle sBMw5 (1853) first try",
+        "delta": 6,
+        "balance": 271
+      },
+      {
+        "id": "mwgtpljl7dy2x",
+        "key": null,
+        "ts": 1794686006865,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "\u26a1 Puzzle sTB7O (1812) retry",
+        "delta": 2,
+        "balance": 273
+      },
+      {
+        "id": "mwgtrew8g2fq8",
+        "key": null,
+        "ts": 1794686091560,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "\u26a1 Puzzle 2lpDp (1834) first try",
+        "delta": 6,
+        "balance": 279
+      },
+      {
+        "id": "mwgtrskjbcbkz",
+        "key": null,
+        "ts": 1794686109284,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "\u26a1 Puzzle 3Ji3S (1869) first try",
+        "delta": 6,
+        "balance": 285
+      },
+      {
+        "id": "mwgtu079w66f8",
+        "key": null,
+        "ts": 1794686212485,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "\u26a1 Puzzle 3xASs (1902) retry",
+        "delta": 2,
+        "balance": 287
+      },
+      {
+        "id": "mwgtv9fg5z9eb",
+        "key": null,
+        "ts": 1794686271100,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "\u26a1 Puzzle 0yhMq (1812) retry",
+        "delta": 2,
+        "balance": 289
+      },
+      {
+        "id": "mwgtw97bt292h",
+        "key": null,
+        "ts": 1794686317463,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "\u26a1 Puzzle 40ck3 (1848) retry",
+        "delta": 2,
+        "balance": 291
+      },
+      {
+        "id": "mwgtxcemf5qex",
+        "key": null,
+        "ts": 1794686368270,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "\u26a1 Puzzle 1sTp0 (1778) first try",
+        "delta": 6,
+        "balance": 297
+      },
+      {
+        "id": "mwgtxv5ulbe13",
+        "key": null,
+        "ts": 1794686392578,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "\u26a1 Puzzle 4Esgt (1794) first try",
+        "delta": 6,
+        "balance": 303
+      },
+      {
+        "id": "mwgtyi49dfa5k",
+        "key": null,
+        "ts": 1794686422329,
+        "date": "2026-11-14",
+        "type": "puzzle",
+        "desc": "\u26a1 Puzzle 11NGt (1811) retry",
+        "delta": 2,
+        "balance": 305
+      },
+      {
+        "id": "mwgtyyu2oelpf",
+        "key": "redeem-mwgtyyu2e0uwg",
+        "ts": 1794686443994,
+        "date": "2026-11-14",
+        "type": "redeem",
+        "desc": "Redeemed: $5 to spend (Robux / LEGO / snacks)",
+        "delta": -200,
+        "balance": 105
+      }
+    ],
+    "redemptions": [
+      {
+        "id": "mwgtyyu2e0uwg",
+        "ts": 1794686443995,
+        "date": "2026-11-14",
+        "name": "$5 to spend (Robux / LEGO / snacks)",
+        "cost": 200,
+        "status": "approved"
+      }
+    ],
+    "rewards": [
+      {
+        "id": "r1",
+        "icon": "\ud83d\udcfa",
+        "name": "30 min bonus watch time",
+        "cost": 100
+      },
+      {
+        "id": "r2",
+        "icon": "\ud83c\udfae",
+        "name": "30 min bonus gaming",
+        "cost": 100
+      },
+      {
+        "id": "r3",
+        "icon": "\ud83c\udf55",
+        "name": "Pick the family treat / dinner",
+        "cost": 150
+      },
+      {
+        "id": "r4",
+        "icon": "\ud83d\udcb5",
+        "name": "$5 to spend (Robux / LEGO / snacks)",
+        "cost": 200
+      },
+      {
+        "id": "r5",
+        "icon": "\ud83c\udf81",
+        "name": "$20 big prize fund",
+        "cost": 800
+      }
+    ],
+    "lessons": {
+      "done": {
+        "l1-open": "2026-11-14"
+      },
+      "quizScores": {
+        "l1-open": 3
+      }
+    },
+    "games": [],
+    "endgames": {
+      "kqk": {
+        "wins": 22,
+        "best": 8
+      },
+      "krk": {
+        "wins": 1,
+        "best": 16
+      }
+    },
+    "levelUps": {
+      "2": "2026-11-13",
+      "3": "2026-11-13"
+    }
+  }
+}

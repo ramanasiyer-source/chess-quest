@@ -5,6 +5,7 @@
   const MIN_FRAC = 0.8;                                // a phase can be finished after 80% of its time
   const DEFAULT_PUZZLE_STAR_CAP = 200;                 // raised from 40 -> 200 stars/day!
   const DEFAULT_ENDGAME_CAP = 10;                      // raised from 3 -> 10 mates/day (50 stars/day)!
+  const DEFAULT_SYNC_URL = 'https://script.google.com/macros/s/AKfycbxnUdMtHZZ39F8t4hp2QO-wIyQc5E-3w9oXeqH00iXuN9DwdcpPlbpy6pCWBBe0s-ag/exec';
 
   const pad = n => String(n).padStart(2, '0');
   const dstr = (d = new Date()) => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
@@ -68,7 +69,7 @@
   function fresh() {
     return {
       v: 2, updatedAt: 0, startDate: dstr(),
-      settings: { name: 'Anish', lichess: 'govindu', syncUrl: '', pin: '', rating: 679, ratingStart: 679, ratingTarget: 1000, ratingDate: dstr(), dailyMin: 30, puzzleStarCap: DEFAULT_PUZZLE_STAR_CAP, endgameCap: DEFAULT_ENDGAME_CAP },
+      settings: { name: 'Anish', lichess: 'govindu', syncUrl: DEFAULT_SYNC_URL, pin: '', rating: 679, ratingStart: 679, ratingTarget: 1000, ratingDate: dstr(), dailyMin: 30, puzzleStarCap: DEFAULT_PUZZLE_STAR_CAP, endgameCap: DEFAULT_ENDGAME_CAP },
       profile: DEFAULT_PROFILE(),
       level: 3,
       days: {},
@@ -82,6 +83,7 @@
     const f = fresh();
     const out = Object.assign(f, obj || {});
     out.settings = Object.assign(f.settings, (obj && obj.settings) || {});
+    if (!out.settings.syncUrl) out.settings.syncUrl = DEFAULT_SYNC_URL;
     if (!out.settings.puzzleStarCap || out.settings.puzzleStarCap < 200) out.settings.puzzleStarCap = DEFAULT_PUZZLE_STAR_CAP;
     if (!out.settings.endgameCap || out.settings.endgameCap < 10) out.settings.endgameCap = DEFAULT_ENDGAME_CAP;
     if (!out.settings.lichess) out.settings.lichess = 'govindu';

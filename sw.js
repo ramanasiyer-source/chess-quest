@@ -1,5 +1,5 @@
 /* Chess Quest service worker: network-first so updates always load immediately, with offline fallback. */
-const CACHE = 'chessquest-v2.3';
+const CACHE = 'chessquest-v2.4';
 const SHELL = ['./', 'index.html', 'styles.css', 'app.js', 'store.js', 'board.js', 'lessons.js', 'puzzles.js', 'manifest.json',
   'assets/chess.min.js', 'assets/anish-jacket.jpg', 'assets/anish-blazer.jpg', 'assets/anish-jacket-fringe.jpg', 'assets/anish-blazer-fringe.jpg',
   'assets/icon-180.png', 'assets/icon-192.png', 'assets/icon-512.png', ...['wP', 'wN', 'wB', 'wR', 'wQ', 'wK', 'bP', 'bN', 'bB', 'bR', 'bQ', 'bK'].map(p => 'assets/pieces/' + p + '.svg')];
