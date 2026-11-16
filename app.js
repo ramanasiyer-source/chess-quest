@@ -378,20 +378,20 @@
             <span>2 Classical + 5 Rapid/wk</span>
           </div>
           <div class="stat">
-            <small class="muted">🧩 PUZZLES SOLVED</small>
+            <small class="muted">🧩 LICHESS PUZZLES</small>
             <b>${wk.totPz} / ${wk.targets.puzzles}</b>
             <span>~${wk.puzzleMin}m (${wk.targets.puzzleMinutes}m goal)</span>
           </div>
           <div class="stat">
-            <small class="muted">🎓 THEORY & ENDGAMES</small>
-            <b>${wk.totQuizzes}/${wk.targets.theoryQuizzes} Exams</b>
+            <small class="muted">📚 ROADMAP &amp; STUDY</small>
+            <b>${wk.totQuizzes}/${wk.targets.theoryQuizzes} Modules</b>
             <span>~${wk.theoryMin}m (${wk.targets.theoryMinutes}m goal)</span>
           </div>
         </div>
 
         <div class="row wrap" style="margin:10px 0">
-          <button class="primary" data-tab="lichess">🌐 Open Lichess & Practice Arena ▶</button>
-          <button data-tab="lessons">📚 Study Level ${s.level} Theory Package ▶</button>
+          <button class="primary" data-tab="lichess">🌐 Open Lichess Hub &amp; Launchpad ▶</button>
+          <button data-tab="lessons">📚 Open Level ${s.level} Roadmap ▶</button>
           <button data-act="refreshli">🔄 Sync Lichess Activity Now</button>
         </div>
 
@@ -595,198 +595,59 @@
       </div>
 
       <div class="card">
-        <div class="row between wrap">
-          <div>
-            <h3>🧩 Built-In Lichess DB Practice Arena (Tactics, Endgame Puzzles & Mate Lab)</h3>
-            <p class="muted small" style="margin:2px 0 0">1,758 verified Lichess Database puzzles across all 5 Levels + Checkmate Conversion Sparring!</p>
+        <h3>🎯 Lichess Adaptive Training &amp; Stockfish Launchpad (All Play &amp; Testing on Lichess)</h3>
+        <p class="muted small" style="margin:2px 0 12px">All puzzles, tactics, endgames, and games run directly on <b>Lichess.org</b> so Lichess's adaptive rating system and Stockfish engine test you dynamically. When finished, click <b>🔄 Sync Lichess Now</b> above to claim your stars!</p>
+
+        <div class="rating-grid">
+          <div class="rating-card">
+            <b>🧩 1. Adaptive Rated Tactics (Scales to ${rt.puzzle || 1765}+)</b>
+            <p class="muted small" style="margin:4px 0 8px">Earns <b>+2 ⭐ per solved puzzle</b> + <b>+10 ⭐ daily rating climb bonus</b> automatically.</p>
+            <div class="row wrap">
+              <a class="btn small primary" target="_blank" rel="noopener" href="https://lichess.org/training">🧩 Mixed Rated Puzzles ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/training/middlegame">⚔️ Middlegame Tactics ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/training/fork">🐴 Forks &amp; Double Attacks ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/training/pin">📌 Pins &amp; Skewers ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/training/discoveredAttack">💥 Discovered Attacks ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/streak">🔥 Puzzle Streak ↗</a>
+            </div>
           </div>
-          <div class="row wrap">
-            <button class="${UI.arenaMode === 'tactics' ? 'primary' : ''}" data-act="arenamode" data-id="tactics">⚔️ Middlegame Tactics (Lichess DB)</button>
-            <button class="${UI.arenaMode === 'endgame_pz' ? 'primary' : ''}" data-act="arenamode" data-id="endgame_pz">♚ Endgame Puzzles (Lichess DB)</button>
-            <button class="${UI.arenaMode === 'endgame_lab' ? 'primary' : ''}" data-act="arenamode" data-id="endgame_lab">🏋️ K+Q / K+R Mate Lab</button>
+
+          <div class="rating-card">
+            <b>♚ 2. Adaptive Endgames &amp; Stockfish Conversion Drills</b>
+            <p class="muted small" style="margin:4px 0 8px">Practice endgames against Lichess's adaptive database and live Stockfish engine.</p>
+            <div class="row wrap">
+              <a class="btn small primary" target="_blank" rel="noopener" href="https://lichess.org/training/endgame">♚ Rated Endgame Puzzles ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/training/rookEndgame">🏰 Rook Endgames ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/training/pawnEndgame">♟️ King &amp; Pawn Endgames ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/practice/checkmates/piece-checkmates-i/BJy6fEDf">👑 Stockfish K+Q / K+R Mates ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/practice/pawn-endgames/key-squares/XP6RVc2B">🗝️ Stockfish Key Squares ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/practice/rook-endgames/7th-rank-rook-pawn/5c42B5Xg">🌉 Lucena &amp; Philidor Drills ↗</a>
+            </div>
+          </div>
+
+          <div class="rating-card">
+            <b>🏛️ 3. Repertoire Opening Explorer &amp; Rated Games</b>
+            <p class="muted small" style="margin:4px 0 8px">Drill your 4 Core Openings in Lichess Opening Explorer or play rated games for your 10-Win Level Gate!</p>
+            <div class="row wrap">
+              <a class="btn small primary" target="_blank" rel="noopener" href="https://lichess.org/">🕹️ Play Rated Game on Lichess ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/analysis/standard/rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR_b_KQkq_-_0_2#explorer">⚪ Queen's Gambit Explorer ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/analysis/standard/rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR_b_KQkq_-_1_2#explorer">⚪ English 1.c4 Explorer ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/analysis/standard/rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR_w_KQkq_-_0_3?color=black#explorer">⚫ Caro-Kann Explorer ↗</a>
+              <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/analysis/standard/rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R_b_KQkq_-_0_3?color=black#explorer">⚫ Sicilian Explorer ↗</a>
+            </div>
           </div>
         </div>
-        <div id="arena-mount" style="margin-top:12px"></div>
       </div>
 
       <div class="card">
-        <h3>⭐ Lichess & Practice Star Log</h3>
+        <h3>⭐ Lichess Activity Star Log</h3>
         ${liLedger.length ? liLedger.map(e => `<div class="row between line small"><span>${esc(e.desc)} <small class="muted">(${e.date})</small></span><b class="plus">+${e.delta} ⭐</b></div>`).join('') : '<p class="muted small">Complete puzzles or games on Lichess and tap Sync!</p>'}
       </div>`;
 
-    const mount = $('#arena-mount', v);
-    if (UI.arenaMode === 'endgame_lab') {
-      renderEndgameLabInto(mount);
-    } else {
-      mount.appendChild(makeTrainer({ endgameOnly: UI.arenaMode === 'endgame_pz' }));
-    }
     loadLichess();
   }
 
-  /* ---------- Puzzle Trainer (Supports Middlegame Tactics & Lichess Endgame Puzzles across 5 Levels) ---------- */
-  const PMAP = {}; (window.PUZZLES || []).forEach(p => PMAP[p.id] = p);
-  function isEndgamePuzzle(p) {
-    const t = p.t || [];
-    if (t.some(x => /endgame|pawn|rook|queen|bishop|knight|zugzwang/i.test(x))) return true;
-    const pieces = (p.f.split(' ')[0] || '').replace(/[1-8/pPkK]/g, '');
-    return pieces.length <= 5;
-  }
-  function pickPuzzle(level, endgameOnly = false) {
-    let pool = (window.PUZZLES || []).filter(p => p.l === level && (!endgameOnly || isEndgamePuzzle(p)));
-    if (!pool.length) pool = (window.PUZZLES || []).filter(p => p.l === level);
-    if (!pool.length) return null;
-    const seen = S().puzzle.seen, unseen = pool.filter(p => !seen[p.id]);
-    if (unseen.length) return rand(unseen);
-    const sorted = pool.slice().sort((a, b) => ((seen[a.id].last === 'first') - (seen[b.id].last === 'first')) || (seen[a.id].ts - seen[b.id].ts));
-    return rand(sorted.slice(0, 8));
-  }
-  function makeTrainer(opts = {}) {
-    const root = document.createElement('div'); root.className = 'trainer';
-    root.innerHTML = `
-      <div class="tr-top">
-        <div id="tr-info" class="muted"></div>
-        <div class="row wrap">
-          <select id="tr-tier" title="Choose Level (1-5)" style="padding:5px 8px;font-size:13px">
-            <option value="0">🎯 My Level (L${S().level} Auto)</option>
-            ${(window.LEVELS || []).map(l => `<option value="${l.n}">${l.icon} L${l.n}: ${l.name}</option>`).join('')}
-          </select>
-          <label class="chal"><input type="checkbox" id="tr-chal"> ⚡ Overclock <small>(+1 level · 2× ⭐)</small></label>
-        </div>
-      </div>
-      <div class="board-wrap"><div id="tr-board"></div></div>
-      <div class="rule">🛑 Before you move: <b>C</b>hecks · <b>C</b>aptures · <b>T</b>hreats — <u>theirs</u> and yours</div>
-      <div id="tr-msg" class="tr-msg">Loading…</div>
-      <div class="row center wrap"><button id="tr-hint">💡 Hint</button><button id="tr-show">👁 Show answer</button><button id="tr-next" class="primary" disabled>Next puzzle ▶</button></div>`;
-    const T = { p: null, idx: 0, wrong: 0, done: false, t0: 0, fast: false, challenge: false, busy: false };
-    const board = new Board($('#tr-board', root), { onMove: (f, t) => onMove(f, t) });
-    const msg = (h, cls = '') => { const m = $('#tr-msg', root); m.className = 'tr-msg ' + cls; m.innerHTML = h; };
-    const sol = () => T.p.s.split(' ');
-    function next() {
-      T.challenge = $('#tr-chal', root).checked;
-      const pickedTier = +($('#tr-tier', root).value || 0);
-      const baseLvl = pickedTier > 0 ? pickedTier : S().level;
-      const lvl = Math.min(CQ.MAX_LEVEL, baseLvl + (T.challenge ? 1 : 0));
-      const lvObj = getLvlObj(lvl);
-      const p = pickPuzzle(lvl, opts.endgameOnly);
-      if (!p) return msg('No puzzles for this filter.');
-      Object.assign(T, { p, idx: 0, wrong: 0, done: false, t0: Date.now(), fast: false, busy: false, shown: false });
-      const side = new Chess(p.f).turn();
-      board.locked = false;
-      board.set(p.f, side, p.lm ? [p.lm.slice(0, 2), p.lm.slice(2, 4)] : null);
-      const modeTag = opts.endgameOnly ? '♚ Lichess Endgame' : '⚔️ Lichess Tactics';
-      $('#tr-info', root).innerHTML = `${modeTag} · ${lvObj.icon} <b>L${lvl} ${lvObj.name}</b> · Rating <b>${p.r}</b> (<a target="_blank" rel="noopener" href="https://lichess.org/training/${p.id}" style="color:#38bdf8">#${p.id} ↗</a>) · ${side === 'w' ? '⚪ White' : '⚫ Black'} to move`;
-      msg(`Find the best move for <b>${side === 'w' ? 'White' : 'Black'}</b>. Scan Checks, Captures, Threats first!`);
-      $('#tr-next', root).disabled = true; $('#tr-hint', root).disabled = false; $('#tr-show', root).disabled = false;
-    }
-    function flashBad(sq) { const el = board.el.querySelector(`[data-sq="${sq}"]`); if (el) { el.classList.add('bad'); setTimeout(() => el.classList.remove('bad'), 650); } }
-    function onMove(from, to) {
-      if (T.done || T.busy || !T.p) return;
-      const expect = sol()[T.idx], elapsed = (Date.now() - T.t0) / 1000;
-      let ok = from + to === expect.slice(0, 4);
-      if (!ok) { const test = new Chess(board.chess.fen()); const m = test.move({ from, to, promotion: 'q' }); if (m && test.in_checkmate()) ok = true; }
-      if (ok) {
-        board.play(from, to, expect[4]); T.idx++; sfx.good();
-        if (T.idx >= sol().length) return finish();
-        T.busy = true; board.locked = true; msg('✅ Good move! Opponent replies…', 'ok');
-        setTimeout(() => {
-          const r = sol()[T.idx]; board.play(r.slice(0, 2), r.slice(2, 4), r[4]); T.idx++;
-          T.busy = false; board.locked = false;
-          if (T.idx >= sol().length) return finish();
-          msg('Your turn again — find the continuation!', 'ok');
-        }, 550);
-      } else {
-        T.wrong++; sfx.bad(); flashBad(to);
-        if (T.wrong === 1 && T.idx === 0 && elapsed < 4) { T.fast = true; msg(`⚡ You moved in <b>${elapsed.toFixed(1)}s</b> — pause and check <b>Checks, Captures, Threats</b>!`, 'bad'); }
-        else msg('Not quite — check for forcing checks, captures, or undefended pieces.', 'bad');
-      }
-    }
-    function finish() {
-      T.done = true; board.locked = true;
-      const result = T.shown ? 'shown' : (T.wrong === 0 ? 'first' : 'retry');
-      const r = CQ.recordPuzzle(T.p, result, { challenge: T.challenge, fastWrong: T.fast });
-      if (result === 'shown') msg('Study the pattern above, then try the next puzzle!', 'bad');
-      else {
-        sfx.win();
-        msg(`🎉 <b>${result === 'first' ? 'First try!' : 'Solved!'}</b> ${r.stars ? `<span class="star">+${r.stars} ⭐</span>` : ''} · Added to your Weekly Goal!`, 'ok');
-      }
-      $('#tr-next', root).disabled = false; $('#tr-hint', root).disabled = true; $('#tr-show', root).disabled = true;
-      updateHeader();
-    }
-    $('#tr-hint', root).onclick = () => { if (T.done || !T.p) return; const m = sol()[T.idx]; board.showHint(m.slice(0, 2)); msg('💡 Move the highlighted piece.'); };
-    $('#tr-show', root).onclick = async () => {
-      if (T.done || T.busy || !T.p) return; T.shown = true; board.locked = true; T.busy = true;
-      for (; T.idx < sol().length; T.idx++) { const m = sol()[T.idx]; board.play(m.slice(0, 2), m.slice(2, 4), m[4]); await new Promise(r => setTimeout(r, 700)); }
-      T.busy = false; finish();
-    };
-    $('#tr-next', root).onclick = next;
-    $('#tr-chal', root).onchange = () => { if (T.done || !T.p) next(); else toast('⚡ Overclock starts on next puzzle'); };
-    $('#tr-tier', root).onchange = () => next();
-    next();
-    return root;
-  }
-
-  /* ---------- Checkmate Conversion Lab (Embedded inside 🌐 Lichess Practice Arena) ---------- */
-  const DRILLS = {
-    kqk: { name: 'King + Queen vs King', limit: 20, piece: 'Q', tip: 'Shrink the box with the Queen a knight-move away, then walk your King in. Zero stalemates!' },
-    krk: { name: 'King + Rook vs King', limit: 35, piece: 'R', tip: 'Cut the King off with the Rook, bring your King into opposition, force him to the edge.' },
-  };
-  const EG_KINGS = ['8/8/8/3k4/8/8/8/', '8/8/2k5/8/8/8/8/', '8/8/8/5k2/8/8/8/', '8/4k3/8/8/8/8/8/', '8/8/6k1/8/8/8/8/'];
-  const EG = window.CQ_EG = { id: 'kqk', board: null, moves: 0, over: false };
-  function opponentMove(chess) {
-    const ms = chess.moves({ verbose: true }); if (!ms.length) return null;
-    const cap = ms.find(m => m.captured); if (cap) return cap;
-    const dist = sq => { const f = sq.charCodeAt(0) - 97, r = +sq[1] - 1; return Math.max(Math.abs(f - 3.5), Math.abs(r - 3.5)); };
-    return ms.map(m => [m, -dist(m.to) + Math.random() * 0.4]).sort((a, b) => b[1] - a[1])[0][0];
-  }
-  function egStart() {
-    const dr = DRILLS[EG.id], fen = rand(EG_KINGS) + dr.piece + '3K3 w - - 0 1';
-    EG.moves = 0; EG.over = false; EG.board.locked = false; EG.board.set(fen, 'w');
-    $('#eg-msg').innerHTML = `Checkmate in <b>${dr.limit} moves or fewer</b>. ${dr.tip}`; $('#eg-moves').textContent = '0';
-  }
-  function renderEndgameLabInto(container) {
-    const egCap = S().settings.endgameCap || 10;
-    const todayCount = S().ledger.filter(e => e.type === 'endgame' && e.date === CQ.dstr()).length;
-    container.innerHTML = `
-      <div class="row between wrap" style="margin-bottom:8px">
-        <select id="eg-sel">${Object.entries(DRILLS).map(([k, d]) => `<option value="${k}" ${k === EG.id ? 'selected' : ''}>${d.name}</option>`).join('')}</select>
-        <span class="muted">Moves: <b id="eg-moves">0</b></span>
-        <span class="chip star">Today: ${todayCount}/${egCap} mates (+5 ⭐ each)</span>
-        <div class="row"><button data-act="egrestart">🔄 New position</button><button data-act="egundo">↩ Undo</button></div>
-      </div>
-      <div class="board-wrap"><div id="eg-board"></div></div>
-      <div id="eg-msg" class="tr-msg"></div>
-      <p class="muted small center">Personal Bests: ${Object.entries(S().endgames).map(([k, e]) => `${DRILLS[k] ? DRILLS[k].name : k}: ${e.wins} wins (PB ${e.best} moves)`).join(' · ') || 'none yet'}</p>`;
-    EG.board = new Board($('#eg-board', container), { onMove: (f, t) => egMove(f, t) });
-    egStart();
-    $('#eg-sel', container).onchange = e => { EG.id = e.target.value; egStart(); };
-  }
-  function egMove(f, t) {
-    if (EG.over) return; const dr = DRILLS[EG.id], b = EG.board;
-    if (!b.play(f, t)) return; EG.moves++; $('#eg-moves').textContent = EG.moves; sfx.good();
-    const end = () => {
-      EG.over = true; b.locked = true;
-      if (b.chess.in_checkmate()) {
-        const w = S().endgames[EG.id] || { wins: 0, best: 999 }; w.wins++; w.best = Math.min(w.best, EG.moves); S().endgames[EG.id] = w;
-        const egCap = S().settings.endgameCap || 10;
-        const efficient = EG.moves <= dr.limit; const today = CQ.dstr(), n = S().ledger.filter(e => e.type === 'endgame' && e.date === today).length;
-        let got = 0; if (efficient && n < egCap) { CQ.addStars(5, 'endgame', 'Checkmate: ' + dr.name + ' in ' + EG.moves, 'eg-' + CQ.uid()); got = 5; }
-        CQ.evaluateWeeklyBonusesAndPenalties();
-        CQ.commit(); sfx.win(); confetti(); $('#eg-msg').className = 'tr-msg ok';
-        $('#eg-msg').innerHTML = `🏆 <b>CHECKMATE in ${EG.moves}!</b> ${efficient ? (got ? '+5 ⭐' : '(daily limit reached)') : `Try for ${dr.limit} or fewer!`}`;
-      } else {
-        sfx.bad(); $('#eg-msg').className = 'tr-msg bad';
-        $('#eg-msg').innerHTML = b.chess.in_stalemate() ? '🤝 <b>Stalemate!</b> Press 🔄 and leave the enemy King a legal square until mate.' : 'Draw — press 🔄 to try again.';
-      }
-    };
-    if (b.chess.game_over()) return end();
-    b.locked = true;
-    setTimeout(() => {
-      const m = opponentMove(b.chess); if (m) b.play(m.from, m.to); b.locked = false;
-      if (b.chess.game_over()) end();
-    }, 400);
-  }
-
-  /* ==================== TAB 3: 📚 THEORY MASTERY (5 Packages & Graduation Checklists) ==================== */
+  /* ==================== TAB 3: 📚 THEORY ROADMAP (5 Packages & Lichess Graduation Checklists — Zero Local Boards) ==================== */
   function lessonCard(l) {
     const mastered = S().lessons.done[l.id];
     const badgeMap = {
@@ -802,14 +663,17 @@
           <span class="chip small">${badgeMap[l.cat] || l.cat}</span>
           <h4 style="margin:4px 0">${l.icon} ${esc(l.title)}</h4>
         </div>
-        <span class="chip ${mastered ? 'ok' : 'run'}">${mastered ? '✅ Mastered (3/3 Exam)' : '🔒 Pass 3/3 Exam to Complete'}</span>
+        <span class="chip ${mastered ? 'ok' : 'run'}">${mastered ? `✅ Studied (${mastered})` : '📖 Roadmap Study & Lichess Practice'}</span>
       </div>
       <p class="muted small">${esc(l.why)}</p>
       <ul class="small">${l.ideas.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
-      <div class="drill small">🏋️ <b>Board Drill:</b> ${esc(l.drill)}</div>
+      <div class="drill small">🎯 <b>Lichess Practice Goal:</b> ${esc(l.drill)}</div>
       <div class="row wrap" style="margin-top:10px">
-        <button class="primary" data-act="quiz" data-id="${l.id}">🎓 ${mastered ? 'Retake Mastery Exam (+10 ⭐ daily)' : 'Pass Mastery Exam (3/3 Board + Theory · +15 ⭐)'}</button>
-        ${(l.videos || []).map(v => `<a class="btn small" target="_blank" rel="noopener" href="${v[1]}">▶ ${esc(v[0])}</a>`).join('')}
+        <a class="btn primary" target="_blank" rel="noopener" href="${esc(l.lichessUrl || 'https://lichess.org/training')}">${esc(l.lichessLabel || '🌐 Practice on Lichess')} ↗</a>
+        ${(l.videos || []).map(v => `<a class="btn small" target="_blank" rel="noopener" href="${v[1]}">▶ ${esc(v[0])} ↗</a>`).join('')}
+        <button class="btn small ${mastered ? '' : 'primary'}" data-act="markstudied" data-id="${l.id}">
+          ${mastered ? '🔄 Log Lichess Review (+10 ⭐ daily)' : '✅ Mark Studied & Practiced on Lichess (+15 ⭐)'}
+        </button>
       </div>
     </div>`;
   }
@@ -823,18 +687,18 @@
       <div class="card hero">
         <div class="row between wrap">
           <div>
-            <span class="chip star">🎓 5-PACKAGE TOURNAMENT REPERTOIRE SYSTEM</span>
-            <h2 style="margin:6px 0 2px">Theory Mastery & Level Graduation Checklist</h2>
+            <span class="chip star">🗺️ 5-PACKAGE TOURNAMENT REPERTOIRE ROADMAP</span>
+            <h2 style="margin:6px 0 2px">Repertoire Roadmap &amp; Lichess Level Graduation</h2>
             <p class="muted small" style="margin:0">
               <b>⚪ White Core Offenses:</b> Queen's Gambit (<code>1.d4 d5 2.c4</code>) &amp; English Opening (<code>1.c4</code>)<br>
               <b>⚫ Black Core Defenses:</b> Caro-Kann Defense (<code>1.e4 c6</code>) &amp; Sicilian Defense (<code>1.e4 c5</code>)<br>
-              To graduate each Level, pass all Variation Mastery Exams, complete Middlegame/Endgame gates, and win <b>10 Repertoire Games (5 White + 5 Black across Classical, Rapid &amp; Blitz)</b>!
+              Study each Roadmap Module, practice it directly on <b>Lichess</b>, and win <b>10 Repertoire Games (5 White + 5 Black across Classical, Rapid &amp; Blitz)</b> to unlock each Level's Mega Bonus!
             </p>
           </div>
           <div class="center">
             <div class="big">${totalDone} <small>/ ${LESSONS.length}</small></div>
-            <div class="muted small">Modules Mastered</div>
-            <button class="btn small primary" data-act="openrepwin" style="margin-top:6px">➕ Log Repertoire Game Win</button>
+            <div class="muted small">Roadmap Modules Studied</div>
+            <button class="btn small primary" data-act="openrepwin" style="margin-top:6px">➕ Log OTB / Repertoire Win</button>
           </div>
         </div>
       </div>
@@ -846,10 +710,8 @@
             <div class="muted small">White Wins (QG / English): <b>${whiteWins.length}</b> · Black Wins (Caro-Kann / Sicilian): <b>${blackWins.length}</b></div>
           </div>
           <div class="row wrap">
-            <select id="yt-topic-sel" style="max-width:280px">
-              ${LESSONS.map(l => `<option value="${l.id}">L${l.l} [${l.cat}]: ${esc(l.title)}</option>`).join('')}
-            </select>
-            <button class="primary small" data-act="yttest">🎓 Quick Exam (+15 ⭐)</button>
+            <button class="primary small" data-act="refreshli">🔄 Sync Lichess Wins Now</button>
+            <a class="btn small" target="_blank" rel="noopener" href="https://lichess.org/">🕹️ Play on Lichess ↗</a>
           </div>
         </div>
       </div>
@@ -885,10 +747,10 @@
 
           ${chk.mods.map(l => {
             const isDone = !!s.lessons.done[l.id];
-            return `<details ${lv.n === s.level && !isDone ? '' : ''}>
+            return `<details>
               <summary>
                 <span>${isDone ? '✅' : l.icon} <b>[${esc(l.cat)}]</b> ${esc(l.title)}</span>
-                <span class="chip small ${isDone ? 'ok' : ''}">${isDone ? 'Mastered 3/3' : 'Pass 3/3 Exam (+15 ⭐)'}</span>
+                <span class="chip small ${isDone ? 'ok' : ''}">${isDone ? 'Studied ✔' : 'Study on Lichess (+15 ⭐)'}</span>
               </summary>
               ${lessonCard(l)}
             </details>`;
@@ -897,97 +759,23 @@
       }).join('')}
 
       <div class="card">
-        <h3>🏛️ Saint Louis Chess Club GM Lectures & Study Channels</h3>
+        <h3>🏛️ Saint Louis Chess Club GM Lectures &amp; Lichess Practice Links</h3>
         <div class="row wrap">${RECOMMENDED.map(r => `<a class="btn" target="_blank" rel="noopener" href="${r[1]}">${esc(r[0])} ↗</a>`).join('')}</div>
       </div>`;
   }
 
-  /* ---------- Mandatory 3-Question Lesson Mastery Quiz Modal ---------- */
-  function openLessonQuiz(lesson, onPass) {
-    const questions = (lesson && lesson.quiz) || [];
-    if (!questions.length) return;
-    let qIdx = 0;
-    const m = document.createElement('div'); m.className = 'modal';
-    document.body.appendChild(m);
-
-    function renderQ() {
-      const q = questions[qIdx];
-      const prog = `Question ${qIdx + 1} of ${questions.length}`;
-      if (q.type === 'board') {
-        m.innerHTML = `<div class="card modal-card">
-          <div class="row between"><span class="chip ok">🎓 Package ${lesson.l} Mastery Exam · ${prog}</span><button id="qz-close" class="btn small">✕ Close</button></div>
-          <h3 style="margin-top:8px">${lesson.icon} ${esc(lesson.title)}</h3>
-          <p><b>Board Challenge:</b> ${esc(q.prompt)}</p>
-          <div class="board-wrap" style="max-width:340px"><div id="qz-board"></div></div>
-          <div id="qz-msg" class="tr-msg">Play the best move on the board (${q.side === 'w' ? '⚪ White' : '⚫ Black'} to move).</div>
-          <div class="row between"><button id="qz-hint">💡 Hint</button><button id="qz-next" class="primary" disabled>${qIdx + 1 < questions.length ? 'Next Question ▶' : '🏆 Claim Mastery (+15 ⭐)'}</button></div>
-        </div>`;
-        const b = new Board($('#qz-board', m), {
-          onMove(from, to) {
-            const uci = from + to;
-            if (q.moves.some(x => x.slice(0, 4) === uci)) {
-              b.play(from, to, 'q'); b.locked = true; sfx.good();
-              $('#qz-msg', m).className = 'tr-msg ok';
-              $('#qz-msg', m).innerHTML = `✅ <b>Correct!</b> ${esc(q.explain)}`;
-              $('#qz-next', m).disabled = false;
-            } else {
-              sfx.bad();
-              $('#qz-msg', m).className = 'tr-msg bad';
-              $('#qz-msg', m).innerHTML = `❌ Not that move — apply the core idea of <b>${esc(lesson.title)}</b> and try again!`;
-            }
-          },
-        });
-        b.set(q.fen, q.side);
-        $('#qz-hint', m).onclick = () => { const mv = q.moves[0]; b.showHint(mv.slice(0, 2)); };
-      } else {
-        m.innerHTML = `<div class="card modal-card">
-          <div class="row between"><span class="chip ok">🎓 Package ${lesson.l} Mastery Exam · ${prog}</span><button id="qz-close" class="btn small">✕ Close</button></div>
-          <h3 style="margin-top:8px">${lesson.icon} ${esc(lesson.title)}</h3>
-          <p><b>Theory Question:</b> ${esc(q.q)}</p>
-          <div id="qz-opts" class="form">${q.opts.map((o, idx) => `<button class="qz-opt" data-idx="${idx}" style="text-align:left;padding:12px">${String.fromCharCode(65 + idx)}. ${esc(o)}</button>`).join('')}</div>
-          <div id="qz-msg" class="tr-msg">Select the correct answer above.</div>
-          <div class="row end"><button id="qz-next" class="primary" disabled>${qIdx + 1 < questions.length ? 'Next Question ▶' : '🏆 Claim Mastery (+15 ⭐)'}</button></div>
-        </div>`;
-        m.querySelectorAll('.qz-opt').forEach(btn => {
-          btn.onclick = () => {
-            const pick = +btn.dataset.idx;
-            if (pick === q.ans) {
-              sfx.good();
-              btn.style.borderColor = '#22c55e'; btn.style.background = '#14532d';
-              $('#qz-msg', m).className = 'tr-msg ok';
-              $('#qz-msg', m).innerHTML = `✅ <b>Spot on!</b> ${esc(q.explain)}`;
-              $('#qz-next', m).disabled = false;
-              m.querySelectorAll('.qz-opt').forEach(x => x.disabled = true);
-            } else {
-              sfx.bad();
-              btn.style.borderColor = '#ef4444'; btn.style.background = '#7f1d1d';
-              $('#qz-msg', m).className = 'tr-msg bad';
-              $('#qz-msg', m).innerHTML = `❌ Not quite — review the options and try again!`;
-            }
-          };
-        });
-      }
-      $('#qz-close', m).onclick = () => m.remove();
-      $('#qz-next', m).onclick = () => {
-        qIdx++;
-        if (qIdx < questions.length) renderQ();
-        else {
-          m.remove();
-          S().lessons.done[lesson.id] = CQ.dstr();
-          S().lessons.quizScores[lesson.id] = questions.length;
-          const gotBounty = CQ.addStars(15, 'lesson_quiz', '🎓 Passed Mastery Exam: ' + lesson.title, 'quiz-' + lesson.id);
-          const gotDaily = !gotBounty && CQ.addStars(10, 'lesson_quiz', '🎓 Theory Review Exam: ' + lesson.title, 'quiz-daily-' + lesson.id + '-' + CQ.dstr());
-          const d = CQ.day();
-          d.sec.p2 = Math.max(d.sec.p2, 600);
-          CQ.evaluateWeeklyBonusesAndPenalties();
-          CQ.commit();
-          confetti(); sfx.win();
-          modal(`<h2>🎓 VARIATION MASTERED (3/3)!</h2><p>You passed <b>${lesson.icon} ${esc(lesson.title)}</b>!</p><p><b class="star">${gotBounty ? '+15 ⭐ Mastery Bounty!' : gotDaily ? '+10 ⭐ Review Bounty!' : '✅ Mastered!'}</b></p>`)
-            .then(() => { if (onPass) onPass(); renderView(); });
-        }
-      };
-    }
-    renderQ();
+  function markLessonStudied(lesson) {
+    if (!lesson) return;
+    S().lessons.done[lesson.id] = CQ.dstr();
+    const gotBounty = CQ.addStars(15, 'lesson_quiz', '📚 Studied & Practiced on Lichess: ' + lesson.title, 'quiz-' + lesson.id);
+    const gotDaily = !gotBounty && CQ.addStars(10, 'lesson_quiz', '📚 Lichess Roadmap Review: ' + lesson.title, 'quiz-daily-' + lesson.id + '-' + CQ.dstr());
+    const d = CQ.day();
+    d.sec.p2 = Math.max(d.sec.p2, 600);
+    CQ.evaluateWeeklyBonusesAndPenalties();
+    CQ.commit();
+    confetti(); sfx.win();
+    toast(gotBounty ? `✅ Marked Studied on Lichess! +15 ⭐` : gotDaily ? `🔄 Logged Lichess Review! +10 ⭐` : `✅ Roadmap Module Updated!`);
+    renderView();
   }
 
   /* ==================== TAB 4: 👤 PROFILE (5 Minecraft Ranks w/ All-Format Targets + Official Ratings) ==================== */
@@ -1467,15 +1255,9 @@
         toast('Updated Excused Day status ✔');
         return renderView();
       }
-      case 'arenamode': UI.arenaMode = id; return renderView();
-      case 'quiz': {
+      case 'markstudied': {
         const l = LESSONS.find(x => x.id === id) || LESSONS[0];
-        return openLessonQuiz(l);
-      }
-      case 'yttest': {
-        const sel = $('#yt-topic-sel');
-        const l = LESSONS.find(x => x.id === (sel && sel.value)) || LESSONS[0];
-        return openLessonQuiz(l);
+        return markLessonStudied(l);
       }
       case 'claimlvl': {
         const bonus = CQ.claimLevelClear(+id);
@@ -1498,11 +1280,6 @@
         return renderView();
       }
       case 'refreshli': await loadLichess(true); toast('Lichess activity & stars synced ✔'); return renderView();
-      case 'egrestart': return egStart();
-      case 'egundo': {
-        const b = EG.board; if (!b || EG.over) return;
-        b.undo(); b.undo(); EG.moves = Math.max(0, EG.moves - 1); $('#eg-moves').textContent = EG.moves; return;
-      }
       case 'delrw': if (!await askPin('Edit reference rewards')) return; s.rewards.splice(+id, 1); CQ.commit(); return renderView();
       case 'addrw': if (!await askPin('Edit reference rewards')) return; s.rewards.push({ id: 'r' + CQ.uid(), icon: '🎁', name: 'New reward', cost: 100 }); CQ.commit(); return renderView();
       case 'bonus': {

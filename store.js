@@ -610,18 +610,16 @@
     const hasBlitz = poolWins.some(w => w.speed === 'blitz');
     const gamesDone = lvlWhiteWins >= 5 && lvlBlackWins >= 5 && hasClassical && hasRapid && hasBlitz;
 
-    // Tactics & Endgame capability
+    // Lichess Adaptive Puzzles capability
     const totalPzSolved = Object.values(S.days).reduce((a, d) => a + (d.pz ? d.pz.solved : 0) + (d.li ? d.li.pzWins : 0), 0);
-    const totalEgWins = Object.values(S.endgames).reduce((a, e) => a + (e.wins || 0), 0);
     const pzGate = totalPzSolved >= (lvObj.reqPuzzles || lvl * 25);
-    const egGate = totalEgWins >= (lvObj.reqEndgames || lvl * 3);
 
     const gates = [
-      { id: 'white', label: `⚪ Deep White Core: Queen's Gambit & English (${whiteMods.filter(m => S.lessons.done[m.id]).length}/${whiteMods.length} exams passed)`, done: whiteDone },
-      { id: 'black', label: `⚫ Deep Black Core: Caro-Kann & Sicilian (${blackMods.filter(m => S.lessons.done[m.id]).length}/${blackMods.length} exams passed)`, done: blackDone },
-      { id: 'other', label: `🛡️ Basic Coverage, Middlegame & Endgame Exams (${otherMods.filter(m => S.lessons.done[m.id]).length}/${otherMods.length} passed)`, done: otherDone },
-      { id: 'games', label: `⚔️ 10 Repertoire Game Wins: ${lvlWhiteWins}/5 White + ${lvlBlackWins}/5 Black (Classical: ${hasClassical ? '✅' : '0/1'} · Rapid: ${hasRapid ? '✅' : '0/1'} · Blitz: ${hasBlitz ? '✅' : '0/1'})`, done: gamesDone },
-      { id: 'cap', label: `🧩 Tactics & Endgame Capability: ${Math.min(totalPzSolved, lvObj.reqPuzzles)}/${lvObj.reqPuzzles} Puzzles · ${Math.min(totalEgWins, lvObj.reqEndgames)}/${lvObj.reqEndgames} Endgame Mates`, done: pzGate && egGate },
+      { id: 'white', label: `⚪ Deep White Core Roadmap: Queen's Gambit & English (${whiteMods.filter(m => S.lessons.done[m.id]).length}/${whiteMods.length} studied on Lichess)`, done: whiteDone },
+      { id: 'black', label: `⚫ Deep Black Core Roadmap: Caro-Kann & Sicilian (${blackMods.filter(m => S.lessons.done[m.id]).length}/${blackMods.length} studied on Lichess)`, done: blackDone },
+      { id: 'other', label: `🛡️ Sidelines, Middlegame & Endgame Roadmap (${otherMods.filter(m => S.lessons.done[m.id]).length}/${otherMods.length} studied on Lichess)`, done: otherDone },
+      { id: 'games', label: `⚔️ 10 Repertoire Game Wins on Lichess/OTB: ${lvlWhiteWins}/5 White + ${lvlBlackWins}/5 Black (Classical: ${hasClassical ? '✅' : '0/1'} · Rapid: ${hasRapid ? '✅' : '0/1'} · Blitz: ${hasBlitz ? '✅' : '0/1'})`, done: gamesDone },
+      { id: 'cap', label: `🧩 Lichess Adaptive Puzzles: ${Math.min(totalPzSolved, lvObj.reqPuzzles)}/${lvObj.reqPuzzles} Rated Puzzles solved on Lichess`, done: pzGate },
     ];
 
     const doneCount = gates.filter(g => g.done).length;
@@ -641,7 +639,6 @@
       hasRapid,
       hasBlitz,
       totalPzSolved,
-      totalEgWins,
       gates,
       doneCount,
       pct: Math.round((doneCount / gates.length) * 100),

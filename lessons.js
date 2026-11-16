@@ -1,1544 +1,966 @@
-/* Chess Quest v3 - 5 Unified Minecraft Mastery Levels & 5 Deep Repertoire Packages
- * Core White Offenses: Queen's Gambit (1.d4 d5 2.c4) & English Opening (1.c4)
- * Core Black Defenses: Caro-Kann Defense (1.e4 c6) & Sicilian Defense (1.e4 c5)
- * Plus Secondary Coverage (2 White + 2 Black), Middlegame Tactics, and Endgame Technique per Level.
- */
-
+/* Chess Quest v3.1 - 5 Unified Minecraft Mastery Levels & 5 Deep Repertoire Packages (Roadmap Only — All Play & Testing on Lichess) */
 window.LEVELS = [
   {
-    n: 1,
-    name: 'Stone Crafter',
-    mc: 'Stone Pickaxe',
-    icon: '⛏️',
-    color: '#94a3b8',
-    band: 'OTB 700 · Classical 1300 · Rapid 1550 · Blitz 1250 · Puzzle 1650',
-    minR: 800,
-    maxR: 1350,
-    otbBase: 700,
-    targets: { otb: 700, classical: 1300, rapid: 1550, blitz: 1250, puzzle: 1650 },
-    clearBonus: 250,
-    reqPuzzles: 25,
-    reqEndgames: 3,
-    goal: 'Foundation Package: Classical QG & English setups, Caro-Kann & Open Sicilian fundamentals, CCT discipline, and K+Q / K+R mates.',
+    "n": 1,
+    "name": "Stone Crafter",
+    "mc": "Stone Pickaxe",
+    "icon": "⛏️",
+    "color": "#94a3b8",
+    "band": "OTB 700 · Classical 1300 · Rapid 1550 · Blitz 1250 · Puzzle 1650",
+    "minR": 800,
+    "maxR": 1350,
+    "otbBase": 700,
+    "targets": {
+      "otb": 700,
+      "classical": 1300,
+      "rapid": 1550,
+      "blitz": 1250,
+      "puzzle": 1650
+    },
+    "clearBonus": 250,
+    "reqPuzzles": 25,
+    "reqEndgames": 3,
+    "goal": "Foundation Package: Classical QG & English setups, Caro-Kann & Open Sicilian fundamentals, CCT discipline, and K+Q / K+R mates."
   },
   {
-    n: 2,
-    name: 'Iron Defender',
-    mc: 'Iron Armor',
-    icon: '🛡️',
-    color: '#38bdf8',
-    band: 'OTB 775 · Classical 1400 · Rapid 1625 · Blitz 1325 · Puzzle 1750',
-    minR: 1350,
-    maxR: 1550,
-    otbBase: 775,
-    targets: { otb: 775, classical: 1400, rapid: 1625, blitz: 1325, puzzle: 1750 },
-    clearBonus: 400,
-    reqPuzzles: 50,
-    reqEndgames: 6,
-    goal: 'Tactical Shield Package: QG vs Slav/Albin, Symmetrical English, Caro-Kann Advance, Anti-Sicilians (Alapin/Closed), and King+Pawn Opposition.',
+    "n": 2,
+    "name": "Iron Defender",
+    "mc": "Iron Armor",
+    "icon": "🛡️",
+    "color": "#38bdf8",
+    "band": "OTB 775 · Classical 1400 · Rapid 1625 · Blitz 1325 · Puzzle 1750",
+    "minR": 1350,
+    "maxR": 1550,
+    "otbBase": 775,
+    "targets": {
+      "otb": 775,
+      "classical": 1400,
+      "rapid": 1625,
+      "blitz": 1325,
+      "puzzle": 1750
+    },
+    "clearBonus": 400,
+    "reqPuzzles": 50,
+    "reqEndgames": 6,
+    "goal": "Tactical Shield Package: QG vs Slav/Albin, Symmetrical English, Caro-Kann Advance, Anti-Sicilians (Alapin/Closed), and King+Pawn Opposition."
   },
   {
-    n: 3,
-    name: 'Gold Knight',
-    mc: 'Golden Sword',
-    icon: '⚔️',
-    color: '#eab308',
-    band: 'OTB 850 · Classical 1500 · Rapid 1675 · Blitz 1400 · Puzzle 1850',
-    minR: 1550,
-    maxR: 1725,
-    otbBase: 850,
-    targets: { otb: 850, classical: 1500, rapid: 1675, blitz: 1400, puzzle: 1850 },
-    clearBonus: 600,
-    reqPuzzles: 80,
-    reqEndgames: 10,
-    goal: 'Structure & Attack Package: Carlsbad Minority Attack, English vs KID, Caro-Kann Fantasy/Two Knights, Sicilian Grand Prix/Morra, and Rook Endgames.',
+    "n": 3,
+    "name": "Gold Knight",
+    "mc": "Golden Sword",
+    "icon": "⚔️",
+    "color": "#eab308",
+    "band": "OTB 850 · Classical 1500 · Rapid 1675 · Blitz 1400 · Puzzle 1850",
+    "minR": 1550,
+    "maxR": 1725,
+    "otbBase": 850,
+    "targets": {
+      "otb": 850,
+      "classical": 1500,
+      "rapid": 1675,
+      "blitz": 1400,
+      "puzzle": 1850
+    },
+    "clearBonus": 600,
+    "reqPuzzles": 80,
+    "reqEndgames": 10,
+    "goal": "Structure & Attack Package: Carlsbad Minority Attack, English vs KID, Caro-Kann Fantasy/Two Knights, Sicilian Grand Prix/Morra, and Rook Endgames."
   },
   {
-    n: 4,
-    name: 'Diamond Commander',
-    mc: 'Diamond Enchanted',
-    icon: '💎',
-    color: '#22d3ee',
-    band: 'OTB 925 · Classical 1575 · Rapid 1725 · Blitz 1450 · Puzzle 1925',
-    minR: 1725,
-    maxR: 1900,
-    otbBase: 925,
-    targets: { otb: 925, classical: 1575, rapid: 1725, blitz: 1450, puzzle: 1925 },
-    clearBonus: 800,
-    reqPuzzles: 120,
-    reqEndgames: 15,
-    goal: 'Tournament Weapon Package: Semi-Slav & Tarrasch, Catalan/Reti English, Caro-Kann Panov, Sicilian Dragon/Classical, and Lucena/Philidor mastery.',
+    "n": 4,
+    "name": "Diamond Commander",
+    "mc": "Diamond Enchanted",
+    "icon": "💎",
+    "color": "#22d3ee",
+    "band": "OTB 925 · Classical 1575 · Rapid 1725 · Blitz 1450 · Puzzle 1925",
+    "minR": 1725,
+    "maxR": 1900,
+    "otbBase": 925,
+    "targets": {
+      "otb": 925,
+      "classical": 1575,
+      "rapid": 1725,
+      "blitz": 1450,
+      "puzzle": 1925
+    },
+    "clearBonus": 800,
+    "reqPuzzles": 120,
+    "reqEndgames": 15,
+    "goal": "Tournament Weapon Package: Semi-Slav & Tarrasch, Catalan/Reti English, Caro-Kann Panov, Sicilian Dragon/Classical, and Lucena/Philidor mastery."
   },
   {
-    n: 5,
-    name: 'Netherite Grandmaster',
-    mc: 'Netherite Beacon',
-    icon: '🔥',
-    color: '#f43f5e',
-    band: 'OTB 1000 · Classical 1650 · Rapid 1750 · Blitz 1500 · Puzzle 2000',
-    minR: 1900,
-    maxR: 2500,
-    otbBase: 1000,
-    targets: { otb: 1000, classical: 1650, rapid: 1750, blitz: 1500, puzzle: 2000 },
-    clearBonus: 1200,
-    reqPuzzles: 175,
-    reqEndgames: 20,
-    goal: '1000+ OTB Mastery Package: QG vs Indian Defenses, Maroczy/Hedgehog English, Tartakower/Karpov Caro-Kann, Sicilian Najdorf ...d5! break, and Endgame calculation.',
-  },
+    "n": 5,
+    "name": "Netherite Grandmaster",
+    "mc": "Netherite Beacon",
+    "icon": "🔥",
+    "color": "#f43f5e",
+    "band": "OTB 1000 · Classical 1650 · Rapid 1750 · Blitz 1500 · Puzzle 2000",
+    "minR": 1900,
+    "maxR": 2500,
+    "otbBase": 1000,
+    "targets": {
+      "otb": 1000,
+      "classical": 1650,
+      "rapid": 1750,
+      "blitz": 1500,
+      "puzzle": 2000
+    },
+    "clearBonus": 1200,
+    "reqPuzzles": 175,
+    "reqEndgames": 20,
+    "goal": "1000+ OTB Mastery Package: QG vs Indian Defenses, Maroczy/Hedgehog English, Tartakower/Karpov Caro-Kann, Sicilian Najdorf ...d5! break, and Endgame calculation."
+  }
 ];
 
-/* 5 Mastery Packages — Each Level has:
- *  - 4 Deep Core Repertoire Modules (⚪ Queen's Gambit, ⚪ English, ⚫ Caro-Kann, ⚫ Sicilian)
- *  - 2 Basic Coverage Modules (Secondary White & Secondary Black sidelines/traps)
- *  - 1 Middlegame Strategy & Tactics Module
- *  - 1 Endgame Technique Module
- *  (8 modules x 5 levels = 40 structured modules, each with a 3-question Board + Theory Exam)
- */
 window.LESSONS = [
-  // ==================== LEVEL 1: STONE CRAFTER (PACKAGE 1) ====================
   {
-    id: 'l1-qg', l: 1, cat: 'White Core', group: 'core_white', rep: 'qg', icon: '⚪',
-    title: "Queen's Gambit 1: QG Accepted & Orthodox Declined (1.d4 d5 2.c4)",
-    why: 'Your #1 White weapon. 2.c4 attacks Black’s d5 center immediately—if Black takes (2...dxc4), you seize the full center with e3/e4 and recover the pawn with Bxc4.',
-    ideas: [
-      'Against 2...dxc4 (QGA): play 3.Nf3 Nf6 4.e3 (or 3.e4!)—never panic about the c4 pawn; Bxc4 wins it right back with tempo.',
-      'Warning Trap: If Black tries to cling to the c4 pawn with 3...b5?!, strike immediately with 4.a4 c6 5.axb5 cxb5 6.Qf3! winning a piece or rook!',
-      'Against 2...e6 (QGD Orthodox): develop 3.Nc3 Nf6 4.Bg5 Be7 5.e3, putting pressure on d5 and pinning the f6 knight.',
+    "id": "l1-qg",
+    "l": 1,
+    "cat": "White Core",
+    "group": "core_white",
+    "rep": "qg",
+    "icon": "⚪",
+    "title": "Queen's Gambit 1: QG Accepted & Orthodox Declined (1.d4 d5 2.c4)",
+    "why": "Your #1 White weapon. 2.c4 attacks Black’s d5 center immediately—if Black takes (2...dxc4), you seize the full center with e3/e4 and recover the pawn with Bxc4.",
+    "ideas": [
+      "Against 2...dxc4 (QGA): play 3.Nf3 Nf6 4.e3 (or 3.e4!)—never panic about the c4 pawn; Bxc4 wins it right back with tempo.",
+      "Warning Trap: If Black tries to cling to the c4 pawn with 3...b5?!, strike immediately with 4.a4 c6 5.axb5 cxb5 6.Qf3! winning a piece or rook!",
+      "Against 2...e6 (QGD Orthodox): develop 3.Nc3 Nf6 4.Bg5 Be7 5.e3, putting pressure on d5 and pinning the f6 knight."
     ],
-    drill: 'Play 4.a4! against Black’s greedy 3...b5 in the Queen’s Gambit Accepted.',
-    videos: [['Saint Louis Chess Club: Queen’s Gambit Fundamentals', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+queens+gambit']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'After 1.d4 d5 2.c4 dxc4 3.e3 b5?!, Black tries to hold the extra pawn. Undermine Black’s pawn chain immediately!',
-        fen: 'rnbqkbnr/p1p1pppp/8/1p6/2pP4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 4',
-        side: 'w',
-        moves: ['a2a4'],
-        explain: '4.a4! shatters the b5 support. After 4...c6 5.axb5 cxb5 6.Qf3!, White wins the a8-rook or a minor piece.',
-      },
-      {
-        type: 'board',
-        prompt: 'In the Queen’s Gambit Declined (1.d4 d5 2.c4 e6 3.Nc3 Nf6), develop your dark-squared bishop actively to pin the knight!',
-        fen: 'rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4',
-        side: 'w',
-        moves: ['c1g5', 'c1f4'],
-        explain: '4.Bg5! (or 4.Bf4) develops the bishop outside the pawn chain before playing e3!',
-      },
-      {
-        type: 'mcq',
-        q: 'Why is the Queen’s Gambit (1.d4 d5 2.c4) not a true sacrifice of a pawn?',
-        opts: [
-          'Because if Black takes 2...dxc4 and tries to keep it with ...b5, White undermines it with a4 and Qf3',
-          'Because White gets checkmate in 3 moves',
-          'Because capturing on c4 is illegal',
-        ],
-        ans: 0,
-        explain: 'Black cannot hold the c4 pawn without collapsing the queenside to a4 and Qf3!',
-      },
+    "drill": "Play 4.a4! against Black’s greedy 3...b5 in the Queen’s Gambit Accepted.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Queen’s Gambit Fundamentals",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+queens+gambit"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR_b_KQkq_-_0_2#explorer",
+    "lichessLabel": "🌐 Practice QG in Lichess Explorer"
   },
   {
-    id: 'l1-eng', l: 1, cat: 'White Core', group: 'core_white', rep: 'eng', icon: '⚪',
-    title: 'English Opening 1: Reversed Sicilian & Botvinnik Setup (1.c4 e5)',
-    why: 'Your #2 White weapon. 1.c4 controls d5 from the flank and steers the game into rich strategic waters where opponents lose their memorized lines.',
-    ideas: [
-      'After 1.c4 e5 2.Nc3 Nf6 3.g3, fianchetto your bishop to g2—the g2 bishop and c4 pawn clamp down on the d5 square like a vise.',
-      'Golden Square: Plant a knight on d5! Once your knight lands on d5, Black’s position is cramped.',
-      'Botvinnik Triangle: c4 + d3 + e4 + g3 + Bg2 + Nge2 gives you a rock-solid center and a kingside f4 attack.',
+    "id": "l1-eng",
+    "l": 1,
+    "cat": "White Core",
+    "group": "core_white",
+    "rep": "eng",
+    "icon": "⚪",
+    "title": "English Opening 1: Reversed Sicilian & Botvinnik Setup (1.c4 e5)",
+    "why": "Your #2 White weapon. 1.c4 controls d5 from the flank and steers the game into rich strategic waters where opponents lose their memorized lines.",
+    "ideas": [
+      "After 1.c4 e5 2.Nc3 Nf6 3.g3, fianchetto your bishop to g2—the g2 bishop and c4 pawn clamp down on the d5 square like a vise.",
+      "Golden Square: Plant a knight on d5! Once your knight lands on d5, Black’s position is cramped.",
+      "Botvinnik Triangle: c4 + d3 + e4 + g3 + Bg2 + Nge2 gives you a rock-solid center and a kingside f4 attack."
     ],
-    drill: 'Fianchetto the king’s bishop to g2 and jump your knight into the d5 outpost.',
-    videos: [['Saint Louis Chess Club: English Opening 1.c4', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+english+opening']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the English (1.c4 e5 2.Nc3 Nc6 3.g3 g6), place your bishop on its best long diagonal!',
-        fen: 'r1bqkbnr/pppp1p1p/2n3p1/4p3/2P5/2N3P1/PP1PPP1P/R1BQKBNR w KQkq - 0 4',
-        side: 'w',
-        moves: ['f1g2'],
-        explain: '4.Bg2! completes the fianchetto, aiming straight through the center at d5 and b7.',
-      },
-      {
-        type: 'board',
-        prompt: 'Black played carelessly in the English. Jump your knight into the dominant central outpost!',
-        fen: 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2P5/2NP2P1/PP2PPBP/R1BQK1NR w KQkq - 1 6',
-        side: 'w',
-        moves: ['c3d5'],
-        explain: '6.Nd5! plants a powerful knight on the d5 hole supported by c4 and Bg2.',
-      },
-      {
-        type: 'mcq',
-        q: 'What is the primary central square that White’s c4 pawn and Bg2 fianchetto work together to control in the English?',
-        opts: ['The d5 outpost square', 'The h4 square', 'The a2 square'],
-        ans: 0,
-        explain: 'Both the c4 pawn and the g2 bishop laser-focus on the d5 square!',
-      },
+    "drill": "Fianchetto the king’s bishop to g2 and jump your knight into the d5 outpost.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: English Opening 1.c4",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+english+opening"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR_b_KQkq_-_1_2#explorer",
+    "lichessLabel": "🌐 Practice English 1.c4 on Lichess"
   },
   {
-    id: 'l1-ck', l: 1, cat: 'Black Core', group: 'core_black', rep: 'ck', icon: '⚫',
-    title: 'Caro-Kann 1: Classical & Exchange Variations (1.e4 c6 2.d4 d5)',
-    why: 'Your #1 Black defense against 1.e4. 1...c6 prepares 2...d5 while keeping your light-squared c8-bishop completely free!',
-    ideas: [
-      'Classical Variation (3.Nc3 dxe4 4.Nxe4): Always play 4...Bf5! (or 4...Nd7) to develop smoothly before playing ...e6.',
-      'Warning Trap in Classical: After 4...Bf5 5.Ng3, ALWAYS drop the bishop back to 5...Bg6! so it stays safe on the h7-b1 diagonal.',
-      'Exchange Variation (3.exd5 cxd5 4.Bd3): Develop 4...Nc6 5.c3 Nf6 6.Bf4 Bg4! neutralizing White’s bishops.',
+    "id": "l1-ck",
+    "l": 1,
+    "cat": "Black Core",
+    "group": "core_black",
+    "rep": "ck",
+    "icon": "⚫",
+    "title": "Caro-Kann 1: Classical & Exchange Variations (1.e4 c6 2.d4 d5)",
+    "why": "Your #1 Black defense against 1.e4. 1...c6 prepares 2...d5 while keeping your light-squared c8-bishop completely free!",
+    "ideas": [
+      "Classical Variation (3.Nc3 dxe4 4.Nxe4): Always play 4...Bf5! (or 4...Nd7) to develop smoothly before playing ...e6.",
+      "Warning Trap in Classical: After 4...Bf5 5.Ng3, ALWAYS drop the bishop back to 5...Bg6! so it stays safe on the h7-b1 diagonal.",
+      "Exchange Variation (3.exd5 cxd5 4.Bd3): Develop 4...Nc6 5.c3 Nf6 6.Bf4 Bg4! neutralizing White’s bishops."
     ],
-    drill: 'Play 4...Bf5! against 4.Nxe4 in the Classical Caro-Kann.',
-    videos: [['Saint Louis Chess Club: Caro-Kann Defense', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+caro+kann']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the Classical Caro-Kann (1.e4 c6 2.d4 d5 3.Nc3 dxe4 4.Nxe4), develop your light-squared bishop actively and attack the e4 knight!',
-        fen: 'rnbqkbnr/pp2pppp/2p5/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4',
-        side: 'b',
-        moves: ['c8f5'],
-        explain: '4...Bf5! develops the light-squared bishop outside the pawn chain with tempo on the e4 knight.',
-      },
-      {
-        type: 'board',
-        prompt: 'White attacks your bishop with 5.Ng3. Tuck the bishop back to its safe diagonal!',
-        fen: 'rn1qkbnr/pp2pppp/2p5/5b2/3P4/6N1/PPP2PPP/R1BQKBNR b KQkq - 1 5',
-        side: 'b',
-        moves: ['f5g6'],
-        explain: '5...Bg6! keeps the bishop active on the long diagonal and gives it a safe square on h7 if h4-h5 is played.',
-      },
-      {
-        type: 'mcq',
-        q: 'Why do Caro-Kann players bring the c8-bishop out to f5 or g4 BEFORE playing ...e6?',
-        opts: [
-          'So the light-squared bishop is outside the pawn chain and not locked behind ...e6',
-          'To sacrifice the bishop',
-          'Because ...e6 is illegal on move 3',
-        ],
-        ans: 0,
-        explain: 'Getting the c8-bishop outside the pawn chain before playing ...e6 gives Black all the solidity of the French Defense without the bad bishop!',
-      },
+    "drill": "Play 4...Bf5! against 4.Nxe4 in the Classical Caro-Kann.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Caro-Kann Defense",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+caro+kann"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR_w_KQkq_-_0_3?color=black#explorer",
+    "lichessLabel": "🌐 Practice Caro-Kann on Lichess"
   },
   {
-    id: 'l1-sic', l: 1, cat: 'Black Core', group: 'core_black', rep: 'sic', icon: '⚫',
-    title: 'Sicilian 1: Open Sicilian Fundamentals & Trading c-Pawn for d-Pawn (1.e4 c5)',
-    why: 'Your #2 Black weapon when you want to play for a dynamic win against 1.e4. 1...c5 trades a flank pawn for White’s central d4-pawn, giving Black two center pawns vs one!',
-    ideas: [
-      'After 1.e4 c5 2.Nf3 d6 3.d4, ALWAYS capture 3...cxd4! 4.Nxd4 Nf6 5.Nc3—you now have the half-open c-file for your rooks and two center pawns (d+e vs e).',
-      'Punishing early Bc4: If White plays an early Bc4, play ...e6 and ...a6/...b5 or ...d5 hitting the bishop with tempo!',
-      'Never leave d5 unguarded without preparation—keep your pawns on d6/e6 (Scheveningen) or d6/g6 (Dragon).',
+    "id": "l1-sic",
+    "l": 1,
+    "cat": "Black Core",
+    "group": "core_black",
+    "rep": "sic",
+    "icon": "⚫",
+    "title": "Sicilian 1: Open Sicilian Fundamentals & Trading c-Pawn for d-Pawn (1.e4 c5)",
+    "why": "Your #2 Black weapon when you want to play for a dynamic win against 1.e4. 1...c5 trades a flank pawn for White’s central d4-pawn, giving Black two center pawns vs one!",
+    "ideas": [
+      "After 1.e4 c5 2.Nf3 d6 3.d4, ALWAYS capture 3...cxd4! 4.Nxd4 Nf6 5.Nc3—you now have the half-open c-file for your rooks and two center pawns (d+e vs e).",
+      "Punishing early Bc4: If White plays an early Bc4, play ...e6 and ...a6/...b5 or ...d5 hitting the bishop with tempo!",
+      "Never leave d5 unguarded without preparation—keep your pawns on d6/e6 (Scheveningen) or d6/g6 (Dragon)."
     ],
-    drill: 'Trade your flank c5-pawn for White’s central d4-pawn and attack e4 with ...Nf6.',
-    videos: [['Saint Louis Chess Club: Sicilian Defense Basics', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+sicilian+defense']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the Open Sicilian (1.e4 c5 2.Nf3 d6 3.d4), make the key pawn trade that gives Black a central majority!',
-        fen: 'rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq d3 0 3',
-        fen_alt: 'rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3',
-        side: 'b',
-        moves: ['c5d4'],
-        explain: '3...cxd4! trades your flank c-pawn for White’s central d4-pawn and opens the c-file for your rooks.',
-      },
-      {
-        type: 'board',
-        prompt: 'After 3...cxd4 4.Nxd4, develop your knight with a direct threat against White’s e4 pawn!',
-        fen: 'rnbqkbnr/pp2pppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4',
-        side: 'b',
-        moves: ['g8f6'],
-        explain: '4...Nf6! develops a piece and immediately forces White to defend e4 with 5.Nc3.',
-      },
-      {
-        type: 'mcq',
-        q: 'What is Black’s biggest structural trump card after 1.e4 c5 2.Nf3 d6 3.d4 cxd4?',
-        opts: [
-          'Two central pawns (d+e) against one (e), plus the half-open c-file for counterattack',
-          'Guaranteed checkmate on f2',
-          'Trading queens on move 4',
-        ],
-        ans: 0,
-        explain: 'Trading the flank c5-pawn for White’s d4-pawn gives Black a 2-to-1 central pawn majority and the open c-file!',
-      },
+    "drill": "Trade your flank c5-pawn for White’s central d4-pawn and attack e4 with ...Nf6.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Sicilian Defense Basics",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+sicilian+defense"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R_b_KQkq_-_0_3?color=black#explorer",
+    "lichessLabel": "🌐 Practice Open Sicilian on Lichess"
   },
   {
-    id: 'l1-cov', l: 1, cat: 'Basic Coverage', group: 'basic', icon: '🛡️',
-    title: 'Basic Coverage 1: Crushing Early Queen Traps & defending 1.d4 as Black',
-    why: 'In U900 tournaments, opponents try Scholar’s Mate (Qh5/Bc4) or early queen sorties. Refute them cleanly and play solid QGD (1.d4 d5 2.c4 e6) as Black!',
-    ideas: [
-      'Against 1.e4 e5 2.Qh5: play 2...Nc6 3.Bc4 g6! 4.Qf3 Nf6—never play 2...g6?? (loses the rook to Qxe5+).',
-      'In the Caro-Kann / Sicilian, Scholar’s Mate doesn’t even work because ...c6/...e6 or ...e6/...d6 blunts the c4-bishop!',
-      'Against 1.d4 as Black: answer 1...d5 and 2...e6 (or 2...c6 Slav), keeping d5 supported by a pawn.',
+    "id": "l1-cov",
+    "l": 1,
+    "cat": "Basic Coverage",
+    "group": "basic",
+    "icon": "🛡️",
+    "title": "Basic Coverage 1: Crushing Early Queen Traps & defending 1.d4 as Black",
+    "why": "In U900 tournaments, opponents try Scholar’s Mate (Qh5/Bc4) or early queen sorties. Refute them cleanly and play solid QGD (1.d4 d5 2.c4 e6) as Black!",
+    "ideas": [
+      "Against 1.e4 e5 2.Qh5: play 2...Nc6 3.Bc4 g6! 4.Qf3 Nf6—never play 2...g6?? (loses the rook to Qxe5+).",
+      "In the Caro-Kann / Sicilian, Scholar’s Mate doesn’t even work because ...c6/...e6 or ...e6/...d6 blunts the c4-bishop!",
+      "Against 1.d4 as Black: answer 1...d5 and 2...e6 (or 2...c6 Slav), keeping d5 supported by a pawn."
     ],
-    drill: 'Shut down White’s 3.Bc4 Qh5 battery with 3...g6! and gain tempos on the exposed queen.',
-    videos: [['Saint Louis Chess Club: Punishing Early Queen Attacks', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+scholars+mate']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'White plays 1.e4 e5 2.Qh5 Nc6 3.Bc4 threatening Qxf7#. Shut down the mate threat and attack the queen!',
-        fen: 'r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3',
-        side: 'b',
-        moves: ['g7g6', 'd8e7'],
-        explain: '3...g6! blocks the mate threat and kicks the queen back to f3 where 4...Nf6 neutralizes everything.',
-      },
-      {
-        type: 'mcq',
-        q: 'When facing 1.d4 d5 2.c4 as Black, why should you avoid 2...Nf6?! (Marshall Defense) if you don’t know the theory?',
-        opts: [
-          'Because 3.cxd5 Nxd5 4.e4! kicks the knight and gives White the entire center for free',
-          'Because knights cannot move on move 2',
-          'Because it causes stalemate',
-        ],
-        ans: 0,
-        explain: 'Supporting d5 with a pawn (2...e6 QGD or 2...c6 Slav) ensures White cannot recapture with a pawn and kick your knight with e4!',
-      },
-      {
-        type: 'mcq',
-        q: 'Why does bringing the Queen out on move 2 or 3 usually lose against a well-prepared player?',
-        opts: [
-          'Minor pieces develop while attacking the Queen, winning free tempos',
-          'The Queen is worth fewer points in the opening',
-          'It prevents pawns from moving',
-        ],
-        ans: 0,
-        explain: 'Every time your minor pieces attack the exposed Queen, she has to waste a move running away while you build a huge lead in development.',
-      },
+    "drill": "Shut down White’s 3.Bc4 Qh5 battery with 3...g6! and gain tempos on the exposed queen.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Punishing Early Queen Attacks",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+scholars+mate"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/training/opening",
+    "lichessLabel": "🌐 Train Opening Traps on Lichess"
   },
   {
-    id: 'l1-mid', l: 1, cat: 'Middlegame', group: 'mid', icon: '⚔️',
-    title: 'Middlegame 1: The CCT Protocol, Double Attacks & Undefended Pieces',
-    why: '90% of games under 900 OTB are decided by hanging pieces and double attacks. Using Checks-Captures-Threats (CCT) on every turn eliminates 1-move blunders.',
-    ideas: [
-      'Before touching a piece, scan opponent’s CCT first, then your own CCT.',
-      'Loose Pieces Drop Off (LPDO): Circle every undefended enemy piece mentally—can a knight fork or queen double-attack hit two of them at once?',
-      'Counting Defenders vs Attackers: Never capture unless Attackers > Defenders (or you win higher-value material).',
+    "id": "l1-mid",
+    "l": 1,
+    "cat": "Middlegame",
+    "group": "mid",
+    "icon": "⚔️",
+    "title": "Middlegame 1: The CCT Protocol, Double Attacks & Undefended Pieces",
+    "why": "90% of games under 900 OTB are decided by hanging pieces and double attacks. Using Checks-Captures-Threats (CCT) on every turn eliminates 1-move blunders.",
+    "ideas": [
+      "Before touching a piece, scan opponent’s CCT first, then your own CCT.",
+      "Loose Pieces Drop Off (LPDO): Circle every undefended enemy piece mentally—can a knight fork or queen double-attack hit two of them at once?",
+      "Counting Defenders vs Attackers: Never capture unless Attackers > Defenders (or you win higher-value material)."
     ],
-    drill: 'Spot the double attack on king and undefended piece.',
-    videos: [['Saint Louis Chess Club: Undefended Pieces & Double Attacks', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+double+attacks+tactics']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Black’s knight on a5 is completely undefended. Find the Queen move that forks the King and the loose Knight!',
-        fen: 'r1bqk2r/pppp1ppp/8/n3p3/1b2P3/2NP1N2/PP3PPP/R1BQKB1R w KQkq - 0 6',
-        side: 'w',
-        moves: ['d1a4'],
-        explain: 'Qa4+! checks the king (or attacks both the loose b4-bishop and a5-knight), winning a full piece.',
-      },
-      {
-        type: 'board',
-        prompt: 'Find the Royal Knight Fork that wins Black’s Queen and Rook!',
-        fen: 'r3k2r/ppp2ppp/2n5/3np3/8/2NP1N2/PPP2PPP/R2QKB1R w KQkq - 0 9',
-        side: 'w',
-        moves: ['c3d5'],
-        explain: 'Nxd5! captures the central knight and threatens Nxc7+, forking the King and Rook.',
-      },
-      {
-        type: 'mcq',
-        q: 'In what exact order should you scan the board before every move?',
-        opts: ['Checks → Captures → Threats (theirs AND yours)', 'Threats → Random pawn pushes', 'Only look at your own pieces'],
-        ans: 0,
-        explain: 'Scanning Checks, Captures, and Threats (CCT) catches forcing tactics before you commit to a move.',
-      },
+    "drill": "Spot the double attack on king and undefended piece.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Undefended Pieces & Double Attacks",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+double+attacks+tactics"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/training/fork",
+    "lichessLabel": "🌐 Train Double Attacks & Forks on Lichess"
   },
   {
-    id: 'l1-end', l: 1, cat: 'Endgame', group: 'end', icon: '♚', drill_id: 'kqk',
-    title: 'Endgame 1: King + Queen & King + Rook Box Mates (Zero Stalemates)',
-    why: 'Converting a won endgame cleanly in under 15 moves saves clock time and prevents tragic stalemates in tournament play.',
-    ideas: [
-      'Queen Box Method: Place your Queen a knight’s move away from the enemy King to shrink his box to the edge.',
-      'Freeze the Queen once the enemy King hits the edge (rank 8 or file a/h) with 2 squares left—walk your King up to deliver mate!',
-      'Rook Box Method: Cut off the enemy King along a rank/file and use opposition to force him back rank by rank.',
+    "id": "l1-end",
+    "l": 1,
+    "cat": "Endgame",
+    "group": "end",
+    "icon": "♚",
+    "drill_id": "kqk",
+    "title": "Endgame 1: King + Queen & King + Rook Box Mates (Zero Stalemates)",
+    "why": "Converting a won endgame cleanly in under 15 moves saves clock time and prevents tragic stalemates in tournament play.",
+    "ideas": [
+      "Queen Box Method: Place your Queen a knight’s move away from the enemy King to shrink his box to the edge.",
+      "Freeze the Queen once the enemy King hits the edge (rank 8 or file a/h) with 2 squares left—walk your King up to deliver mate!",
+      "Rook Box Method: Cut off the enemy King along a rank/file and use opposition to force him back rank by rank."
     ],
-    drill: 'Deliver mate in 1 without stalemating.',
-    videos: [['Saint Louis Chess Club: Basic Checkmates (K+Q & K+R)', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+basic+checkmates']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Deliver checkmate in 1 move with King + Queen!',
-        fen: '7k/5K2/6Q1/8/8/8/8/8 w - - 0 1',
-        side: 'w',
-        moves: ['g6g7', 'g6h6'],
-        explain: 'Qg7# (or Qh6#) is checkmate because the White King on f7 guards the queen and all escape squares.',
-      },
-      {
-        type: 'board',
-        prompt: 'Deliver checkmate in 1 move with King + Rook!',
-        fen: '3k4/8/3K4/8/8/8/8/R7 w - - 0 1',
-        side: 'w',
-        moves: ['a1a8'],
-        explain: 'Ra8# is checkmate because the kings are in direct opposition on d6 and d8.',
-      },
-      {
-        type: 'mcq',
-        q: 'What is the #1 danger when your Queen gets too close to a lone enemy King in the corner without giving check?',
-        opts: ['Accidental Stalemate (1/2-1/2 draw!)', 'Losing on time', 'Threefold repetition'],
-        ans: 0,
-        explain: 'Once the enemy King is on the edge, stop moving the Queen closer—bring your King in so you never stalemate!',
-      },
+    "drill": "Deliver mate in 1 without stalemating.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Basic Checkmates (K+Q & K+R)",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+basic+checkmates"
+      ]
     ],
-  },
-
-  // ==================== LEVEL 2: IRON DEFENDER (PACKAGE 2) ====================
-  {
-    id: 'l2-qg', l: 2, cat: 'White Core', group: 'core_white', rep: 'qg', icon: '⚪',
-    title: "Queen's Gambit 2: Slav Defense (2...c6) & Refuting the Albin Countergambit",
-    why: 'Many opponents play the Slav (2...c6) to support d5 without locking in their c8-bishop, or try the tricky Albin Countergambit (2...e5).',
-    ideas: [
-      'Against the Slav (1.d4 d5 2.c4 c6): play 3.Nf3 Nf6 4.Nc3 dxc4 5.a4!—5.a4 stops ...b5 cold and guarantees you win back the c4 pawn with e4/Bxc4!',
-      'Exchange Slav option: 3.cxd5 cxd5 4.Nc3 Nf6 5.Bf4 Nc6 6.e3 followed by Rc1 and Qb3 hitting b7.',
-      'Against Albin Countergambit (1.d4 d5 2.c4 e5): take 3.dxe5 d4 4.Nf3! Nc6 5.g3 (or 5.Nbd2)—never play 4.e3? Bb4+ Bd2 dxe3! (Lasker Trap).',
-    ],
-    drill: 'Play 5.a4! in the Main Line Slav to prevent Black from holding the c4 pawn with ...b5.',
-    videos: [['Saint Louis Chess Club: How to Play Against the Slav Defense', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+slav+defense']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the Slav (1.d4 d5 2.c4 c6 3.Nf3 Nf6 4.Nc3 dxc4), stop Black from playing ...b5 to keep the pawn!',
-        fen: 'rnbqkb1r/pp2pppp/2p2n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5',
-        side: 'w',
-        moves: ['a2a4'],
-        explain: '5.a4! stops ...b5 and forces Black to let White recapture on c4 with e3/e4 and Bxc4.',
-      },
-      {
-        type: 'board',
-        prompt: 'In the Exchange Slav after Black brings out ...Bf5, attack the unguarded b7 pawn with your Queen!',
-        fen: 'rn1qkb1r/pp2pppp/2p2n2/5b2/3P1B2/2N2N2/PP2PPPP/R2QKB1R w KQkq - 1 6',
-        side: 'w',
-        moves: ['d1b3'],
-        explain: 'Qb3! exploits the fact that Black’s c8-bishop left the queenside, hitting b7 and d5 simultaneously.',
-      },
-      {
-        type: 'mcq',
-        q: 'In the Albin Countergambit (1.d4 d5 2.c4 e5 3.dxe5 d4), why must White avoid the careless 4.e3?!',
-        opts: [
-          'Because 4...Bb4+ 5.Bd2 dxe3! sets the famous Lasker Trap where 6.Bxb4?? exf2+ wins for Black',
-          'Because e3 hangs the king',
-          'Because pawns cannot capture on d4',
-        ],
-        ans: 0,
-        explain: '4.Nf3! followed by g3/Bg2 cleanly controls d4 and avoids the Lasker Trap completely.',
-      },
-    ],
+    "lichessUrl": "https://lichess.org/practice/checkmates/piece-checkmates-i/BJy6fEDf",
+    "lichessLabel": "🌐 Practice K+Q & K+R Mates on Lichess"
   },
   {
-    id: 'l2-eng', l: 2, cat: 'White Core', group: 'core_white', rep: 'eng', icon: '⚪',
-    title: 'English Opening 2: Symmetrical English (1.c4 c5) & Early d4 Break',
-    why: 'When Black copies you with 1...c5, knowing how to break the symmetry first gives White the initiative.',
-    ideas: [
-      'After 1.c4 c5 2.Nf3 Nf6 3.Nc3 Nc6, strike in the center with 4.g3 d5 5.cxd5 Nxd5 6.Bg2!—your g2 bishop lasers the d5 knight and long diagonal.',
-      'Rubinstein / Maroczy jump: If Black plays 6...Nc7, develop 7.O-O e5 8.d3 Be7 9.Nd2-c4! eyeing d6 and b6.',
-      'Trap: If Black gets careless on the a8-h1 diagonal, Nxd5 followed by Qa4+ or Nxe5 wins material via discovered attack from Bg2!',
+    "id": "l2-qg",
+    "l": 2,
+    "cat": "White Core",
+    "group": "core_white",
+    "rep": "qg",
+    "icon": "⚪",
+    "title": "Queen's Gambit 2: Slav Defense (2...c6) & Refuting the Albin Countergambit",
+    "why": "Many opponents play the Slav (2...c6) to support d5 without locking in their c8-bishop, or try the tricky Albin Countergambit (2...e5).",
+    "ideas": [
+      "Against the Slav (1.d4 d5 2.c4 c6): play 3.Nf3 Nf6 4.Nc3 dxc4 5.a4!—5.a4 stops ...b5 cold and guarantees you win back the c4 pawn with e4/Bxc4!",
+      "Exchange Slav option: 3.cxd5 cxd5 4.Nc3 Nf6 5.Bf4 Nc6 6.e3 followed by Rc1 and Qb3 hitting b7.",
+      "Against Albin Countergambit (1.d4 d5 2.c4 e5): take 3.dxe5 d4 4.Nf3! Nc6 5.g3 (or 5.Nbd2)—never play 4.e3? Bb4+ Bd2 dxe3! (Lasker Trap)."
     ],
-    drill: 'Use the Bg2 long-diagonal pin/discovery in the Symmetrical English.',
-    videos: [['Saint Louis Chess Club: Symmetrical English Opening', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+symmetrical+english']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'After 1.c4 c5 2.Nf3 Nf6 3.Nc3 d5, trade your flank c-pawn for Black’s central d-pawn!',
-        fen: 'rnbqkb1r/pp2pppp/5n2/2pp4/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq d6 0 4',
-        fen_alt: 'rnbqkb1r/pp2pppp/5n2/2pp4/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq - 0 4',
-        side: 'w',
-        moves: ['c4d5'],
-        explain: '4.cxd5! Nxd5 5.g3 and 6.Bg2 puts intense pressure on Black’s centralized d5 knight.',
-      },
-      {
-        type: 'board',
-        prompt: 'Black forgot about your Bg2 laser! Capture on e5 to unleash a discovered attack along the h1-a8 diagonal!',
-        fen: 'r1bqk2r/pp2bppp/2n5/2pnp3/8/2NP1NP1/PP2PPBP/R1BQ1RK1 w kq - 0 8',
-        side: 'w',
-        moves: ['f3e5'],
-        explain: '8.Nxe5! wins a clean central pawn because if 8...Nxe5 9.Nxd5 discovers an attack from Bg2!',
-      },
-      {
-        type: 'mcq',
-        q: 'In the Symmetrical English (1.c4 c5), why is the fianchettoed bishop on g2 so dangerous after White trades cxd5 Nxd5?',
-        opts: [
-          'It x-rays the d5 knight, c6 knight, and b7/a8 squares along the long diagonal',
-          'It defends h2',
-          'It prevents castling',
-        ],
-        ans: 0,
-        explain: 'The g2 bishop dominates the entire h1-a8 diagonal once the c4/d5 pawns are traded!',
-      },
+    "drill": "Play 5.a4! in the Main Line Slav to prevent Black from holding the c4 pawn with ...b5.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: How to Play Against the Slav Defense",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+slav+defense"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/pp2pppp/2p5/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R_b_KQkq_-_1_3#explorer",
+    "lichessLabel": "🌐 Practice QG vs Slav on Lichess"
   },
   {
-    id: 'l2-ck', l: 2, cat: 'Black Core', group: 'core_black', rep: 'ck', icon: '⚫',
-    title: 'Caro-Kann 2: Advance Variation (3.e5 Bf5) & The ...c5 Counterstrike',
-    why: 'The Advance Variation (1.e4 c6 2.d4 d5 3.e5) is White’s most popular try against the Caro-Kann. You crush it by developing ...Bf5 and undermining d4 with ...c5!',
-    ideas: [
-      'Always play 3...Bf5! immediately so your light-squared bishop gets outside the pawn chain before 4...e6.',
-      'After 4.Nf3 e6 5.Be2, strike at the base of White’s pawn chain with 5...c5! followed by ...Nc6 and ...Qb6 putting maximum pressure on d4 and b2.',
-      'Short Trap Defense: If White plays the aggressive 4.Nc3 e6 5.g4, calmly drop back 5...Bg6 6.Nge2 c5! counterattacking the center while White’s kingside is weakened.',
+    "id": "l2-eng",
+    "l": 2,
+    "cat": "White Core",
+    "group": "core_white",
+    "rep": "eng",
+    "icon": "⚪",
+    "title": "English Opening 2: Symmetrical English (1.c4 c5) & Early d4 Break",
+    "why": "When Black copies you with 1...c5, knowing how to break the symmetry first gives White the initiative.",
+    "ideas": [
+      "After 1.c4 c5 2.Nf3 Nf6 3.Nc3 Nc6, strike in the center with 4.g3 d5 5.cxd5 Nxd5 6.Bg2!—your g2 bishop lasers the d5 knight and long diagonal.",
+      "Rubinstein / Maroczy jump: If Black plays 6...Nc7, develop 7.O-O e5 8.d3 Be7 9.Nd2-c4! eyeing d6 and b6.",
+      "Trap: If Black gets careless on the a8-h1 diagonal, Nxd5 followed by Qa4+ or Nxe5 wins material via discovered attack from Bg2!"
     ],
-    drill: 'Strike at the base of White’s d4-e5 chain with ...c5! in the Advance Caro-Kann.',
-    videos: [['Saint Louis Chess Club: Caro-Kann Advance Variation', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+caro+kann+advance']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'White plays the Advance Variation: 1.e4 c6 2.d4 d5 3.e5. Bring your light-squared bishop out BEFORE playing ...e6!',
-        fen: 'rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3',
-        side: 'b',
-        moves: ['c8f5'],
-        explain: '3...Bf5! gets the bishop to an active diagonal outside the pawn chain before you play 4...e6.',
-      },
-      {
-        type: 'board',
-        prompt: 'After 3...Bf5 4.Nf3 e6 5.Be2, strike at the d4 base of White’s pawn chain!',
-        fen: 'rn1qkbnr/pp3ppp/2p1p3/3p1b2/3P4/5N2/PPP1BPPP/RNBQK2R b KQkq - 1 5',
-        side: 'b',
-        moves: ['c6c5'],
-        explain: '5...c5! attacks d4 immediately, followed by ...Nc6 and ...Qb6 hitting d4 and b2.',
-      },
-      {
-        type: 'mcq',
-        q: 'In the Advance Caro-Kann (1.e4 c6 2.d4 d5 3.e5 Bf5), what pawn break is Black’s main engine of counterplay?',
-        opts: ['...c5! attacking the base of White’s d4-e5 chain', '...h5 on move 4', '...a5'],
-        ans: 0,
-        explain: 'Aron Nimzowitsch’s rule: always attack a pawn chain at its base (d4) with ...c5 and later ...f6!',
-      },
+    "drill": "Use the Bg2 long-diagonal pin/discovery in the Symmetrical English.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Symmetrical English Opening",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+symmetrical+english"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/pp1ppppp/8/2p5/2P5/2N5/PP1PPPPP/R1BQKBNR_b_KQkq_-_1_2#explorer",
+    "lichessLabel": "🌐 Practice Symmetrical English on Lichess"
   },
   {
-    id: 'l2-sic', l: 2, cat: 'Black Core', group: 'core_black', rep: 'sic', icon: '⚫',
-    title: 'Sicilian 2: Beating the Alapin (2.c3) & Closed Sicilian (2.Nc3)',
-    why: 'Over half of scholastic players avoid the Open Sicilian with 2.c3 (Alapin) or 2.Nc3 (Closed). Knowing the exact antidote gives Black effortless equality or better!',
-    ideas: [
-      'Against 2.c3 (Alapin): Strike back in the center immediately with 2...Nf6! 3.e5 Nd5 4.d4 cxd4 5.cxd4 d6 (or 2...d5! 3.exd5 Qxd5 4.d4 Nf6).',
-      'Why 2...Nf6 works: White wanted to build a d4+e4 pawn center, and 2...Nf6 forces e4 forward to e5 where it becomes a target!',
-      'Against 2.Nc3 (Closed Sicilian): Fianchetto with 2...Nc6 3.g3 g6 4.Bg2 Bg7 5.d3 d6 and expand on the queenside with ...Rb8 and ...b5-b4!',
+    "id": "l2-ck",
+    "l": 2,
+    "cat": "Black Core",
+    "group": "core_black",
+    "rep": "ck",
+    "icon": "⚫",
+    "title": "Caro-Kann 2: Advance Variation (3.e5 Bf5) & The ...c5 Counterstrike",
+    "why": "The Advance Variation (1.e4 c6 2.d4 d5 3.e5) is White’s most popular try against the Caro-Kann. You crush it by developing ...Bf5 and undermining d4 with ...c5!",
+    "ideas": [
+      "Always play 3...Bf5! immediately so your light-squared bishop gets outside the pawn chain before 4...e6.",
+      "After 4.Nf3 e6 5.Be2, strike at the base of White’s pawn chain with 5...c5! followed by ...Nc6 and ...Qb6 putting maximum pressure on d4 and b2.",
+      "Short Trap Defense: If White plays the aggressive 4.Nc3 e6 5.g4, calmly drop back 5...Bg6 6.Nge2 c5! counterattacking the center while White’s kingside is weakened."
     ],
-    drill: 'Meet the Alapin Sicilian (1.e4 c5 2.c3) with 2...Nf6! or 2...d5! challenging the center immediately.',
-    videos: [['Saint Louis Chess Club: Beating the Alapin Sicilian 2.c3', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+alapin+sicilian']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'White plays the Alapin Sicilian: 1.e4 c5 2.c3. Attack the undefended e4 pawn (or strike in the center with ...d5)!',
-        fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2',
-        side: 'b',
-        moves: ['g8f6', 'd7d5'],
-        explain: '2...Nf6! (or 2...d5!) challenges White’s center immediately before White can play d4 comfortably.',
-      },
-      {
-        type: 'board',
-        prompt: 'After 1.e4 c5 2.c3 Nf6 3.e5, jump your knight into the unassailable central d5 square!',
-        fen: 'rnbqkb1r/pp1ppppp/5n2/2p1P3/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3',
-        side: 'b',
-        moves: ['f6d5'],
-        explain: '3...Nd5! centralizes the knight on d5 (since White’s c-pawn is already on c3, White cannot kick it without wasting a tempo!).',
-      },
-      {
-        type: 'mcq',
-        q: 'Against the Closed Sicilian (1.e4 c5 2.Nc3 Nc6 3.g3 g6 4.Bg2 Bg7), on which side of the board should Black launch a pawn storm?',
-        opts: [
-          'The Queenside (...Rb8, ...b5-b4 kicking the c3 knight and opening lines for the g7-bishop)',
-          'Moving the King to e7',
-          'Trading all pieces on h6',
-        ],
-        ans: 0,
-        explain: 'Black’s g7-bishop aims straight at the queenside—pushing ...b5-b4 dislodges the c3 knight and opens the long diagonal!',
-      },
+    "drill": "Strike at the base of White’s d4-e5 chain with ...c5! in the Advance Caro-Kann.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Caro-Kann Advance Variation",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+caro+kann+advance"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR_b_KQkq_-_0_3?color=black#explorer",
+    "lichessLabel": "🌐 Practice Caro-Kann Advance on Lichess"
   },
   {
-    id: 'l2-cov', l: 2, cat: 'Basic Coverage', group: 'basic', icon: '🛡️',
-    title: 'Basic Coverage 2: Neutralizing the London System & Fried Liver Trap',
-    why: 'Two of the most common scholastic weapons you will face are the London System (1.d4 + 2.Bf4) and the Fried Liver (Ng5). Here is how to crush both.',
-    ideas: [
-      'Against the London System (1.d4 d5 2.Bf4): Play 2...c5! 3.e3 Nc6 4.Nf3 Nf6 and ...Qb6! hitting the unprotected b2 pawn now that the c1-bishop left home!',
-      'If you ever play 1...e5 and face the Fried Liver (4.Ng5): play 4...d5 5.exd5 Na5! (Polerio Defense), kicking the c4 bishop and taking over the initiative.',
-      'Even better: your Caro-Kann (1...c6) and Sicilian (1...c5) completely prevent the Fried Liver from ever appearing on the board!',
+    "id": "l2-sic",
+    "l": 2,
+    "cat": "Black Core",
+    "group": "core_black",
+    "rep": "sic",
+    "icon": "⚫",
+    "title": "Sicilian 2: Beating the Alapin (2.c3) & Closed Sicilian (2.Nc3)",
+    "why": "Over half of scholastic players avoid the Open Sicilian with 2.c3 (Alapin) or 2.Nc3 (Closed). Knowing the exact antidote gives Black effortless equality or better!",
+    "ideas": [
+      "Against 2.c3 (Alapin): Strike back in the center immediately with 2...Nf6! 3.e5 Nd5 4.d4 cxd4 5.cxd4 d6 (or 2...d5! 3.exd5 Qxd5 4.d4 Nf6).",
+      "Why 2...Nf6 works: White wanted to build a d4+e4 pawn center, and 2...Nf6 forces e4 forward to e5 where it becomes a target!",
+      "Against 2.Nc3 (Closed Sicilian): Fianchetto with 2...Nc6 3.g3 g6 4.Bg2 Bg7 5.d3 d6 and expand on the queenside with ...Rb8 and ...b5-b4!"
     ],
-    drill: 'Counterattack the London System with ...c5 and ...Qb6 hitting b2 and d4.',
-    videos: [['Saint Louis Chess Club: Crushing the London System', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+beat+the+london+system']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'White plays the London System: 1.d4 d5 2.Bf4 Nf6 3.e3 c5 4.c3 Nc6 5.Nf3. Punish the early Bf4 by attacking b2 and d4!',
-        fen: 'r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/2P1PN2/PP3PPP/RN1QKB1R b KQkq - 1 5',
-        side: 'b',
-        moves: ['d8b6'],
-        explain: '5...Qb6! targets the unprotected b2 pawn (left behind by 2.Bf4) and adds pressure to d4.',
-      },
-      {
-        type: 'mcq',
-        q: 'Why is ...c5 followed by ...Qb6 the most effective plan against the London System (1.d4 d5 2.Bf4)?',
-        opts: [
-          'Because developing the bishop to f4 leaves the b2 pawn undefended',
-          'Because the Queen wants to go to a1',
-          'Because White cannot castle',
-        ],
-        ans: 0,
-        explain: 'The moment White’s c1-bishop moves to f4, b2 loses its natural defender—...c5 and ...Qb6 exploit that immediately!',
-      },
-      {
-        type: 'mcq',
-        q: 'In the Two Knights Defense (1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.Ng5 d5 5.exd5), why is 5...Na5! better than 5...Nxd5?!',
-        opts: [
-          '5...Na5! attacks the c4-bishop with tempo and avoids the 6.Nxf7 Fried Liver sacrifice',
-          '5...Nxd5 is illegal',
-          'Knights belong on the rim in every opening',
-        ],
-        ans: 0,
-        explain: '5...Na5! interrupts White’s attack on f7 by forcing the c4-bishop to move first.',
-      },
+    "drill": "Meet the Alapin Sicilian (1.e4 c5 2.c3) with 2...Nf6! or 2...d5! challenging the center immediately.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Beating the Alapin Sicilian 2.c3",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+alapin+sicilian"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR_b_KQkq_-_0_2?color=black#explorer",
+    "lichessLabel": "🌐 Practice Anti-Sicilian (Alapin) on Lichess"
   },
   {
-    id: 'l2-mid', l: 2, cat: 'Middlegame', group: 'mid', icon: '⚔️',
-    title: 'Middlegame 2: Pins, Skewers, Discovered Attacks & Removing the Guard',
-    why: 'At the 1400–1600 Lichess level, tactics are 2-move combinations: pin a defender, remove the guard, or unleash a discovered check.',
-    ideas: [
-      'Put Pressure on the Pinned Piece (PPonnthePP): Don’t cash in a pin immediately—pile another pawn or piece onto the pinned target until it collapses.',
-      'Removing the Guard: If an enemy knight defends a mate square or loose bishop, capture or deflect that knight first!',
-      'Discovered Attack: Move the front piece with check or a threat so the bishop/rook/queen behind it wins a free piece.',
+    "id": "l2-cov",
+    "l": 2,
+    "cat": "Basic Coverage",
+    "group": "basic",
+    "icon": "🛡️",
+    "title": "Basic Coverage 2: Neutralizing the London System & Fried Liver Trap",
+    "why": "Two of the most common scholastic weapons you will face are the London System (1.d4 + 2.Bf4) and the Fried Liver (Ng5). Here is how to crush both.",
+    "ideas": [
+      "Against the London System (1.d4 d5 2.Bf4): Play 2...c5! 3.e3 Nc6 4.Nf3 Nf6 and ...Qb6! hitting the unprotected b2 pawn now that the c1-bishop left home!",
+      "If you ever play 1...e5 and face the Fried Liver (4.Ng5): play 4...d5 5.exd5 Na5! (Polerio Defense), kicking the c4 bishop and taking over the initiative.",
+      "Even better: your Caro-Kann (1...c6) and Sicilian (1...c5) completely prevent the Fried Liver from ever appearing on the board!"
     ],
-    drill: 'Remove the guard or unleash a discovered attack to win material.',
-    videos: [['Saint Louis Chess Club: Pins, Skewers & Discovered Attacks', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+pins+skewers+discovered+attacks']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Black’s knight on c6 is the ONLY defender of the d4 knight. Remove the guard to win a full piece!',
-        fen: 'r1bqk2r/ppp2ppp/2n5/1B2p3/3nP3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5',
-        side: 'w',
-        moves: ['b5c6'],
-        explain: 'Bxc6+! eliminates the defender of d4, and after ...bxc6 White plays Nxd4 winning a clean piece.',
-      },
-      {
-        type: 'board',
-        prompt: 'Your bishop on b5 x-rays Black’s Queen on d7. Unleash a lethal discovered check!',
-        fen: 'r3k2r/pppq1ppp/2n5/1B2N3/8/8/PPPP1PPP/RNBQK2R w KQkq - 1 8',
-        side: 'w',
-        moves: ['e5d7', 'e5c6'],
-        explain: 'Nxd7! (or Nxc6) wins Black’s Queen immediately!',
-      },
-      {
-        type: 'mcq',
-        q: 'What does the classic rule "Put Pressure on the Pinned Piece" (PPonnthePP) teach?',
-        opts: [
-          'Instead of trading off a pinned piece right away, attack it with more pieces (especially a pawn) since it cannot run away',
-          'Always trade a bishop for a knight on move 3',
-          'Never pin a knight',
-        ],
-        ans: 0,
-        explain: 'A pinned piece is frozen in place—bring more attackers until you win it for free or shatter their pawn structure!',
-      },
+    "drill": "Counterattack the London System with ...c5 and ...Qb6 hitting b2 and d4.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Crushing the London System",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+beat+the+london+system"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R_b_KQkq_-_2_3?color=black#explorer",
+    "lichessLabel": "🌐 Practice vs London System on Lichess"
   },
   {
-    id: 'l2-end', l: 2, cat: 'Endgame', group: 'end', icon: '♚', drill_id: 'krk',
-    title: 'Endgame 2: King & Pawn Endgames — The Rule of the Square & Direct Opposition',
-    why: 'Every Queen’s Gambit and Caro-Kann endgame boils down to whether a single extra pawn can promote. Knowing Opposition and Key Squares tells you with 100% certainty.',
-    ideas: [
-      'Direct Opposition: Kings face each other with 1 square in between—the player who does NOT have to move holds the opposition and forces the other King to yield.',
-      'King IN FRONT of the Pawn: Always march your King ahead of your passed pawn to control the 3 Key Squares two ranks in front of the pawn.',
-      'Rule of the Square: Draw a diagonal from the pawn to the 8th rank—if the enemy King cannot step inside that square on his turn, the pawn queens by force!',
+    "id": "l2-mid",
+    "l": 2,
+    "cat": "Middlegame",
+    "group": "mid",
+    "icon": "⚔️",
+    "title": "Middlegame 2: Pins, Skewers, Discovered Attacks & Removing the Guard",
+    "why": "At the 1400–1600 Lichess level, tactics are 2-move combinations: pin a defender, remove the guard, or unleash a discovered check.",
+    "ideas": [
+      "Put Pressure on the Pinned Piece (PPonnthePP): Don’t cash in a pin immediately—pile another pawn or piece onto the pinned target until it collapses.",
+      "Removing the Guard: If an enemy knight defends a mate square or loose bishop, capture or deflect that knight first!",
+      "Discovered Attack: Move the front piece with check or a threat so the bishop/rook/queen behind it wins a free piece."
     ],
-    drill: 'Seize the opposition so your passed pawn promotes cleanly.',
-    videos: [['Saint Louis Chess Club: King and Pawn Endgames & Opposition', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+king+and+pawn+endgames+opposition']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'White to move: Seize the direct opposition in front of your pawn so Black’s King is forced to step aside!',
-        fen: '4k3/8/3K1P2/8/8/8/8/8 w - - 0 1',
-        side: 'w',
-        moves: ['d6e6'],
-        explain: '1.Ke6! takes the opposition (or forces 1...Kf8 2.Kd7! controlling f7 and f8 so the f-pawn queens).',
-      },
-      {
-        type: 'board',
-        prompt: 'Black is trying to promote the e-pawn, and your King is on e1. Step straight up to take the opposition and save the draw!',
-        fen: '8/8/8/8/8/4k3/4p3/4K3 w - - 0 1',
-        side: 'w',
-        moves: ['e1e2'],
-        explain: 'Wait—in this position Black’s pawn is on e2 giving check or blocked; on fen 8/8/8/4k3/4p3/8/8/4K3, Ke2 takes opposition!',
-        fen: '8/8/8/4k3/4p3/8/8/4K3 w - - 0 1',
-        moves: ['e1e2'],
-      },
-      {
-        type: 'mcq',
-        q: 'In a King + Pawn vs King endgame, where must your King stand relative to your own pawn to guarantee promotion?',
-        opts: [
-          'In front of the pawn (controlling the key squares ahead of it)',
-          'Behind the pawn on the 1st rank',
-          'In the opposite corner of the board',
-        ],
-        ans: 0,
-        explain: 'If your King walks behind the pawn, the defender gets the opposition and forces stalemate on the 8th rank!',
-      },
+    "drill": "Remove the guard or unleash a discovered attack to win material.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Pins, Skewers & Discovered Attacks",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+pins+skewers+discovered+attacks"
+      ]
     ],
-  },
-
-  // ==================== LEVEL 3: GOLD KNIGHT (PACKAGE 3) ====================
-  {
-    id: 'l3-qg', l: 3, cat: 'White Core', group: 'core_white', rep: 'qg', icon: '⚪',
-    title: "Queen's Gambit 3: The Exchange QGD, Carlsbad Structure & Minority Attack",
-    why: 'The Exchange Variation of the Queen’s Gambit Declined (1.d4 d5 2.c4 e6 3.Nc3 Nf6 4.cxd5 exd5) is one of the most deadly positional weapons in chess.',
-    ideas: [
-      'After 4.cxd5 exd5 5.Bg5 Be7 6.e3 c6 7.Bd3, we reach the famous Carlsbad Pawn Structure.',
-      'The Minority Attack: Push your 2 queenside pawns (b2-b4-b5!) against Black’s 3 queenside pawns (a7, b7, c6) to create a permanent weak backward/isolated pawn on c6 or d5!',
-      'Botvinnik Plan: You can also play Nge2, f3, and e4! to blow open the center while Black is passive.',
-    ],
-    drill: 'Launch the classic Minority Attack with b4-b5! to saddle Black with a weak c6 pawn.',
-    videos: [['Saint Louis Chess Club: Carlsbad Structure & Minority Attack', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+carlsbad+structure+minority+attack']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the Carlsbad structure, your rook is behind the b-pawn and Black’s queenside is fixed on c6. Launch the Minority Attack break!',
-        fen: 'r2q1rk1/pp1nbppp/2p2n2/3p2B1/1P1P4/2NBPN2/P4PPP/1R1Q1RK1 w - - 1 11',
-        side: 'w',
-        moves: ['b4b5'],
-        explain: '11.b5! attacks Black’s c6 base, creating a permanent queenside weakness on c6 or d5.',
-      },
-      {
-        type: 'mcq',
-        q: 'Why is the b2-b4-b5 plan in the Exchange Queen’s Gambit Declined called the "Minority Attack"?',
-        opts: [
-          'Because White uses 2 queenside pawns (a+b) to attack Black’s 3 queenside pawns (a+b+c) and leave a weak c6/d5 target',
-          'Because it only uses knights',
-          'Because it happens on move 2',
-        ],
-        ans: 0,
-        explain: 'Trading your a- and b-pawns leaves Black with a permanently weak c6 or d5 pawn for your rooks to attack!',
-      },
-      {
-        type: 'mcq',
-        q: 'In the Exchange QGD (1.d4 d5 2.c4 e6 3.Nc3 Nf6 4.cxd5 exd5), where should White develop the c1-bishop before playing e3?',
-        opts: ['To g5 (or f4), outside the pawn chain', 'Leave it on c1 forever', 'To d2'],
-        ans: 0,
-        explain: '5.Bg5! pins the f6 knight and gets the dark-squared bishop outside the e3-d4 pawn chain.',
-      },
-    ],
+    "lichessUrl": "https://lichess.org/training/pin",
+    "lichessLabel": "🌐 Train Pins, Skewers & Discovered Attacks on Lichess"
   },
   {
-    id: 'l3-eng', l: 3, cat: 'White Core', group: 'core_white', rep: 'eng', icon: '⚪',
-    title: 'English Opening 3: English vs King’s Indian Setup (...Nf6, ...g6, ...Bg7)',
-    why: 'Many Black players fianchetto automatically (...Nf6, ...g6, ...Bg7). In the English, you keep the center closed or expand on the queenside with Rb1 and b4-b5!',
-    ideas: [
-      'Queenside Expansion: Place your bishop on g2, play d3, Rb1, and push b2-b4-b5! while your g2-bishop supports the attack from afar.',
-      'Why it crushes KID players: King’s Indian players want White to commit d4+e4 so they can attack the kingside with ...f5. By keeping d3 and pushing b4-b5, Black’s g7-bishop bites on granite!',
-      'Botvinnik Clamp: Put pawns on c4, d3, e4 and a knight on d5—Black has zero counterplay.',
+    "id": "l2-end",
+    "l": 2,
+    "cat": "Endgame",
+    "group": "end",
+    "icon": "♚",
+    "drill_id": "krk",
+    "title": "Endgame 2: King & Pawn Endgames — The Rule of the Square & Direct Opposition",
+    "why": "Every Queen’s Gambit and Caro-Kann endgame boils down to whether a single extra pawn can promote. Knowing Opposition and Key Squares tells you with 100% certainty.",
+    "ideas": [
+      "Direct Opposition: Kings face each other with 1 square in between—the player who does NOT have to move holds the opposition and forces the other King to yield.",
+      "King IN FRONT of the Pawn: Always march your King ahead of your passed pawn to control the 3 Key Squares two ranks in front of the pawn.",
+      "Rule of the Square: Draw a diagonal from the pawn to the 8th rank—if the enemy King cannot step inside that square on his turn, the pawn queens by force!"
     ],
-    drill: 'Prepare and launch the b4! queenside expansion with Rb1 in the English Fianchetto.',
-    videos: [['Saint Louis Chess Club: English Opening Queenside Play', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+english+opening+g3+bg2']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Your rook is on b1 and bishop on g2. Launch the thematic English queenside expansion!',
-        fen: 'r1bq1rk1/ppp1ppbp/2np1np1/8/2P5/1PNP2P1/P3PPBP/1RBQ1RK1 w - - 1 8',
-        side: 'w',
-        moves: ['b3b4'],
-        explain: '8.b4! gains queenside space and prepares b5 to dislodge Black’s c6 knight while Bg2 rules the long diagonal.',
-      },
-      {
-        type: 'mcq',
-        q: 'Why does the English (c4 + d3 + g3 + Bg2) frustrate opponents who love the King’s Indian Defense?',
-        opts: [
-          'Without a fixed d4-e5 pawn chain to attack, Black’s kingside storm has no target while White dominates the queenside with Rb1 and b4-b5',
-          'Because Black cannot fianchetto',
-          'Because knights cannot move to f6',
-        ],
-        ans: 0,
-        explain: 'By keeping d3 flexible and attacking on the queenside with b4-b5, White hits first while Black’s kingside is quiet.',
-      },
-      {
-        type: 'mcq',
-        q: 'Which rook move prepares White’s b2-b4-b5 push while stepping off the enemy g7-bishop’s diagonal?',
-        opts: ['Rb1!', 'Ra2', 'Rh2'],
-        ans: 0,
-        explain: 'Rb1! gets the rook off the h8-a1 diagonal (away from Black’s g7-bishop) and powers the b4-b5 advance.',
-      },
+    "drill": "Seize the opposition so your passed pawn promotes cleanly.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: King and Pawn Endgames & Opposition",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+king+and+pawn+endgames+opposition"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/practice/pawn-endgames/key-squares/XP6RVc2B",
+    "lichessLabel": "🌐 Practice King & Pawn Endgames on Lichess"
   },
   {
-    id: 'l3-ck', l: 3, cat: 'Black Core', group: 'core_black', rep: 'ck', icon: '⚫',
-    title: 'Caro-Kann 3: Refuting the Fantasy Variation (3.f3) & Two Knights (2.Nc3 d5 3.Nf3)',
-    why: 'Tricky 1500+ players try 3.f3 (Fantasy Variation) to keep a big pawn center, or 2.Nc3 d5 3.Nf3 (Two Knights). Here is the exact punishment for both.',
-    ideas: [
-      'Against 3.f3 (Fantasy): Play 3...dxe4 4.fxe4 e5!—strike the center immediately while White’s f-file/e1-h4 diagonal is wide open to ...Qh4+!',
-      'Fantasy Trap: After 3...dxe4 4.fxe4 e5 5.dxe5??, 5...Qh4+! 6.Ke2 Qxe4+ or 6.g3 Qxe4+ forks the King and h1-rook!',
-      'Against Two Knights (2.Nc3 d5 3.Nf3): Play 3...Bg4! 4.h3 Bxf3 5.Qxf3 e6, giving Black an ironclad dark-square grip on d5 and e6.',
+    "id": "l3-qg",
+    "l": 3,
+    "cat": "White Core",
+    "group": "core_white",
+    "rep": "qg",
+    "icon": "⚪",
+    "title": "Queen's Gambit 3: The Exchange QGD, Carlsbad Structure & Minority Attack",
+    "why": "The Exchange Variation of the Queen’s Gambit Declined (1.d4 d5 2.c4 e6 3.Nc3 Nf6 4.cxd5 exd5) is one of the most deadly positional weapons in chess.",
+    "ideas": [
+      "After 4.cxd5 exd5 5.Bg5 Be7 6.e3 c6 7.Bd3, we reach the famous Carlsbad Pawn Structure.",
+      "The Minority Attack: Push your 2 queenside pawns (b2-b4-b5!) against Black’s 3 queenside pawns (a7, b7, c6) to create a permanent weak backward/isolated pawn on c6 or d5!",
+      "Botvinnik Plan: You can also play Nge2, f3, and e4! to blow open the center while Black is passive."
     ],
-    drill: 'Strike with 4...e5! against the Fantasy Caro-Kann (1.e4 c6 2.d4 d5 3.f3 dxe4 4.fxe4).',
-    videos: [['Saint Louis Chess Club: Caro-Kann Fantasy & Two Knights', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+caro+kann+fantasy+variation']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the Fantasy Caro-Kann (1.e4 c6 2.d4 d5 3.f3 dxe4 4.fxe4), strike at the center immediately to exploit White’s weakened e1-h4 diagonal!',
-        fen: 'rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4',
-        side: 'b',
-        moves: ['e7e5'],
-        explain: '4...e5! threatens ...Qh4+ and punishes 5.dxe5?? immediately.',
-      },
-      {
-        type: 'board',
-        prompt: 'White greedily played 5.dxe5?? after 4...e5! Punish White’s weakened kingside immediately!',
-        fen: 'rnbqkbnr/pp3ppp/2p5/4P3/4P3/8/PPP3PP/RNBQKBNR b KQkq - 0 5',
-        side: 'b',
-        moves: ['d8h4'],
-        explain: '5...Qh4+! wins on the spot—if 6.g3 Qxe4+ forks the King and the h1-rook!',
-      },
-      {
-        type: 'mcq',
-        q: 'In the Two Knights Caro-Kann (1.e4 c6 2.Nc3 d5 3.Nf3), what is Black’s simplest and most solid move?',
-        opts: ['3...Bg4! pinning the f3 knight and trading off the bishop before ...e6', '3...h6', '3...f5'],
-        ans: 0,
-        explain: '3...Bg4! pins the f3 knight (which fights for d4/e5) and lets Black build an unbreakable light-square wall with ...e6 and ...c6.',
-      },
+    "drill": "Launch the classic Minority Attack with b4-b5! to saddle Black with a weak c6 pawn.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Carlsbad Structure & Minority Attack",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+carlsbad+structure+minority+attack"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR_w_KQkq_-_2_4#explorer",
+    "lichessLabel": "🌐 Practice Carlsbad QGD on Lichess"
   },
   {
-    id: 'l3-sic', l: 3, cat: 'Black Core', group: 'core_black', rep: 'sic', icon: '⚫',
-    title: 'Sicilian 3: Crushing the Grand Prix Attack (2.f4) & Smith-Morra Gambit',
-    why: 'Aggressive club players love 2.f4 (Grand Prix Attack) or 2.d4 cxd4 3.c3 (Smith-Morra Gambit). Neutralizing both turns their gambit into a lost endgame!',
-    ideas: [
-      'Against the Grand Prix Attack (1.e4 c5 2.Nc3 Nc6 3.f4): Play 3...g6 4.Nf3 Bg7 5.Bb5 Nd4!—jump into d4 to trade off their dangerous light-squared bishop and follow with ...e6 and ...Ne7/...d5!',
-      'Rule vs Kingside Attack: Counterattack in the center with ...d5! or on the queenside with ...Rb8 and ...b5.',
-      'Against Smith-Morra Gambit (2.d4 cxd4 3.c3): Either decline cleanly with 3...Nf6! 4.e5 Nd5 (transposing directly into your Alapin repertoire!) or accept and setup ...d6, ...e6, ...Ne7-g6.',
+    "id": "l3-eng",
+    "l": 3,
+    "cat": "White Core",
+    "group": "core_white",
+    "rep": "eng",
+    "icon": "⚪",
+    "title": "English Opening 3: English vs King’s Indian Setup (...Nf6, ...g6, ...Bg7)",
+    "why": "Many Black players fianchetto automatically (...Nf6, ...g6, ...Bg7). In the English, you keep the center closed or expand on the queenside with Rb1 and b4-b5!",
+    "ideas": [
+      "Queenside Expansion: Place your bishop on g2, play d3, Rb1, and push b2-b4-b5! while your g2-bishop supports the attack from afar.",
+      "Why it crushes KID players: King’s Indian players want White to commit d4+e4 so they can attack the kingside with ...f5. By keeping d3 and pushing b4-b5, Black’s g7-bishop bites on granite!",
+      "Botvinnik Clamp: Put pawns on c4, d3, e4 and a knight on d5—Black has zero counterplay."
     ],
-    drill: 'Use 3...Nf6! against the Smith-Morra Gambit to transpose directly into your winning Alapin setup.',
-    videos: [['Saint Louis Chess Club: Beating the Grand Prix & Morra Gambit', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+grand+prix+attack+smith+morra']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'White plays the Smith-Morra Gambit: 1.e4 c5 2.d4 cxd4 3.c3. Play the practical move that attacks e4 and transposes directly into your Alapin repertoire!',
-        fen: 'rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3',
-        side: 'b',
-        moves: ['g8f6', 'd4c3'],
-        explain: '3...Nf6! (or 3...dxc3) is super clean—after 3...Nf6 4.e5 Nd5, you reach the exact Alapin position you already mastered!',
-      },
-      {
-        type: 'board',
-        prompt: 'In the Grand Prix Attack (1.e4 c5 2.Nc3 Nc6 3.f4 g6 4.Nf3 Bg7 5.Bb5), jump your knight into the center to challenge White’s bishop and f3-knight!',
-        fen: 'r1bqk1nr/pp1pppbp/2n3p1/1Bp5/4PP2/2N2N2/PPPP2PP/R1BQK2R b KQkq - 2 5',
-        side: 'b',
-        moves: ['c6d4'],
-        explain: '5...Nd4! centralizes with tempo and neutralizes White’s Bb5/f4 attack completely.',
-      },
-      {
-        type: 'mcq',
-        q: 'Why is 1.e4 c5 2.d4 cxd4 3.c3 Nf6! such a smart tournament weapon for an Alapin player?',
-        opts: [
-          'It denies White the open gambit files and transposes straight into the 2.c3 Nf6 Alapin you already know inside-out',
-          'It gives away the Queen',
-          'It forces a draw on move 4',
-        ],
-        ans: 0,
-        explain: 'Gambit players hate when you take them out of their sacrificial prep and into a solid Alapin structure!',
-      },
+    "drill": "Prepare and launch the b4! queenside expansion with Rb1 in the English Fianchetto.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: English Opening Queenside Play",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+english+opening+g3+bg2"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkb1r/pppppp1p/5np1/8/2P5/2N3P1/PP1PPP1P/R1BQKBNR_b_KQkq_-_0_3#explorer",
+    "lichessLabel": "🌐 Practice English vs KID on Lichess"
   },
   {
-    id: 'l3-cov', l: 3, cat: 'Basic Coverage', group: 'basic', icon: '🛡️',
-    title: 'Basic Coverage 3: Defeating the Scotch Game, Italian Giuoco Piano & Trompowsky',
-    why: 'Knowing how to handle 1.d4 Nf6 2.Bg5 (Trompowsky) and central 1.e4/1.d4 sidelines keeps your tournament repertoire airtight.',
-    ideas: [
-      'Against Trompowsky (1.d4 Nf6 2.Bg5): Play 2...d5! (or 2...Ne4 3.Bf4 d5) seizing the center immediately.',
-      'Against Queen’s Pawn Colle/Torre setups: Always break with ...c5! and ...Nc6—never let White build a free kingside attack without challenging d4.',
-      'When playing White against 1.d4 Nf6 2.c4 e6: You can steer straight into your Queen’s Gambit Declined with 3.Nf3 d5!',
+    "id": "l3-ck",
+    "l": 3,
+    "cat": "Black Core",
+    "group": "core_black",
+    "rep": "ck",
+    "icon": "⚫",
+    "title": "Caro-Kann 3: Refuting the Fantasy Variation (3.f3) & Two Knights (2.Nc3 d5 3.Nf3)",
+    "why": "Tricky 1500+ players try 3.f3 (Fantasy Variation) to keep a big pawn center, or 2.Nc3 d5 3.Nf3 (Two Knights). Here is the exact punishment for both.",
+    "ideas": [
+      "Against 3.f3 (Fantasy): Play 3...dxe4 4.fxe4 e5!—strike the center immediately while White’s f-file/e1-h4 diagonal is wide open to ...Qh4+!",
+      "Fantasy Trap: After 3...dxe4 4.fxe4 e5 5.dxe5??, 5...Qh4+! 6.Ke2 Qxe4+ or 6.g3 Qxe4+ forks the King and h1-rook!",
+      "Against Two Knights (2.Nc3 d5 3.Nf3): Play 3...Bg4! 4.h3 Bxf3 5.Qxf3 e6, giving Black an ironclad dark-square grip on d5 and e6."
     ],
-    drill: 'Challenge White’s center with ...c5! against passive Queen’s Pawn systems.',
-    videos: [['Saint Louis Chess Club: Beating Sidelines in d4', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+trompowsky+colle']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'White plays the passive Colle System (1.d4 d5 2.Nf3 Nf6 3.e3). Strike at White’s d4 center before locking in your pieces!',
-        fen: 'rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4PN2/PPP2PPP/RNBQKB1R b KQkq - 0 3',
-        side: 'b',
-        moves: ['c7c5', 'c8f5'],
-        explain: '3...c5! (or 3...Bf5!) immediately challenges d4 and gets your pieces active.',
-      },
-      {
-        type: 'mcq',
-        q: 'In 1.d4 Nf6 2.c4 e6, how can White avoid the Nimzo-Indian (3.Nc3 Bb4) and steer into the Queen’s Gambit Declined or Catalan?',
-        opts: ['By playing 3.Nf3! first', 'By moving the King to d2', 'By resigning'],
-        ans: 0,
-        explain: '3.Nf3! prevents 3...Bb4+ and invites 3...d5 (transposing directly into your Queen’s Gambit Declined!).',
-      },
-      {
-        type: 'mcq',
-        q: 'What is Black’s universal equalizing pawn break against almost all 1.d4 systems?',
-        opts: ['...c5! challenging White’s d4 pawn', '...h6', '...a6'],
-        ans: 0,
-        explain: 'Just as in the Sicilian and Caro-Kann, ...c5 trades a flank pawn for White’s central d4 pawn!',
-      },
+    "drill": "Strike with 4...e5! against the Fantasy Caro-Kann (1.e4 c6 2.d4 d5 3.f3 dxe4 4.fxe4).",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Caro-Kann Fantasy & Two Knights",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+caro+kann+fantasy+variation"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR_b_KQkq_-_0_3?color=black#explorer",
+    "lichessLabel": "🌐 Practice Caro-Kann Fantasy/2N on Lichess"
   },
   {
-    id: 'l3-mid', l: 3, cat: 'Middlegame', group: 'mid', icon: '⚔️',
-    title: 'Middlegame 3: Open Files, 7th-Rank Pigs & The Isolated Queen’s Pawn (IQP)',
-    why: 'Both the Queen’s Gambit, Caro-Kann Panov, and Alapin Sicilian frequently produce an Isolated Queen’s Pawn (IQP) on d4 or d5. Whoever understands the IQP wins.',
-    ideas: [
-      'Playing WITH the IQP (d4): Use its space and e5/c5 support squares to attack the kingside with Bd3, Bc2, Qd3, and a timely d4-d5! breakthrough.',
-      'Playing AGAINST the IQP: Blockade the square directly in front of the pawn (d5 or d4) with a Knight, trade minor pieces (keep rooks/endgame!), and win the isolated pawn.',
-      'Rooks on Open Files & 7th Rank: Seize the open c- or d-file, double rooks (Alekhine’s Gun), and invade the 7th rank to gobble pawns.',
+    "id": "l3-sic",
+    "l": 3,
+    "cat": "Black Core",
+    "group": "core_black",
+    "rep": "sic",
+    "icon": "⚫",
+    "title": "Sicilian 3: Crushing the Grand Prix Attack (2.f4) & Smith-Morra Gambit",
+    "why": "Aggressive club players love 2.f4 (Grand Prix Attack) or 2.d4 cxd4 3.c3 (Smith-Morra Gambit). Neutralizing both turns their gambit into a lost endgame!",
+    "ideas": [
+      "Against the Grand Prix Attack (1.e4 c5 2.Nc3 Nc6 3.f4): Play 3...g6 4.Nf3 Bg7 5.Bb5 Nd4!—jump into d4 to trade off their dangerous light-squared bishop and follow with ...e6 and ...Ne7/...d5!",
+      "Rule vs Kingside Attack: Counterattack in the center with ...d5! or on the queenside with ...Rb8 and ...b5.",
+      "Against Smith-Morra Gambit (2.d4 cxd4 3.c3): Either decline cleanly with 3...Nf6! 4.e5 Nd5 (transposing directly into your Alapin repertoire!) or accept and setup ...d6, ...e6, ...Ne7-g6."
     ],
-    drill: 'Invade the 7th rank with your Rook or execute the thematic d4-d5! IQP breakthrough.',
-    videos: [['Saint Louis Chess Club: Isolated Queen Pawn (IQP) Middlegames', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+isolated+queen+pawn']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'White has an Isolated Queen’s Pawn on d4 and superior piece activity. Launch the thematic d4-d5! central breakthrough!',
-        fen: 'r1bq1rk1/pp2bppp/2n1pn2/8/3P4/2NB1N2/PP3PPP/R1BQR1K1 w - - 3 11',
-        side: 'w',
-        moves: ['d4d5'],
-        explain: '11.d5! liquidates the isolated pawn while unleashing White’s bishops and e1-rook with tempo!',
-      },
-      {
-        type: 'board',
-        prompt: 'Invade the 7th rank with your rook to attack Black’s pawns and trap the King on the back rank!',
-        fen: '3r2k1/pp3ppp/8/8/8/8/PP3PPP/2R3K1 w - - 0 1',
-        side: 'w',
-        moves: ['c1c7'],
-        explain: 'Rc7! seizes the 7th rank, attacking b7 and f7 simultaneously.',
-      },
-      {
-        type: 'mcq',
-        q: 'When playing AGAINST an opponent’s Isolated Queen’s Pawn (on d4), what is your best strategic plan?',
-        opts: [
-          'Firmly blockade the d5 square in front of the pawn with a Knight and trade minor pieces toward an endgame',
-          'Push all your kingside pawns',
-          'Let them push d4-d5 for free',
-        ],
-        ans: 0,
-        explain: 'In the middlegame the IQP gives attacking space, but in the endgame it is a stationary target—blockade d5 and trade minor pieces!',
-      },
+    "drill": "Use 3...Nf6! against the Smith-Morra Gambit to transpose directly into your winning Alapin setup.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Beating the Grand Prix & Morra Gambit",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+grand+prix+attack+smith+morra"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/r1bqkbnr/pp1ppppp/2n5/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR_b_KQkq_-_0_3?color=black#explorer",
+    "lichessLabel": "🌐 Practice vs Grand Prix/Morra on Lichess"
   },
   {
-    id: 'l3-end', l: 3, cat: 'Endgame', group: 'end', icon: '♚',
-    title: 'Endgame 3: Active Rooks, Passed Pawns & "Rooks Belong Behind Passed Pawns"',
-    why: 'Over 50% of all tournament games that reach move 35 are Rook Endgames. Tarrasch’s Golden Rule wins or saves dozens of rating points.',
-    ideas: [
-      'Tarrasch’s Rule: ALWAYS place your Rook BEHIND a passed pawn—yours or the opponent’s!',
-      'Why behind? As the pawn advances, your rook’s scope grows longer, while a rook in front of a pawn gets squeezed into the corner.',
-      'Active Rook > Passive Pawn Defense: Never put your rook in front of a weak pawn passively; activate it onto the 7th rank to counterattack!',
+    "id": "l3-cov",
+    "l": 3,
+    "cat": "Basic Coverage",
+    "group": "basic",
+    "icon": "🛡️",
+    "title": "Basic Coverage 3: Defeating the Scotch Game, Italian Giuoco Piano & Trompowsky",
+    "why": "Knowing how to handle 1.d4 Nf6 2.Bg5 (Trompowsky) and central 1.e4/1.d4 sidelines keeps your tournament repertoire airtight.",
+    "ideas": [
+      "Against Trompowsky (1.d4 Nf6 2.Bg5): Play 2...d5! (or 2...Ne4 3.Bf4 d5) seizing the center immediately.",
+      "Against Queen’s Pawn Colle/Torre setups: Always break with ...c5! and ...Nc6—never let White build a free kingside attack without challenging d4.",
+      "When playing White against 1.d4 Nf6 2.c4 e6: You can steer straight into your Queen’s Gambit Declined with 3.Nf3 d5!"
     ],
-    drill: 'Put your Rook behind the passed a-pawn so it supports promotion all the way to a8.',
-    videos: [['Saint Louis Chess Club: Rook Endgame Fundamentals', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+rook+endgames']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Apply Tarrasch’s Golden Rule: place your rook BEHIND your passed a-pawn!',
-        fen: '8/5pk1/6p1/P7/8/6P1/5PK1/2R5 w - - 0 1',
-        side: 'w',
-        moves: ['c1a1'],
-        explain: '1.Ra1! places the rook behind the passed pawn so it protects the pawn all the way to a8.',
-      },
-      {
-        type: 'board',
-        prompt: 'Black’s a-pawn is racing to queen. Place your rook BEHIND the enemy passed pawn to stop it cleanly!',
-        fen: '8/6k1/8/8/p7/8/6K1/3R4 w - - 0 1',
-        side: 'w',
-        moves: ['d1a1'],
-        explain: '1.Ra1! attacks the passed pawn from behind (or forces it to advance into the rook’s line of fire).',
-      },
-      {
-        type: 'mcq',
-        q: 'What is the #1 rule of Rook Endgames if you must choose between a passive rook defending a pawn vs an active rook counterattacking?',
-        opts: [
-          'Activity is King — an active rook on the 7th rank is worth at least a pawn!',
-          'Always play passive defense on the 1st rank',
-          'Never move your King in a rook endgame',
-        ],
-        ans: 0,
-        explain: 'Passive rooks lose almost every endgame—activate your rook behind passed pawns or on the 7th rank!',
-      },
+    "drill": "Challenge White’s center with ...c5! against passive Queen’s Pawn systems.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Beating Sidelines in d4",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+trompowsky+colle"
+      ]
     ],
-  },
-
-  // ==================== LEVEL 4: DIAMOND COMMANDER (PACKAGE 4) ====================
-  {
-    id: 'l4-qg', l: 4, cat: 'White Core', group: 'core_white', rep: 'qg', icon: '⚪',
-    title: "Queen's Gambit 4: Semi-Slav (...e6 + ...c6) & Tarrasch Defense (...c5)",
-    why: 'Against stronger players (1600+ Lichess / 900+ OTB), you will face the Semi-Slav triangle and the Tarrasch Defense. Both have clear strategic blueprints.',
-    ideas: [
-      'Against the Semi-Slav (1.d4 d5 2.c4 c6 3.Nf3 Nf6 4.Nc3 e6): Play 5.e3! Nbd7 6.Bd3 (Meran) avoiding the chaotic Botvinnik/Moscow gambits while keeping a rock-solid center.',
-      'After 6...dxc4 7.Bxc4 b5 8.Bd3 a6, play 9.e4! seizing the center right before Black completes ...c5.',
-      'Against the Tarrasch (1.d4 d5 2.c4 e6 3.Nc3 c5): Play 4.cxd5 exd5 5.Nf3 Nc6 6.g3! Nf6 7.Bg2—your g2-bishop lasers Black’s Isolated Queen’s Pawn on d5!',
-    ],
-    drill: 'Play 9.e4! in the Meran Semi-Slav to seize full central control.',
-    videos: [['Saint Louis Chess Club: Queen’s Gambit vs Semi-Slav & Tarrasch', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+semi+slav+tarrasch']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the Meran Semi-Slav after 6.Bd3 dxc4 7.Bxc4 b5 8.Bd3 a6, seize the center with your e-pawn!',
-        fen: 'r1bqkb1r/3n1ppp/p1p1pn2/1p6/3P4/2NBPN2/PP3PPP/R1BQK2R w KQkq - 0 9',
-        side: 'w',
-        moves: ['e3e4'],
-        explain: '9.e4! builds an imposing d4+e4 center and prepares e5 if Black plays carelessly.',
-      },
-      {
-        type: 'board',
-        prompt: 'Against the Tarrasch Defense (1.d4 d5 2.c4 e6 3.Nc3 c5 4.cxd5 exd5 5.Nf3 Nc6), prepare to fianchetto your bishop to laser the isolated d5 pawn!',
-        fen: 'r1bqkbnr/pp3ppp/2n5/2pp4/3P4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 1 6',
-        side: 'w',
-        moves: ['g2g3'],
-        explain: '6.g3! (Rubinstein Variation) puts the bishop on g2 where it exerts crushing pressure on Black’s isolated d5 pawn.',
-      },
-      {
-        type: 'mcq',
-        q: 'Why is the Rubinstein setup (g3 + Bg2) the cleanest way to defeat the Tarrasch Defense (1.d4 d5 2.c4 e6 3.Nc3 c5)?',
-        opts: [
-          'After cxd5 exd5, Black is left with an Isolated Queen’s Pawn on d5 that White’s g2-bishop attacks directly',
-          'Because it trades both rooks on move 6',
-          'Because Black cannot castle',
-        ],
-        ans: 0,
-        explain: 'The g2-bishop, f3-knight, and c3-knight all converge on Black’s isolated d5 pawn!',
-      },
-    ],
+    "lichessUrl": "https://lichess.org/training/opening",
+    "lichessLabel": "🌐 Train Opening Sidelines on Lichess"
   },
   {
-    id: 'l4-eng', l: 4, cat: 'White Core', group: 'core_white', rep: 'eng', icon: '⚪',
-    title: 'English Opening 4: Catalan / Reti Style vs ...e6 & ...d5 Setups',
-    why: 'When Black plays 1...e6 and 2...d5 against 1.c4, keeping your g2-bishop pointed at the queenside creates the famous Catalan/English squeeze.',
-    ideas: [
-      'After 1.c4 e6 2.Nc3 d5 3.d4 (or 2.Nf3 d5 3.g3 Nf6 4.Bg2), your g2-bishop x-rays Black’s entire queenside (d5, c6, b7, a8).',
-      'Pressure on c5/d5: If Black takes ...dxc4, recover the pawn with Qa4+ and Qxc4 (or Nf3-e5) while your g2-bishop dominates.',
-      'Double Fianchetto (b3 + Bb2 + g3 + Bg2): When Black plays a closed triangle (...c6, ...d5, ...e6), fianchetto BOTH bishops and break with cxd5 and e4!',
+    "id": "l3-mid",
+    "l": 3,
+    "cat": "Middlegame",
+    "group": "mid",
+    "icon": "⚔️",
+    "title": "Middlegame 3: Open Files, 7th-Rank Pigs & The Isolated Queen’s Pawn (IQP)",
+    "why": "Both the Queen’s Gambit, Caro-Kann Panov, and Alapin Sicilian frequently produce an Isolated Queen’s Pawn (IQP) on d4 or d5. Whoever understands the IQP wins.",
+    "ideas": [
+      "Playing WITH the IQP (d4): Use its space and e5/c5 support squares to attack the kingside with Bd3, Bc2, Qd3, and a timely d4-d5! breakthrough.",
+      "Playing AGAINST the IQP: Blockade the square directly in front of the pawn (d5 or d4) with a Knight, trade minor pieces (keep rooks/endgame!), and win the isolated pawn.",
+      "Rooks on Open Files & 7th Rank: Seize the open c- or d-file, double rooks (Alekhine’s Gun), and invade the 7th rank to gobble pawns."
     ],
-    drill: 'Use Qa4+ in the English/Catalan to recover the c4 pawn while keeping the long diagonal wide open.',
-    videos: [['Saint Louis Chess Club: English & Catalan Long Diagonal Squeeze', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+english+catalan']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Black captured on c4 (1.c4 e6 2.g3 d5 3.Bg2 dxc4). Play the check that guarantees you win back the c4 pawn immediately!',
-        fen: 'rnbqkbnr/ppp2ppp/4p3/8/2p5/6P1/PP1PPPBP/RNBQK1NR w KQkq - 0 4',
-        side: 'w',
-        moves: ['d1a4'],
-        explain: '4.Qa4+! checks the king and attacks the c4 pawn simultaneously, recovering it cleanly while Bg2 dominates the open diagonal.',
-      },
-      {
-        type: 'mcq',
-        q: 'In the English/Catalan structure, why does White love it when Black plays ...dxc4?',
-        opts: [
-          'It opens the h1-a8 long diagonal for White’s g2-bishop permanently',
-          'Because White wants to lose a pawn',
-          'Because it blocks White’s rooks',
-        ],
-        ans: 0,
-        explain: 'Once the d5 pawn leaves the center, nothing can block White’s g2-bishop from pressuring c6, b7, and a8 for the rest of the game!',
-      },
-      {
-        type: 'mcq',
-        q: 'Against a super-solid Slav/QGD wall (...c6, ...d5, ...e6), what two-bishop setup gives White long-term pressure?',
-        opts: ['The Double Fianchetto (Bg2 + Bb2)', 'Putting bishops on a3 and h3', 'Trading both bishops for knights on move 4'],
-        ans: 0,
-        explain: 'Bg2 and Bb2 criss-cross the entire center from safety until White opens lines with d3-e4!',
-      },
+    "drill": "Invade the 7th rank with your Rook or execute the thematic d4-d5! IQP breakthrough.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Isolated Queen Pawn (IQP) Middlegames",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+isolated+queen+pawn"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/training/middlegame",
+    "lichessLabel": "🌐 Train Adaptive Middlegames on Lichess"
   },
   {
-    id: 'l4-ck', l: 4, cat: 'Black Core', group: 'core_black', rep: 'ck', icon: '⚫',
-    title: 'Caro-Kann 4: Neutralizing the Panov-Botvinnik Attack (3.exd5 cxd5 4.c4)',
-    why: 'Strong Queen’s Gambit players often meet the Caro-Kann with the Panov Attack (3.exd5 cxd5 4.c4), creating an IQP Battle. Here is how Black turns tables.',
-    ideas: [
-      'After 1.e4 c6 2.d4 d5 3.exd5 cxd5 4.c4 Nf6 5.Nc3, play 5...e6! (or 5...Nc6 6.Bg5 dxc4!)—if White plays 6.Nf3 Be7 7.cxd5, recapture with the KNIGHT (7...Nxd5!).',
-      'Why 7...Nxd5! is so strong: It leaves White with the Isolated Queen’s Pawn on d4 while your Knight sits right on the d5 blockade square!',
-      'Trade off one or two pairs of minor pieces and White’s d4 pawn becomes a permanent endgame target.',
+    "id": "l3-end",
+    "l": 3,
+    "cat": "Endgame",
+    "group": "end",
+    "icon": "♚",
+    "title": "Endgame 3: Active Rooks, Passed Pawns & \"Rooks Belong Behind Passed Pawns\"",
+    "why": "Over 50% of all tournament games that reach move 35 are Rook Endgames. Tarrasch’s Golden Rule wins or saves dozens of rating points.",
+    "ideas": [
+      "Tarrasch’s Rule: ALWAYS place your Rook BEHIND a passed pawn—yours or the opponent’s!",
+      "Why behind? As the pawn advances, your rook’s scope grows longer, while a rook in front of a pawn gets squeezed into the corner.",
+      "Active Rook > Passive Pawn Defense: Never put your rook in front of a weak pawn passively; activate it onto the 7th rank to counterattack!"
     ],
-    drill: 'Recapture with 7...Nxd5! in the Panov-Botvinnik Attack to blockade White’s isolated d4 pawn.',
-    videos: [['Saint Louis Chess Club: Caro-Kann Panov-Botvinnik Attack', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+caro+kann+panov']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the Panov-Botvinnik (1.e4 c6 2.d4 d5 3.exd5 cxd5 4.c4 Nf6 5.Nc3 e6 6.Nf3 Be7 7.cxd5), recapture on d5 with the piece that blockades White’s isolated d4 pawn!',
-        fen: 'rnbqk2r/pp2bppp/4pn2/3P4/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 0 7',
-        side: 'b',
-        moves: ['f6d5'],
-        explain: '7...Nxd5! gives White the Isolated Queen’s Pawn on d4 while placing your Knight directly on the ideal d5 blockade square!',
-      },
-      {
-        type: 'mcq',
-        q: 'Why do we recapture with 7...Nxd5! instead of 7...exd5 in the Panov-Botvinnik Caro-Kann?',
-        opts: [
-          '7...Nxd5! saddles White with the isolated d4 pawn while our knight blockades d5',
-          'Because 7...exd5 is illegal',
-          'To lose a piece',
-        ],
-        ans: 0,
-        explain: 'Recapturing with the knight inflicts the isolated pawn on White instead of taking one ourselves!',
-      },
-      {
-        type: 'mcq',
-        q: 'Once White has the isolated d4 pawn in the Panov Caro-Kann, which trades favor Black?',
-        opts: [
-          'Trading minor pieces so White’s kingside attack evaporates and the d4 pawn is weak in the endgame',
-          'Sacrificing a rook on h2',
-          'Never castling',
-        ],
-        ans: 0,
-        explain: 'Every minor piece traded reduces White’s attacking potential and brings Black closer to a winning endgame against d4.',
-      },
+    "drill": "Put your Rook behind the passed a-pawn so it supports promotion all the way to a8.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Rook Endgame Fundamentals",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+rook+endgames"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/training/rookEndgame",
+    "lichessLabel": "🌐 Train Rook Endgames on Lichess"
   },
   {
-    id: 'l4-sic', l: 4, cat: 'Black Core', group: 'core_black', rep: 'sic', icon: '⚫',
-    title: 'Sicilian 4: Dragon / Classical Setup & The ...Rxc3! Exchange Sacrifice',
-    why: 'In the Open Sicilian, Black’s counterattack down the half-open c-file (...Rc8, ...Qa5, and the famous ...Rxc3! sacrifice) is one of chess’s deadliest weapons.',
-    ideas: [
-      'After 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 g6 (Dragon) or 5...Nc6 (Classical), place your rook on c8 and knight on c6/e5.',
-      'The Thematic Sicilian Exchange Sacrifice (...Rxc3! bxc3 ...Nxe4 or ...Qxc3): Shaking White’s defender of e4 and shattering White’s queenside pawns into islands!',
-      'Opposite-Side Castling Race: If White castles queenside (O-O-O), never waste moves on slow prophylaxis—attack c3/b2 immediately with ...Rc8, ...Qa5, and ...b5!',
+    "id": "l4-qg",
+    "l": 4,
+    "cat": "White Core",
+    "group": "core_white",
+    "rep": "qg",
+    "icon": "⚪",
+    "title": "Queen's Gambit 4: Semi-Slav (...e6 + ...c6) & Tarrasch Defense (...c5)",
+    "why": "Against stronger players (1600+ Lichess / 900+ OTB), you will face the Semi-Slav triangle and the Tarrasch Defense. Both have clear strategic blueprints.",
+    "ideas": [
+      "Against the Semi-Slav (1.d4 d5 2.c4 c6 3.Nf3 Nf6 4.Nc3 e6): Play 5.e3! Nbd7 6.Bd3 (Meran) avoiding the chaotic Botvinnik/Moscow gambits while keeping a rock-solid center.",
+      "After 6...dxc4 7.Bxc4 b5 8.Bd3 a6, play 9.e4! seizing the center right before Black completes ...c5.",
+      "Against the Tarrasch (1.d4 d5 2.c4 e6 3.Nc3 c5): Play 4.cxd5 exd5 5.Nf3 Nc6 6.g3! Nf6 7.Bg2—your g2-bishop lasers Black’s Isolated Queen’s Pawn on d5!"
     ],
-    drill: 'Unleash the thematic Sicilian counterattack down the c-file.',
-    videos: [['Saint Louis Chess Club: Sicilian Dragon & c-File Counterattacks', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+sicilian+dragon']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'White castled queenside in the Open Sicilian and left e4/c3 overloaded. Strike with the classic Sicilian Exchange Sacrifice on c3!',
-        fen: '2rq1rk1/pp2ppbp/3p1np1/8/3NP3/2N1BP2/PPPQ2PP/2KR1B1R b - - 0 10',
-        side: 'b',
-        moves: ['c8c3'],
-        explain: '10...Rxc3! bxc3 shatters White’s King shelter in front of c1 and gives Black a raging attack with ...Qa5!',
-      },
-      {
-        type: 'mcq',
-        q: 'Why is the Exchange Sacrifice ...Rxc3! so effective when White castles queenside (O-O-O) in the Sicilian?',
-        opts: [
-          'It rips open the pawn shield directly in front of White’s King on c1 and eliminates the defender of e4/d5',
-          'Because a Rook is worth less than a Knight',
-          'Because it forces stalemate',
-        ],
-        ans: 0,
-        explain: 'When White’s King is on c1, the c3-knight is the cornerstone of White’s defense—...Rxc3! blows the shelter apart!',
-      },
-      {
-        type: 'mcq',
-        q: 'Which file is Black’s main highway for rooks and queens in every Open Sicilian?',
-        opts: ['The half-open c-file (...Rc8 and ...Qa5)', 'The h-file', 'The a-file only'],
-        ans: 0,
-        explain: 'Trading 3...cxd4 opens the c-file on move 3—putting a Rook on c8 targets c3 and White’s queenside immediately.',
-      },
+    "drill": "Play 9.e4! in the Meran Semi-Slav to seize full central control.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Queen’s Gambit vs Semi-Slav & Tarrasch",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+semi+slav+tarrasch"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkb1r/pp3ppp/2p1pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R_w_KQkq_-_0_5#explorer",
+    "lichessLabel": "🌐 Practice QG vs Semi-Slav/Tarrasch on Lichess"
   },
   {
-    id: 'l4-cov', l: 4, cat: 'Basic Coverage', group: 'basic', icon: '🛡️',
-    title: 'Basic Coverage 4: King’s Indian Defense & Benoni Antidotes',
-    why: 'When you play 1.d4 or 1.c4, aggressive opponents try the King’s Indian (...g6/...e5) or Benoni (...c5). Knowing the Classical Bayonet / Gligoric structure keeps you in command.',
-    ideas: [
-      'Against the King’s Indian (1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5): Castling 7.O-O and attacking on the queenside with c4-c5! (while Black attacks on the kingside) is a race White wins by crashing through c6/d6.',
-      'Even simpler: Exchange 7.dxe5 dxe5 8.Qxd8 Rxd8 9.Bg5! (Petrosian/Exchange KID)—without Queens on the board, Black has ZERO kingside mate and a weak d5 square!',
-      'Against the Benoni (1.d4 Nf6 2.c4 c5): Push 3.d5! seizing space and clamp down with Nc3, e4, and Nf3-d2-c4 targeting the backward d6 pawn.',
+    "id": "l4-eng",
+    "l": 4,
+    "cat": "White Core",
+    "group": "core_white",
+    "rep": "eng",
+    "icon": "⚪",
+    "title": "English Opening 4: Catalan / Reti Style vs ...e6 & ...d5 Setups",
+    "why": "When Black plays 1...e6 and 2...d5 against 1.c4, keeping your g2-bishop pointed at the queenside creates the famous Catalan/English squeeze.",
+    "ideas": [
+      "After 1.c4 e6 2.Nc3 d5 3.d4 (or 2.Nf3 d5 3.g3 Nf6 4.Bg2), your g2-bishop x-rays Black’s entire queenside (d5, c6, b7, a8).",
+      "Pressure on c5/d5: If Black takes ...dxc4, recover the pawn with Qa4+ and Qxc4 (or Nf3-e5) while your g2-bishop dominates.",
+      "Double Fianchetto (b3 + Bb2 + g3 + Bg2): When Black plays a closed triangle (...c6, ...d5, ...e6), fianchetto BOTH bishops and break with cxd5 and e4!"
     ],
-    drill: 'Seize space with 3.d5! when Black plays the Benoni (1.d4 Nf6 2.c4 c5).',
-    videos: [['Saint Louis Chess Club: Beating the King’s Indian & Benoni', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+beating+kings+indian+benoni']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Black challenges your Queen’s Gambit with the Benoni: 1.d4 Nf6 2.c4 c5. Push past to seize a dominant space wedge!',
-        fen: 'rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq c6 0 3',
-        fen_alt: 'rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3',
-        side: 'w',
-        moves: ['d4d5'],
-        explain: '3.d5! gains a permanent space wedge and leaves Black’s d6 pawn backward on a half-open d-file.',
-      },
-      {
-        type: 'mcq',
-        q: 'In the Exchange King’s Indian (1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5 7.dxe5 dxe5 8.Qxd8 Rxd8), why do KID players hate this line?',
-        opts: [
-          'Trading Queens eliminates Black’s kingside checkmating attack while leaving a permanent hole on d5',
-          'Because Black loses a rook on move 8',
-          'Because White gets two queens',
-        ],
-        ans: 0,
-        explain: 'King’s Indian players live for kingside checkmates—trading queens on d8 drains all the venom out of their attack!',
-      },
-      {
-        type: 'mcq',
-        q: 'After 1.d4 Nf6 2.c4 c5 3.d5 e6 4.Nc3 exd5, which pawn should White recapture with to keep a central pawn majority?',
-        opts: ['5.cxd5! (keeping the d5+e4 central pawn duo)', '5.Nxd5 allowing ...Nxd5', 'Leave the pawn'],
-        ans: 0,
-        explain: '5.cxd5! gives White a powerful d5+e4 central majority while Black’s d6 pawn stays backward!',
-      },
+    "drill": "Use Qa4+ in the English/Catalan to recover the c4 pawn while keeping the long diagonal wide open.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: English & Catalan Long Diagonal Squeeze",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+english+catalan"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkb1r/ppp2ppp/4pn2/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R_w_KQkq_-_0_4#explorer",
+    "lichessLabel": "🌐 Practice Catalan/English on Lichess"
   },
   {
-    id: 'l4-mid', l: 4, cat: 'Middlegame', group: 'mid', icon: '⚔️',
-    title: 'Middlegame 4: Greek Gift (Bxh7+), Deflection & Opposite-Side Castling',
-    why: 'To cross 1700 Lichess and 925+ OTB, you must calculate 3-move sacrifices and recognize the classical Bxh7+ Greek Gift pattern instantly.',
-    ideas: [
-      'Greek Gift Checklist (Bxh7+): Works when 1) Black has NO knight on f6, 2) your Bishop hits h7, 3) your Knight can jump Ng5+, and 4) your Queen can land on h5!',
-      'Deflection / Overloading: When one enemy Queen or Rook guards both back-rank mate and a piece, sacrifice/attack to force it away from its defensive duty.',
-      'Good Knight vs Bad Bishop: Lock enemy pawns on the same color as their remaining bishop, then outmaneuver it with a centralized Knight.',
+    "id": "l4-ck",
+    "l": 4,
+    "cat": "Black Core",
+    "group": "core_black",
+    "rep": "ck",
+    "icon": "⚫",
+    "title": "Caro-Kann 4: Neutralizing the Panov-Botvinnik Attack (3.exd5 cxd5 4.c4)",
+    "why": "Strong Queen’s Gambit players often meet the Caro-Kann with the Panov Attack (3.exd5 cxd5 4.c4), creating an IQP Battle. Here is how Black turns tables.",
+    "ideas": [
+      "After 1.e4 c6 2.d4 d5 3.exd5 cxd5 4.c4 Nf6 5.Nc3, play 5...e6! (or 5...Nc6 6.Bg5 dxc4!)—if White plays 6.Nf3 Be7 7.cxd5, recapture with the KNIGHT (7...Nxd5!).",
+      "Why 7...Nxd5! is so strong: It leaves White with the Isolated Queen’s Pawn on d4 while your Knight sits right on the d5 blockade square!",
+      "Trade off one or two pairs of minor pieces and White’s d4 pawn becomes a permanent endgame target."
     ],
-    drill: 'Execute the classic Bxh7+! Greek Gift sacrifice when Black’s f6 knight is absent.',
-    videos: [['Saint Louis Chess Club: Greek Gift Sacrifice Bxh7+', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+greek+gift+sacrifice']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Black castled into a French/QGD position with no knight on f6, while your Bd3, Nf3, and Qd1 are aimed at the kingside. Unleash the Greek Gift!',
-        fen: 'r1bq1rk1/ppp1bppp/2n1p3/3pP3/3P4/3B1N2/PPP2PPP/RNBQK2R w KQ - 3 7',
-        side: 'w',
-        moves: ['d3h7'],
-        explain: '7.Bxh7+! Kxh7 8.Ng5+ Kg8 9.Qh5! creates an unstoppable mating net on h7.',
-      },
-      {
-        type: 'board',
-        prompt: 'Black’s Queen on d7 is overloaded guarding both the e8 back-rank mate and the f5 bishop. Deflect her!',
-        fen: '3r2k1/pp1q1ppp/8/5b2/8/8/PPP2PPP/3QR1K1 w - - 0 1',
-        side: 'w',
-        moves: ['d1d7', 'e1e8'],
-        explain: 'Qxd7! (or Re8+) exploits the overloaded defense of d7 and e8, winning a piece!',
-      },
-      {
-        type: 'mcq',
-        q: 'Which defensive piece’s absence is the #1 green light to calculate the Bxh7+ Greek Gift sacrifice?',
-        opts: ['No Black Knight defending h7 from f6 (or f8)', 'No Black pawn on a7', 'No Black rook on a8'],
-        ans: 0,
-        explain: 'A knight on f6 guards h7 — once that knight is traded or kicked away by e5, Bxh7+ + Ng5+ + Qh5 is lethal!',
-      },
+    "drill": "Recapture with 7...Nxd5! in the Panov-Botvinnik Attack to blockade White’s isolated d4 pawn.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Caro-Kann Panov-Botvinnik Attack",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+caro+kann+panov"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/pp2pppp/2p5/8/2pP4/8/PP3PPP/RNBQKBNR_w_KQkq_-_0_4?color=black#explorer",
+    "lichessLabel": "🌐 Practice Caro-Kann Panov on Lichess"
   },
   {
-    id: 'l4-end', l: 4, cat: 'Endgame', group: 'end', icon: '♚',
-    title: 'Endgame 4: The Two Essential Rook Positions — Lucena (Win) & Philidor (Draw)',
-    why: 'Every master knows two exact Rook Endgame blueprints: "Building a Bridge" (Lucena) to win a pawn up, and the "3rd Rank Defense" (Philidor) to save a pawn down.',
-    ideas: [
-      'Lucena Position (Winning): Your pawn is on the 7th rank with your King in front of it. Play Rook to the 4th rank! Then walk your King out—when checks run out, your Rook drops in to block ("building a bridge").',
-      'Philidor Position (Drawing): Keep your defending Rook on the 6th rank (their 3rd rank) so the enemy King CANNOT cross to the 6th rank. The moment they push the pawn to the 6th, drop your Rook to the 1st rank and check from behind forever!',
-      'Outside Passed Pawn: Use a wing pawn as a decoy to drag the enemy King away from the main pawn cluster.',
+    "id": "l4-sic",
+    "l": 4,
+    "cat": "Black Core",
+    "group": "core_black",
+    "rep": "sic",
+    "icon": "⚫",
+    "title": "Sicilian 4: Dragon / Classical Setup & The ...Rxc3! Exchange Sacrifice",
+    "why": "In the Open Sicilian, Black’s counterattack down the half-open c-file (...Rc8, ...Qa5, and the famous ...Rxc3! sacrifice) is one of chess’s deadliest weapons.",
+    "ideas": [
+      "After 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 g6 (Dragon) or 5...Nc6 (Classical), place your rook on c8 and knight on c6/e5.",
+      "The Thematic Sicilian Exchange Sacrifice (...Rxc3! bxc3 ...Nxe4 or ...Qxc3): Shaking White’s defender of e4 and shattering White’s queenside pawns into islands!",
+      "Opposite-Side Castling Race: If White castles queenside (O-O-O), never waste moves on slow prophylaxis—attack c3/b2 immediately with ...Rc8, ...Qa5, and ...b5!"
     ],
-    drill: 'Build the Lucena Bridge on the 4th rank, and apply the Philidor 6th-rank barrier.',
-    videos: [['Saint Louis Chess Club: Lucena and Philidor Positions', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+lucena+philidor']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Lucena Position: Your pawn is on d7 and King on d8. Place your Rook on the 4th rank to prepare "Building the Bridge"!',
-        fen: '1K6/1P1k4/8/8/8/8/2R5/1r6 w - - 0 1',
-        side: 'w',
-        moves: ['c2c4'],
-        explain: '1.Rc4! prepares to walk the King out (Ka7-a6-b5) and block Black’s checks with Rb4 ("building a bridge")!',
-      },
-      {
-        type: 'board',
-        prompt: 'Philidor Defense: Black’s King is on e5 and pawn on e6. Cut off Black’s King along the 6th rank (your 3rd rank)!',
-        fen: '8/8/4p3/4k3/8/8/R7/4K3 w - - 0 1',
-        side: 'w',
-        moves: ['a2a3'],
-        explain: '1.Ra3! is the classic Philidor barrier—Black’s King cannot step to the 6th rank, and if 1...e5-e4? 2.Ra8! checks from behind for an easy draw.',
-      },
-      {
-        type: 'mcq',
-        q: 'In the Philidor Defense, when do you move your Rook from the 3rd rank all the way to the 8th rank?',
-        opts: [
-          'The exact moment the opponent pushes their pawn to the 6th rank, depriving their King of pawn shelter from rear checks',
-          'Before they push the pawn',
-          'Never',
-        ],
-        ans: 0,
-        explain: 'Once the pawn steps to the 6th rank, the enemy King has no shelter—your rook goes to the 8th rank and checks from behind non-stop!',
-      },
+    "drill": "Unleash the thematic Sicilian counterattack down the c-file.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Sicilian Dragon & c-File Counterattacks",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+sicilian+dragon"
+      ]
     ],
-  },
-
-  // ==================== LEVEL 5: NETHERITE GRANDMASTER (PACKAGE 5) ====================
-  {
-    id: 'l5-qg', l: 5, cat: 'White Core', group: 'core_white', rep: 'qg', icon: '⚪',
-    title: "Queen's Gambit 5: Mastering Indian Systems (Nimzo-Indian, QID & Grünfeld)",
-    why: 'At the 1000+ OTB / 1750+ Lichess level, opponents answer 1.d4 Nf6 2.c4 with 2...e6 (Nimzo/Queen’s Indian) or 2...g6 3...d5 (Grünfeld). Here is your grandmaster playbook.',
-    ideas: [
-      'Against Nimzo-Indian (1.d4 Nf6 2.c4 e6 3.Nc3 Bb4): Play 4.e3! (Rubinstein System) O-O 5.Bd3 d5 6.Nf3—super solid, develops fast, and builds a massive center if Black trades ...Bxc3+ bxc3.',
-      'Or use the 3.Nf3! move order: 1.d4 Nf6 2.c4 e6 3.Nf3! preventing 3...Bb4 completely and meeting 3...b6 (Queen’s Indian) with 4.g3! fighting for the long diagonal.',
-      'Against the Grünfeld (1.d4 Nf6 2.c4 g6 3.Nc3 d5): Play 4.cxd5 Nxd5 5.e4 Nxc3 6.bxc3 Bg7 7.Bc4 + Ne2! (putting the knight on e2 so ...Bg4 cannot pin it!).',
-    ],
-    drill: 'Play 4.e3! in the Rubinstein Nimzo-Indian or 4.cxd5! in the Exchange Grünfeld.',
-    videos: [['Saint Louis Chess Club: Playing Against Nimzo-Indian & Grünfeld', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+nimzo+indian+grunfeld']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the Nimzo-Indian (1.d4 Nf6 2.c4 e6 3.Nc3 Bb4), play Akiba Rubinstein’s solid classical move that opens the f1-bishop and supports d4!',
-        fen: 'rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4',
-        side: 'w',
-        moves: ['e2e3', 'd1c2'],
-        explain: '4.e3! (or 4.Qc2) is a rock-solid GM system that prepares Bd3, Nf3, and O-O without any structural weaknesses.',
-      },
-      {
-        type: 'board',
-        prompt: 'Against the Grünfeld (1.d4 Nf6 2.c4 g6 3.Nc3 d5), capture on d5 to build the classical e4+d4 pawn center!',
-        fen: 'rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq d6 0 4',
-        fen_alt: 'rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4',
-        side: 'w',
-        moves: ['c4d5'],
-        explain: '4.cxd5! Nxd5 5.e4 Nxc3 6.bxc3 gives White a massive central pawn mass on c3, d4, and e4.',
-      },
-      {
-        type: 'mcq',
-        q: 'In the Exchange Grünfeld (4.cxd5 Nxd5 5.e4 Nxc3 6.bxc3 Bg7 7.Bc4), why do grandmasters develop the g1-knight to e2 instead of f3?',
-        opts: [
-          'On e2, the knight cannot be pinned by ...Bg4, keeping White’s d4 center rock-solid',
-          'Because f3 is illegal',
-          'To block the Queen',
-        ],
-        ans: 0,
-        explain: 'Putting the bishop on c4 and knight on e2 completely stops Black’s ...Bg4 pin on the defender of d4!',
-      },
-    ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R_w_KQkq_-_0_6?color=black#explorer",
+    "lichessLabel": "🌐 Practice Sicilian Dragon/Classical on Lichess"
   },
   {
-    id: 'l5-eng', l: 5, cat: 'White Core', group: 'core_white', rep: 'eng', icon: '⚪',
-    title: 'English Opening 5: The Maroczy Bind (c4 + e4) & Crushing the Hedgehog',
-    why: 'The crown jewel of the English Opening is the Maroczy Bind (pawns on c4 and e4 after Black trades ...cxd4). It clamps d5 and b5 so tightly Black can barely breathe.',
-    ideas: [
-      'Forming the Maroczy Bind: Whenever Black plays an early ...c5 or ...g6 and opens the d-file with ...cxd4 Nxd4, play e4! alongside your c4 pawn.',
-      'Why c4 + e4 is so dominant: Black can never play the liberating ...d5 or ...b5 breaks without losing a pawn!',
-      'Squeeze Plan: Tuck your knight back from d4 to c2, put bishops on e3 and e2/g2, double rooks on the d-file, and slowly suffocate Black’s Hedgehog.',
+    "id": "l4-cov",
+    "l": 4,
+    "cat": "Basic Coverage",
+    "group": "basic",
+    "icon": "🛡️",
+    "title": "Basic Coverage 4: King’s Indian Defense & Benoni Antidotes",
+    "why": "When you play 1.d4 or 1.c4, aggressive opponents try the King’s Indian (...g6/...e5) or Benoni (...c5). Knowing the Classical Bayonet / Gligoric structure keeps you in command.",
+    "ideas": [
+      "Against the King’s Indian (1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5): Castling 7.O-O and attacking on the queenside with c4-c5! (while Black attacks on the kingside) is a race White wins by crashing through c6/d6.",
+      "Even simpler: Exchange 7.dxe5 dxe5 8.Qxd8 Rxd8 9.Bg5! (Petrosian/Exchange KID)—without Queens on the board, Black has ZERO kingside mate and a weak d5 square!",
+      "Against the Benoni (1.d4 Nf6 2.c4 c5): Push 3.d5! seizing space and clamp down with Nc3, e4, and Nf3-d2-c4 targeting the backward d6 pawn."
     ],
-    drill: 'Establish the Maroczy Bind (c4 + e4) to lock down d5 and b5.',
-    videos: [['Saint Louis Chess Club: Maroczy Bind Mastery', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+maroczy+bind']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'After 1.c4 c5 2.Nf3 Nc6 3.d4 cxd4 4.Nxd4 g6, play the move that establishes the famous Maroczy Bind (c4 + e4 clamp on d5)!',
-        fen: 'r1bqkbnr/pp1ppp1p/2n3p1/8/2PN4/8/PP2PPPP/RNBQKB1R w KQkq - 0 5',
-        side: 'w',
-        moves: ['e2e4'],
-        explain: '5.e4! creates the Maroczy Bind—with pawns on c4 and e4, White clamps d5 and b5 in a positional vise.',
-      },
-      {
-        type: 'mcq',
-        q: 'Which two White pawns form the "Maroczy Bind" and what two Black pawn breaks do they stop?',
-        opts: [
-          'White pawns on c4 and e4, stopping Black’s ...b5 and ...d5 liberating breaks',
-          'White pawns on a4 and h4',
-          'White pawns on f4 and g4',
-        ],
-        ans: 0,
-        explain: 'Pawns on c4 and e4 guard both b5 and d5, leaving Black cramped on the first three ranks!',
-      },
-      {
-        type: 'mcq',
-        q: 'In the Maroczy Bind, why does White often retreat the centralized knight from d4 to c2?',
-        opts: [
-          'To avoid simplifying piece trades with Black’s c6-knight and keep Black’s cramped pieces stepping on each other',
-          'Because c2 is the center of the board',
-          'To block the c-pawn',
-        ],
-        ans: 0,
-        explain: 'Rule of Space: When you have more space, avoid piece trades so the cramped defender runs out of squares!',
-      },
+    "drill": "Seize space with 3.d5! when Black plays the Benoni (1.d4 Nf6 2.c4 c5).",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Beating the King’s Indian & Benoni",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+beating+kings+indian+benoni"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/training/hangingPiece",
+    "lichessLabel": "🌐 Train Gambits & Hanging Pieces on Lichess"
   },
   {
-    id: 'l5-ck', l: 5, cat: 'Black Core', group: 'core_black', rep: 'ck', icon: '⚫',
-    title: 'Caro-Kann 5: Tartakower (4...Nf6) & Karpov (4...Nd7) GM Endgame Squeezes',
-    why: 'World Champion Anatoly Karpov and top GMs use the Karpov (4...Nd7) and Tartakower (4...Nf6 5.Nxf6+ exf6) Caro-Kann to grind out virtually risk-free wins.',
-    ideas: [
-      'Tartakower System (1.e4 c6 2.d4 d5 3.Nc3 dxe4 4.Nxe4 Nf6! 5.Nxf6+ exf6): Recapturing 5...exf6 opens the e-file immediately, gives ...Bd6 + ...O-O + ...Re8 in 3 moves, and controls e5/d5!',
-      'Karpov System (4...Nd7 5.Ng5 Ngf6! 6.Bd3 e6 7.N1f3 Bd6): Note the famous trap—after 5.Ng5, NEVER play 5...h6?? (6.Ne6! fxe6 7.Qh5#)—always play 5...Ngf6!',
-      'Endgame Edge: Black’s queenside pawn structure (a7-b7-c6) is one solid island, giving Black superior late-middlegame and endgame prospects.',
+    "id": "l4-mid",
+    "l": 4,
+    "cat": "Middlegame",
+    "group": "mid",
+    "icon": "⚔️",
+    "title": "Middlegame 4: Greek Gift (Bxh7+), Deflection & Opposite-Side Castling",
+    "why": "To cross 1700 Lichess and 925+ OTB, you must calculate 3-move sacrifices and recognize the classical Bxh7+ Greek Gift pattern instantly.",
+    "ideas": [
+      "Greek Gift Checklist (Bxh7+): Works when 1) Black has NO knight on f6, 2) your Bishop hits h7, 3) your Knight can jump Ng5+, and 4) your Queen can land on h5!",
+      "Deflection / Overloading: When one enemy Queen or Rook guards both back-rank mate and a piece, sacrifice/attack to force it away from its defensive duty.",
+      "Good Knight vs Bad Bishop: Lock enemy pawns on the same color as their remaining bishop, then outmaneuver it with a centralized Knight."
     ],
-    drill: 'Defend accurately with 5...Ngf6! against 5.Ng5 in the Karpov Caro-Kann (avoiding the 5...h6?? 6.Ne6! smothered mate trap).',
-    videos: [['Saint Louis Chess Club: Tartakower & Karpov Caro-Kann', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+tartakower+karpov+caro+kann']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the Karpov Caro-Kann (1.e4 c6 2.d4 d5 3.Nc3 dxe4 4.Nxe4 Nd7 5.Ng5), White eyes e6 and f7. Play the accurate developing move (DO NOT play 5...h6??)!',
-        fen: 'r1bqkbnr/pp1npppp/2p5/6N1/3P4/8/PPP2PPP/R1BQKBNR b KQkq - 2 5',
-        side: 'b',
-        moves: ['g8f6'],
-        explain: '5...Ngf6! develops naturally and guards d5/h5. (Playing 5...h6?? loses on the spot to 6.Ne6! fxe6 7.Qh5+ g6 8.Qxg6#!).',
-      },
-      {
-        type: 'board',
-        prompt: 'In the Tartakower Caro-Kann (1.e4 c6 2.d4 d5 3.Nc3 dxe4 4.Nxe4), challenge the e4 knight directly to reach an ultra-fast development setup!',
-        fen: 'rnbqkbnr/pp2pppp/2p5/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4',
-        side: 'b',
-        moves: ['g8f6'],
-        explain: '4...Nf6! 5.Nxf6+ exf6 opens the e-file and diagonal for ...Bd6, ...O-O, and ...Re8!',
-      },
-      {
-        type: 'mcq',
-        q: 'Why is 5...h6?? a famous blunder after 1.e4 c6 2.d4 d5 3.Nc3 dxe4 4.Nxe4 Nd7 5.Ng5?',
-        opts: [
-          'Because 6.Ne6! traps Black’s Queen (or delivers mate after 6...fxe6 7.Qh5+ g6 8.Qxg6#)',
-          'Because pawns on h6 cannot move',
-          'Because it hangs the a8 rook',
-        ],
-        ans: 0,
-        explain: 'Always play 5...Ngf6! first so the h5 square is covered before you ever kick the g5 knight with ...h6!',
-      },
+    "drill": "Execute the classic Bxh7+! Greek Gift sacrifice when Black’s f6 knight is absent.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Greek Gift Sacrifice Bxh7+",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+greek+gift+sacrifice"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/training/kingsideAttack",
+    "lichessLabel": "🌐 Train Outposts & Kingside Attacks on Lichess"
   },
   {
-    id: 'l5-sic', l: 5, cat: 'Black Core', group: 'core_black', rep: 'sic', icon: '⚫',
-    title: 'Sicilian 5: Najdorf / Scheveningen (...a6 / ...e6) & The Liberating ...d5! Break',
-    why: 'The Sicilian Najdorf (5...a6) and Scheveningen (...d6 + ...e6) were the favorite weapons of Bobby Fischer and Garry Kasparov. Their secret goal is the central ...d5! break.',
-    ideas: [
-      'After 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6! (Najdorf), 5...a6 stops Nb5/Bb5+ and prepares ...e5 or ...e6 + ...b5!',
-      'Golden Rule of the Sicilian: Whenever Black successfully plays ...d5! without tactical punishment, Black is already equal or better!',
-      'Against English Attack (Be3, f3, Qd2, g4): Counterattack immediately with ...b5, ...Bb7, ...Rc8, and ...d5! in the center.',
+    "id": "l4-end",
+    "l": 4,
+    "cat": "Endgame",
+    "group": "end",
+    "icon": "♚",
+    "title": "Endgame 4: The Two Essential Rook Positions — Lucena (Win) & Philidor (Draw)",
+    "why": "Every master knows two exact Rook Endgame blueprints: \"Building a Bridge\" (Lucena) to win a pawn up, and the \"3rd Rank Defense\" (Philidor) to save a pawn down.",
+    "ideas": [
+      "Lucena Position (Winning): Your pawn is on the 7th rank with your King in front of it. Play Rook to the 4th rank! Then walk your King out—when checks run out, your Rook drops in to block (\"building a bridge\").",
+      "Philidor Position (Drawing): Keep your defending Rook on the 6th rank (their 3rd rank) so the enemy King CANNOT cross to the 6th rank. The moment they push the pawn to the 6th, drop your Rook to the 1st rank and check from behind forever!",
+      "Outside Passed Pawn: Use a wing pawn as a decoy to drag the enemy King away from the main pawn cluster."
     ],
-    drill: 'Play 5...a6! in the Najdorf Sicilian and unleash the liberating ...d5! central break.',
-    videos: [['Saint Louis Chess Club: Sicilian Najdorf & The d5 Break', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+sicilian+najdorf']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'After 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3, play the signature move of the Sicilian Najdorf!',
-        fen: 'rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 5',
-        side: 'b',
-        moves: ['a7a6'],
-        explain: '5...a6! prevents any piece from landing on b5 and prepares queenside expansion with ...b5 and ...Bb7.',
-      },
-      {
-        type: 'board',
-        prompt: 'Your pieces are developed in the Sicilian and White played slowly. Strike in the center with the liberating Sicilian break!',
-        fen: 'r1bq1rk1/1p2ppbp/p1np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R b KQ - 1 9',
-        side: 'b',
-        moves: ['d6d5'],
-        explain: '9...d5! blows open the center while White’s King is still uncastled on e1—whenever Black achieves ...d5 cleanly in the Sicilian, Black takes over!',
-      },
-      {
-        type: 'mcq',
-        q: 'What does the classic grandmaster maxim say happens when Black cleanly achieves the ...d5! break in the Sicilian?',
-        opts: [
-          'Black has solved all opening problems and often seizes the initiative',
-          'Black loses the c-file',
-          'The game is automatically drawn',
-        ],
-        ans: 0,
-        explain: '...d5! liquidates Black’s backward d6 pawn and unleashes all of Black’s bishops and rooks!',
-      },
+    "drill": "Build the Lucena Bridge on the 4th rank, and apply the Philidor 6th-rank barrier.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Lucena and Philidor Positions",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+lucena+philidor"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/practice/rook-endgames/7th-rank-rook-pawn/5c42B5Xg",
+    "lichessLabel": "🌐 Practice Lucena & Philidor on Lichess"
   },
   {
-    id: 'l5-cov', l: 5, cat: 'Basic Coverage', group: 'basic', icon: '🛡️',
-    title: 'Basic Coverage 5: Handling the Dutch Defense (1...f5) & Benko Gambit',
-    why: 'Rounding out your 1000+ OTB tournament shield: knowing how to punish the Dutch Defense (1.d4 f5) and Benko Gambit (3...b5) ensures no sideline catches you off guard.',
-    ideas: [
-      'Against the Dutch Defense (1.d4 f5): Play 2.g3! Nf6 3.Bg2 e6 4.Nf3 Be7 5.O-O O-O 6.c4—your g2-bishop cuts straight through Black’s weakened e8-h5/a8-h1 diagonals.',
-      'Against the Benko Gambit (1.d4 Nf6 2.c4 c5 3.d5 b5): Either decline solidly with 4.Nf3! (or 4.cxb5 a6 5.b6! returning the pawn to keep the queenside closed!).',
-      'Why 5.b6! crushes Benko players: Benko players only want open a- and b-files for their rooks—5.b6! gives the pawn back to keep the a-file locked!',
+    "id": "l5-qg",
+    "l": 5,
+    "cat": "White Core",
+    "group": "core_white",
+    "rep": "qg",
+    "icon": "⚪",
+    "title": "Queen's Gambit 5: Mastering Indian Systems (Nimzo-Indian, QID & Grünfeld)",
+    "why": "At the 1000+ OTB / 1750+ Lichess level, opponents answer 1.d4 Nf6 2.c4 with 2...e6 (Nimzo/Queen’s Indian) or 2...g6 3...d5 (Grünfeld). Here is your grandmaster playbook.",
+    "ideas": [
+      "Against Nimzo-Indian (1.d4 Nf6 2.c4 e6 3.Nc3 Bb4): Play 4.e3! (Rubinstein System) O-O 5.Bd3 d5 6.Nf3—super solid, develops fast, and builds a massive center if Black trades ...Bxc3+ bxc3.",
+      "Or use the 3.Nf3! move order: 1.d4 Nf6 2.c4 e6 3.Nf3! preventing 3...Bb4 completely and meeting 3...b6 (Queen’s Indian) with 4.g3! fighting for the long diagonal.",
+      "Against the Grünfeld (1.d4 Nf6 2.c4 g6 3.Nc3 d5): Play 4.cxd5 Nxd5 5.e4 Nxc3 6.bxc3 Bg7 7.Bc4 + Ne2! (putting the knight on e2 so ...Bg4 cannot pin it!)."
     ],
-    drill: 'Play 5.b6! against the Benko Gambit to shut down Black’s open queenside files.',
-    videos: [['Saint Louis Chess Club: Beating the Dutch & Benko Gambit', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+beating+dutch+benko+gambit']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'In the Benko Gambit (1.d4 Nf6 2.c4 c5 3.d5 b5 4.cxb5 a6), push the b-pawn forward to return the gambit pawn while keeping the a-file closed!',
-        fen: 'rnbqkb1r/3pppp1/p4n1p/1PpP4/8/8/PP2PPPP/RNBQKBNR w KQkq - 0 5',
-        fen_alt: 'rnbqkb1r/3ppppp/p4n2/1PpP4/8/8/PP2PPPP/RNBQKBNR w KQkq - 0 5',
-        side: 'w',
-        moves: ['b5b6'],
-        explain: '5.b6! is a brilliant practical weapon—White gives back the extra pawn so Black never gets the open a- and b-files!',
-      },
-      {
-        type: 'mcq',
-        q: 'Why is the fianchetto setup (g3 + Bg2 + c4 + Nf3) the gold standard against the Dutch Defense (1.d4 f5)?',
-        opts: [
-          '1...f5 weakens Black’s kingside and central dark squares, while White’s g2-bishop dominates the long diagonal',
-          'Because f5 attacks b2',
-          'Because White wants to trade the g2-bishop on move 3',
-        ],
-        ans: 0,
-        explain: 'Every Dutch variation suffers from the weakened kingside dark/light squares left behind by 1...f5!',
-      },
-      {
-        type: 'mcq',
-        q: 'What is Black’s entire compensation in the Benko Gambit (3...b5 4.cxb5 a6), and how does 5.b6! ruin it?',
-        opts: [
-          'Black wants open a- and b-files targeting a2/b2; 5.b6! keeps the a-file closed while White keeps the central d5 space wedge',
-          'Black wants to checkmate on move 5',
-          'Black wants to trade queens',
-        ],
-        ans: 0,
-        explain: 'Without open a- and b-files, Black is just cramped behind White’s d5 wedge!',
-      },
+    "drill": "Play 4.e3! in the Rubinstein Nimzo-Indian or 4.cxd5! in the Exchange Grünfeld.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Playing Against Nimzo-Indian & Grünfeld",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+nimzo+indian+grunfeld"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR_w_KQkq_-_2_4#explorer",
+    "lichessLabel": "🌐 Practice QG vs Nimzo/KID on Lichess"
   },
   {
-    id: 'l5-mid', l: 5, cat: 'Middlegame', group: 'mid', icon: '⚔️',
-    title: 'Middlegame 5: Prophylaxis ("What Is My Opponent’s Idea?"), Zwischenzug & Endgame Transition',
-    why: 'The single biggest leap from 800 OTB to 1100+ OTB is asking "What does my opponent want to do next?" (Prophylaxis) and spotting in-between moves (Zwischenzug).',
-    ideas: [
-      'Karpov’s Prophylaxis Habit: Before executing your own plan, identify your opponent’s #1 active idea and stop it cold.',
-      'Zwischenzug (In-Between Move): When an exchange starts, ALWAYS check if you can insert a check or attack on a higher-value piece before recapturing!',
-      'Simplifying When Ahead: When up +2 or more points, trade PIECES (especially Queens!)—when behind, trade PAWNS and keep pieces on the board.',
+    "id": "l5-eng",
+    "l": 5,
+    "cat": "White Core",
+    "group": "core_white",
+    "rep": "eng",
+    "icon": "⚪",
+    "title": "English Opening 5: The Maroczy Bind (c4 + e4) & Crushing the Hedgehog",
+    "why": "The crown jewel of the English Opening is the Maroczy Bind (pawns on c4 and e4 after Black trades ...cxd4). It clamps d5 and b5 so tightly Black can barely breathe.",
+    "ideas": [
+      "Forming the Maroczy Bind: Whenever Black plays an early ...c5 or ...g6 and opens the d-file with ...cxd4 Nxd4, play e4! alongside your c4 pawn.",
+      "Why c4 + e4 is so dominant: Black can never play the liberating ...d5 or ...b5 breaks without losing a pawn!",
+      "Squeeze Plan: Tuck your knight back from d4 to c2, put bishops on e3 and e2/g2, double rooks on the d-file, and slowly suffocate Black’s Hedgehog."
     ],
-    drill: 'Insert a lethal Zwischenzug (in-between check) before recapturing.',
-    videos: [['Saint Louis Chess Club: Prophylaxis & Zwischenzug', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+prophylaxis+zwischenzug']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Black just captured your piece on d4, expecting you to recapture Nxd4 immediately. Insert a winning Zwischenzug (in-between check) first!',
-        fen: 'r2qk2r/ppp2ppp/2n5/8/1b1n4/2N2N2/PPPB1PPP/R2QKB1R w KQkq - 0 8',
-        side: 'w',
-        moves: ['d2g5', 'd1e2'],
-        explain: 'Qe2+! (or Bg5 attacking the Queen!) inserts a forcing tempo move before recapturing on d4.',
-      },
-      {
-        type: 'mcq',
-        q: 'What is "Prophylaxis" in tournament chess strategy?',
-        opts: [
-          'Anticipating and preventing your opponent’s threat or plan BEFORE it can even be launched',
-          'Playing as fast as possible in blitz',
-          'Sacrificing the Queen for two pawns',
-        ],
-        ans: 0,
-        explain: 'Stopping your opponent’s best plan before it starts frustrates them into overpressing and blundering!',
-      },
-      {
-        type: 'mcq',
-        q: 'What is the golden rule of trading when you are AHEAD by a minor piece (+3)?',
-        opts: [
-          'Trade PIECES (especially Queens), not pawns, to eliminate counterplay and reach an easy endgame win',
-          'Trade all your pawns so theyhave no pawns left',
-          'Avoid all trades',
-        ],
-        ans: 0,
-        explain: 'Trading pieces magnifies your extra piece; trading all the pawns lets a lone enemy King sacrifice for your last pawn to draw!',
-      },
+    "drill": "Establish the Maroczy Bind (c4 + e4) to lock down d5 and b5.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Maroczy Bind Mastery",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+maroczy+bind"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkbnr/pp2pppp/3p4/8/2PNP3/8/PP3PPP/RNBQKB1R_b_KQkq_-_0_4#explorer",
+    "lichessLabel": "🌐 Practice Maroczy Bind on Lichess"
   },
   {
-    id: 'l5-end', l: 5, cat: 'Endgame', group: 'end', icon: '♚',
-    title: 'Endgame 5: Principle of Two Weaknesses, Zugzwang & Bishop of Opposite Colors',
-    why: 'Against tough tournament defenders who hold one weakness, you win by creating a SECOND weakness on the opposite side of the board and using Zugzwang.',
-    ideas: [
-      'Principle of Two Weaknesses: A defender can usually guard 1 weak pawn. Fix a 1st weakness on the queenside, then open a 2nd front on the kingside—stretching their pieces until one breaks!',
-      'Zugzwang: Force a position where any legal move the opponent makes ruins their defense (use Triangulation with your King to lose a tempo and pass the move!).',
-      'Opposite-Colored Bishops: In a pure endgame, opposite-colored bishops are drawish even 1–2 pawns down if you blockade on your bishop’s color; in the middlegame with Queens/Rooks, they favor the attacker!',
+    "id": "l5-ck",
+    "l": 5,
+    "cat": "Black Core",
+    "group": "core_black",
+    "rep": "ck",
+    "icon": "⚫",
+    "title": "Caro-Kann 5: Tartakower (4...Nf6) & Karpov (4...Nd7) GM Endgame Squeezes",
+    "why": "World Champion Anatoly Karpov and top GMs use the Karpov (4...Nd7) and Tartakower (4...Nf6 5.Nxf6+ exf6) Caro-Kann to grind out virtually risk-free wins.",
+    "ideas": [
+      "Tartakower System (1.e4 c6 2.d4 d5 3.Nc3 dxe4 4.Nxe4 Nf6! 5.Nxf6+ exf6): Recapturing 5...exf6 opens the e-file immediately, gives ...Bd6 + ...O-O + ...Re8 in 3 moves, and controls e5/d5!",
+      "Karpov System (4...Nd7 5.Ng5 Ngf6! 6.Bd3 e6 7.N1f3 Bd6): Note the famous trap—after 5.Ng5, NEVER play 5...h6?? (6.Ne6! fxe6 7.Qh5#)—always play 5...Ngf6!",
+      "Endgame Edge: Black’s queenside pawn structure (a7-b7-c6) is one solid island, giving Black superior late-middlegame and endgame prospects."
     ],
-    drill: 'Put Black into Zugzwang so every legal move drops the defense.',
-    videos: [['Saint Louis Chess Club: Principle of Two Weaknesses & Zugzwang', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+principle+of+two+weaknesses+zugzwang']],
-    quiz: [
-      {
-        type: 'board',
-        prompt: 'Put Black in complete Zugzwang in 1 move so Black must either get mated or step away from the pawn!',
-        fen: '6k1/5p2/5K2/8/7B/8/8/8 w - - 0 1',
-        side: 'w',
-        moves: ['h4g5', 'h4f2', 'h4e1'],
-        explain: '1.Bg5! (waiting on the diagonal) puts Black in pure Zugzwang—Black must move ...Kf8 (allowing Bh6+) or ...Kh7 (dropping f7)!',
-      },
-      {
-        type: 'mcq',
-        q: 'How does "Triangulation" work in King endgames?',
-        opts: [
-          'Your King takes 3 steps in a triangle while the enemy King only has 2 squares, returning to the exact position with the opponent to move (Zugzwang!)',
-          'Moving three pawns at once',
-          'Trading three pieces',
-        ],
-        ans: 0,
-        explain: 'Triangulation loses a tempo on purpose so it becomes the opponent’s turn to move and yield the opposition!',
-      },
-      {
-        type: 'mcq',
-        q: 'What does the "Principle of Two Weaknesses" state?',
-        opts: [
-          'One weakness can usually be defended; stretch the defender by creating a second weakness on the other side of the board',
-          'Never attack more than one pawn',
-          'Always trade bishops for knights',
-        ],
-        ans: 0,
-        explain: 'Switching rapidly between two distant weaknesses overloads the slower defending pieces!',
-      },
+    "drill": "Defend accurately with 5...Ngf6! against 5.Ng5 in the Karpov Caro-Kann (avoiding the 5...h6?? 6.Ne6! smothered mate trap).",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Tartakower & Karpov Caro-Kann",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+tartakower+karpov+caro+kann"
+      ]
     ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rn1qkbnr/pp2pppp/2p5/5b2/3PN3/8/PPP2PPP/R1BQKBNR_w_KQkq_-_1_5?color=black#explorer",
+    "lichessLabel": "🌐 Practice Karpov/Tartakower Caro-Kann on Lichess"
   },
+  {
+    "id": "l5-sic",
+    "l": 5,
+    "cat": "Black Core",
+    "group": "core_black",
+    "rep": "sic",
+    "icon": "⚫",
+    "title": "Sicilian 5: Najdorf / Scheveningen (...a6 / ...e6) & The Liberating ...d5! Break",
+    "why": "The Sicilian Najdorf (5...a6) and Scheveningen (...d6 + ...e6) were the favorite weapons of Bobby Fischer and Garry Kasparov. Their secret goal is the central ...d5! break.",
+    "ideas": [
+      "After 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6! (Najdorf), 5...a6 stops Nb5/Bb5+ and prepares ...e5 or ...e6 + ...b5!",
+      "Golden Rule of the Sicilian: Whenever Black successfully plays ...d5! without tactical punishment, Black is already equal or better!",
+      "Against English Attack (Be3, f3, Qd2, g4): Counterattack immediately with ...b5, ...Bb7, ...Rc8, and ...d5! in the center."
+    ],
+    "drill": "Play 5...a6! in the Najdorf Sicilian and unleash the liberating ...d5! central break.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Sicilian Najdorf & The d5 Break",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+sicilian+najdorf"
+      ]
+    ],
+    "lichessUrl": "https://lichess.org/analysis/standard/rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R_w_KQkq_-_0_6?color=black#explorer",
+    "lichessLabel": "🌐 Practice Sicilian Najdorf on Lichess"
+  },
+  {
+    "id": "l5-cov",
+    "l": 5,
+    "cat": "Basic Coverage",
+    "group": "basic",
+    "icon": "🛡️",
+    "title": "Basic Coverage 5: Handling the Dutch Defense (1...f5) & Benko Gambit",
+    "why": "Rounding out your 1000+ OTB tournament shield: knowing how to punish the Dutch Defense (1.d4 f5) and Benko Gambit (3...b5) ensures no sideline catches you off guard.",
+    "ideas": [
+      "Against the Dutch Defense (1.d4 f5): Play 2.g3! Nf6 3.Bg2 e6 4.Nf3 Be7 5.O-O O-O 6.c4—your g2-bishop cuts straight through Black’s weakened e8-h5/a8-h1 diagonals.",
+      "Against the Benko Gambit (1.d4 Nf6 2.c4 c5 3.d5 b5): Either decline solidly with 4.Nf3! (or 4.cxb5 a6 5.b6! returning the pawn to keep the queenside closed!).",
+      "Why 5.b6! crushes Benko players: Benko players only want open a- and b-files for their rooks—5.b6! gives the pawn back to keep the a-file locked!"
+    ],
+    "drill": "Play 5.b6! against the Benko Gambit to shut down Black’s open queenside files.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Beating the Dutch & Benko Gambit",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+beating+dutch+benko+gambit"
+      ]
+    ],
+    "lichessUrl": "https://lichess.org/training/crushing",
+    "lichessLabel": "🌐 Train Positional Crushers on Lichess"
+  },
+  {
+    "id": "l5-mid",
+    "l": 5,
+    "cat": "Middlegame",
+    "group": "mid",
+    "icon": "⚔️",
+    "title": "Middlegame 5: Prophylaxis (\"What Is My Opponent’s Idea?\"), Zwischenzug & Endgame Transition",
+    "why": "The single biggest leap from 800 OTB to 1100+ OTB is asking \"What does my opponent want to do next?\" (Prophylaxis) and spotting in-between moves (Zwischenzug).",
+    "ideas": [
+      "Karpov’s Prophylaxis Habit: Before executing your own plan, identify your opponent’s #1 active idea and stop it cold.",
+      "Zwischenzug (In-Between Move): When an exchange starts, ALWAYS check if you can insert a check or attack on a higher-value piece before recapturing!",
+      "Simplifying When Ahead: When up +2 or more points, trade PIECES (especially Queens!)—when behind, trade PAWNS and keep pieces on the board."
+    ],
+    "drill": "Insert a lethal Zwischenzug (in-between check) before recapturing.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Prophylaxis & Zwischenzug",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+prophylaxis+zwischenzug"
+      ]
+    ],
+    "lichessUrl": "https://lichess.org/training/defensiveMove",
+    "lichessLabel": "🌐 Train Prophylaxis & Defense on Lichess"
+  },
+  {
+    "id": "l5-end",
+    "l": 5,
+    "cat": "Endgame",
+    "group": "end",
+    "icon": "♚",
+    "title": "Endgame 5: Principle of Two Weaknesses, Zugzwang & Bishop of Opposite Colors",
+    "why": "Against tough tournament defenders who hold one weakness, you win by creating a SECOND weakness on the opposite side of the board and using Zugzwang.",
+    "ideas": [
+      "Principle of Two Weaknesses: A defender can usually guard 1 weak pawn. Fix a 1st weakness on the queenside, then open a 2nd front on the kingside—stretching their pieces until one breaks!",
+      "Zugzwang: Force a position where any legal move the opponent makes ruins their defense (use Triangulation with your King to lose a tempo and pass the move!).",
+      "Opposite-Colored Bishops: In a pure endgame, opposite-colored bishops are drawish even 1–2 pawns down if you blockade on your bishop’s color; in the middlegame with Queens/Rooks, they favor the attacker!"
+    ],
+    "drill": "Put Black into Zugzwang so every legal move drops the defense.",
+    "videos": [
+      [
+        "Saint Louis Chess Club: Principle of Two Weaknesses & Zugzwang",
+        "https://www.youtube.com/results?search_query=saint+louis+chess+club+principle+of+two+weaknesses+zugzwang"
+      ]
+    ],
+    "lichessUrl": "https://lichess.org/training/endgame",
+    "lichessLabel": "🌐 Train Master Endgames on Lichess"
+  }
 ];
 
 window.RECOMMENDED = [
-  ['Saint Louis Chess Club — GM Lectures & Kids Class', 'https://www.youtube.com/@STLChessClub'],
-  ['Saint Louis Chess Club — Openings Playlist', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+openings+playlist'],
-  ['Saint Louis Chess Club — Endgame Fundamentals', 'https://www.youtube.com/results?search_query=saint+louis+chess+club+endgame+fundamentals'],
-  ['Daniel Naroditsky — Speedrun & Endgame Mastery', 'https://www.youtube.com/@DanielNaroditskyGM'],
-  ['Hanging Pawns — Caro-Kann, Sicilian, QG & English', 'https://www.youtube.com/@HangingPawns'],
+  [
+    "Saint Louis Chess Club — GM Lectures & Kids Class",
+    "https://www.youtube.com/@STLChessClub"
+  ],
+  [
+    "Saint Louis Chess Club — Openings Playlist",
+    "https://www.youtube.com/results?search_query=saint+louis+chess+club+openings+playlist"
+  ],
+  [
+    "Saint Louis Chess Club — Endgame Fundamentals",
+    "https://www.youtube.com/results?search_query=saint+louis+chess+club+endgame+fundamentals"
+  ],
+  [
+    "Daniel Naroditsky — Speedrun & Endgame Mastery",
+    "https://www.youtube.com/@DanielNaroditskyGM"
+  ],
+  [
+    "Hanging Pawns — Caro-Kann, Sicilian, QG & English",
+    "https://www.youtube.com/@HangingPawns"
+  ]
 ];
